@@ -4,18 +4,14 @@ function arrayLimit(val) {
     return val.length >= 1;
   }
 
-const GeneralOfferModelSchema = new mongoose.Schema({
-    general_quote_request:{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "GENERALQUOTEREQUEST"
-    },
+const DealModelSchema = new mongoose.Schema({
     designer:{
         type: mongoose.Schema.Types.ObjectId, 
-        ref: "Designer"
+        ref: "DESGINER"
     },
     client:{
         type: mongoose.Schema.Types.ObjectId,
-        ref: "Client"
+        ref: "CLIENT"
     },
     tags:{
         type: [String],
@@ -57,4 +53,4 @@ const GeneralOfferModelSchema = new mongoose.Schema({
       }
 }, { timestamps: true, strict: true });
 
-module.exports = mongoose.model("GENERALOFFER", GeneralOfferModelSchema, "generaloffers");
+module.exports = mongoose.model("DEAL", DealModelSchema, "deals");

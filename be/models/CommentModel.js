@@ -11,6 +11,10 @@ const CommentModelSchema = new mongoose.Schema({
         enum: ['Client', 'Designer'],
         required: true
     },
+    project:{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "PROJECT"
+    },
     text: {
         type: String,
         required: true

@@ -53,10 +53,10 @@ const ClientModelSchema = new mongoose.Schema({
             }
         }
     ],
-    quotes:[
+    deals:[
         {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "QUOTE",
+        ref: "DEAL",
         default: []
         }
     ],

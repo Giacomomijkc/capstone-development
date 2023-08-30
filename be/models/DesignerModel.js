@@ -74,10 +74,10 @@ const DesignerModelSchema = new mongoose.Schema({
         default: []
         }
     ],
-    quotes:[
+    deals:[
         {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "QUOTE",
+        ref: "DEAL",
         default: []
         }
     ],

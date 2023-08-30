@@ -4,19 +4,19 @@ function arrayLimit(val) {
     return val.length >= 1;
 }
 
-const InvoiceGeneralOfferAcceptedModelSchema = new mongoose.Schema({
+const InvoiceModelSchema = new mongoose.Schema({
 
-    general_offer:{
+    deal:{
         type: mongoose.Schema.Types.ObjectId,
-        ref: "GENERALOFFER"
+        ref: "DEAL"
     },
     designer:{
         type: mongoose.Schema.Types.ObjectId, 
-        ref: "Designer"
+        ref: "DESGINER"
     },
     client:{
         type: mongoose.Schema.Types.ObjectId,
-        ref: "Client"
+        ref: "CLIENT"
     },
     tags:{
         type: [String],
@@ -75,4 +75,4 @@ const InvoiceGeneralOfferAcceptedModelSchema = new mongoose.Schema({
     }
 }, { timestamps: true, strict: true });
 
-module.exports = mongoose.model("INVOICEGENERALOFFERACCEPTED", InvoiceGeneralOfferAcceptedModelSchema, "invoicesgeneralofferaccepted");
+module.exports = mongoose.model("INVOICE", InvoiceModelSchema, "invoices");

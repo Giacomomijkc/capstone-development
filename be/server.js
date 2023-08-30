@@ -6,6 +6,10 @@ require('dotenv').config();
 
 const designersRoute = require('./routes/designers');
 const projectsRoute = require('./routes/projects');
+const clientsRoute = require('./routes/clients');
+const commentsRoute = require('./routes/comments');
+const loginsRoute = require('./routes/logins');
+const dealsRoute = require('./routes/deals');
 
 const app = express();
 
@@ -14,6 +18,10 @@ app.use(express.json());
 
 app.use('/', designersRoute);
 app.use('/', projectsRoute);
+app.use('/', clientsRoute);
+app.use('/', commentsRoute);
+app.use('/', loginsRoute);
+app.use('/', dealsRoute);
 
 mongoose.connect(process.env.MONGO_DB_URL);
 
