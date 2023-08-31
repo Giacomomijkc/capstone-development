@@ -41,6 +41,15 @@ const ClientModelSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    job_offers:[
+        {
+            job_offer_id:{
+                type: mongoose.Schema.Types.ObjectId,
+                ref: "JOBOFFER",
+                default: []
+            }
+        }
+    ],
     liked_projects: [
         {
             project_id: {

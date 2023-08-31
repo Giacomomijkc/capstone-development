@@ -1,12 +1,105 @@
 const mongoose = require('mongoose');
 const express = require('express');
 const verifyToken = require('../middlewares/verifyToken');
+const cloudinary = require('cloudinary').v2;
+const { CloudinaryStorage } = require('multer-storage-cloudinary');
+const multer = require('multer');
+
 
 const ProjectsModel = require('../models/ProjectModel');
 const DesignersModel = require('../models/DesignerModel');
 const ClientsModel = require('../models/ClientModel');
+const CommentsModel = require('../models/CommentModel');
 
 const project = express.Router();
+
+cloudinary.config({
+    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+    api_key: process.env.CLOUDINARY_API_KEY,
+    api_secret: process.env.CLOUDINARY_API_SECRET
+});
+
+const cloudStorage = new CloudinaryStorage({
+    cloudinary: cloudinary,
+    params: {
+        folder: 'capstone',
+        format: async (req, file) => {
+            if (file.mimetype === 'image/jpeg') {
+                return 'jpg';
+            } else if (file.mimetype === 'image/png') {
+                return 'png';
+            } else {
+                return 'jpg'; // Default format if not JPG or PNG
+            }
+        },
+        public_id: (req, file) => file.name
+    }
+});
+
+const cloudUpload = multer({ storage: cloudStorage });
+
+//project post cover
+project.post('/projects/cover/upload', cloudUpload.single('cover'), async (req, res) => {
+    try {
+        res.status(200).json({ cover: req.file.path });
+    } catch (error) {
+        console.error('File upload failed', error);
+        res.status(500).json({ error: 'File upload failed' });
+    }
+});
+
+//project patch cover
+project.patch('/projects/:projectId/cover/update', cloudUpload.single('cover'), async (req, res) => {
+    const { projectId } = req.params;
+
+    try {
+        const updatedCoverUrl = req.file.path;
+        const dataToUpdate = { cover: updatedCoverUrl };
+        const options = { new: true };
+        const result = await ProjectsModel.findByIdAndUpdate(projectId, dataToUpdate, options);
+
+        res.status(200).json({
+            cover: result.cover,
+            statusCode: 202,
+            message: `Project cover with id ${projectId} successfully updated`
+        });
+    } catch (error) {
+        console.error('File update failed', error);
+        res.status(500).json({ error: 'File update failed' });
+    }
+});
+
+//project post images
+project.post('/projects/images/upload', cloudUpload.array('images', 5), async (req, res) => {
+    try {
+        const imageUrls = req.files.map(file => file.path);
+        res.status(200).json({ images: imageUrls });
+    } catch (error) {
+        console.error('File upload failed', error);
+        res.status(500).json({ error: 'File upload failed' });
+    }
+});
+
+//project patch images
+project.patch('/projects/:projectId/images/update', cloudUpload.array('images', 5), async (req, res) => {
+    const { projectId } = req.params;
+
+    try {
+        const updatedImageUrls = req.files.map(file => file.path);
+        const dataToUpdate = { images: updatedImageUrls };
+        const options = { new: true };
+        const result = await ProjectsModel.findByIdAndUpdate(projectId, dataToUpdate, options);
+
+        res.status(200).json({
+            images: result.images,
+            statusCode: 202,
+            message: `Project images with id ${projectId} successfully updated`
+        });
+    } catch (error) {
+        console.error('File update failed', error);
+        res.status(500).json({ error: 'File update failed' });
+    }
+});
 
 //project creation
 project.post('/projects/create', verifyToken, async (req, res) =>{
@@ -54,6 +147,95 @@ project.post('/projects/create', verifyToken, async (req, res) =>{
     }
 })
 
+//project single get
+project.get('/projects/:projectId', async (req, res) => {
+    const { projectId } = req.params;
+    try {
+        const project = await ProjectsModel.findById(projectId);
+        if (!project) {
+            return res.status(404).json({ 
+                statusCode: 404,
+                message: 'Project not found' 
+            });
+        }
+        res.status(200).json({
+            statusCode: 200,
+            message: `Project with id ${projectId} fetched successfully`,
+            project
+        });
+    } catch (error) {
+        res.status(500).json({
+            message: 'Internal server error',
+            error
+        });
+    }
+});
+
+//project all get
+project.get('/projects', async (req, res) => {
+    try {
+        const projects = await ProjectsModel.find();
+        res.status(200).json({
+            statusCode: 200,
+            message: 'All projects fetched successfully',
+            projects
+        });
+    } catch (error) {
+        res.status(500).json({
+            message: 'Internal server error',
+            error
+        });
+    }
+});
+
+
+//patch di project
+project.patch('/projects/:projectId/update', verifyToken, async (req, res) => {
+    const { projectId } = req.params;
+
+    if (req.user.role !== 'Designer') {
+        return res.status(403).json({ 
+            statusCode: 403,
+            message: 'Only designers can update projects' 
+        });
+    }
+
+    try {
+        const project = await ProjectsModel.findById(projectId);
+        if (!project) {
+            return res.status(404).json({ 
+                statusCode: 404,
+                message: 'Project not found' 
+            });
+        }
+
+        const projectAuthorToString = project.author.toString();
+        const reqUserIdToString = req.user._id.toString();
+        if (projectAuthorToString !== reqUserIdToString ) {
+            return res.status(403).json({ 
+                statusCode: 403,
+                message: 'You can only update your own projects' 
+            });
+        }
+
+        const dataToUpdate = req.body;
+        const options = { new: true };
+
+        const result = await ProjectsModel.findByIdAndUpdate(projectId, dataToUpdate, options);
+
+        res.status(200).json({
+            statusCode: 200,
+            message: `Project with id ${projectId} updated successfully`,
+            result
+        });
+    } catch (error) {
+        res.status(500).json({
+            statusCode: 500,
+            message: 'Internal server error',
+            error
+        });
+    }
+});
 
 // Aggiunta e rimozione di like da un progetto
 project.post('/projects/:projectId/like', verifyToken, async (req, res) => {
@@ -121,6 +303,52 @@ project.post('/projects/:projectId/like', verifyToken, async (req, res) => {
         });
     }
 });
+
+//delete projetc consentita solo a un designer
+project.delete('/projects/:projectId', verifyToken, async (req, res) =>{
+    const {projectId} = req.params;
+
+    if (!req.user) {
+        return res.status(401).json({ message: 'Authentication required' });
+    }
+
+    if (req.user.role !== 'Designer') {
+        return res.status(403).json({ 
+            statusCode: 403,
+            message: 'Only designers can delete projects' 
+        });
+    }
+
+    const project = await ProjectsModel.findById(projectId);
+    if (!project) {
+        return res.status(404).json({ message: 'Project not found' });
+    }
+
+    const projectAuthorToString = project.author.toString();
+        const reqUserIdToString = req.user._id.toString();
+        if (projectAuthorToString !== reqUserIdToString ) {
+            return res.status(403).json({ 
+                statusCode: 403,
+                message: 'You can only delete your own projects' 
+            });
+        }
+
+    try {
+
+        //qui bisogna eliminare dal modello commenti tutti i commnenti relativi a questo progetto
+        //poi bisogna togliere anche da client e designer model il progetto dai progetti liked
+
+
+        await ProjectsModel.findByIdAndDelete(projectId);
+
+        res.status(200).json({ message: `Project with id ${projectId} deleted successfully` });
+        
+    } catch (error) {
+        console.log(error),
+        res.status(500).json({ message: 'Internal server error', error });
+    }
+
+})
 
 
 module.exports = project;

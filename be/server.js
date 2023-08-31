@@ -10,6 +10,8 @@ const clientsRoute = require('./routes/clients');
 const commentsRoute = require('./routes/comments');
 const loginsRoute = require('./routes/logins');
 const dealsRoute = require('./routes/deals');
+const invoicesRoute = require('./routes/invoices');
+const jobOffersRoute = require('./routes/jobOffers');
 
 const app = express();
 
@@ -22,6 +24,8 @@ app.use('/', clientsRoute);
 app.use('/', commentsRoute);
 app.use('/', loginsRoute);
 app.use('/', dealsRoute);
+app.use('/', invoicesRoute);
+app.use('/', jobOffersRoute);
 
 mongoose.connect(process.env.MONGO_DB_URL);
 

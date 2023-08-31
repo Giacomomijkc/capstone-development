@@ -12,7 +12,7 @@ const InvoiceModelSchema = new mongoose.Schema({
     },
     designer:{
         type: mongoose.Schema.Types.ObjectId, 
-        ref: "DESGINER"
+        ref: "DESIGNER"
     },
     client:{
         type: mongoose.Schema.Types.ObjectId,

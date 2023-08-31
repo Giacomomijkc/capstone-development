@@ -4,26 +4,26 @@ function arrayLimit(val) {
     return val.length >= 1;
   }
 
-const DealModelSchema = new mongoose.Schema({
-    designer:{
-        type: mongoose.Schema.Types.ObjectId, 
-        ref: "DESIGNER"
-    },
+const JobOfferModelSchema = new mongoose.Schema({
     client:{
         type: mongoose.Schema.Types.ObjectId,
         ref: "CLIENT"
+    },
+    title:{
+        type: String,
+        required: true
     },
     tags:{
         type: [String],
         required: true,
         validate: [arrayLimit, '{PATH} deve avere almeno 1 elemento']
     },
-    amount:{
-        amount_value:{
+    budget:{
+        budget_value:{
             type: Number,
             required: true
         },
-        amount_unit:{
+        budget_unit:{
             type: String,
             required: true
         }
@@ -32,25 +32,10 @@ const DealModelSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    rework_limit:{
-        type: Number,
-        required: true
-    },
-    timing:{
-        timing_value:{
-            type: Number,
-            required: true
-        },
-        timing_unit:{
-            type: String,
-            required: true
-        }
-    },
-    status: {
+    deadline:{
         type: String,
-        default: 'offered', // Stato predefinito
         required: true
-      }
+    },
 }, { timestamps: true, strict: true });
 
-module.exports = mongoose.model("DEAL", DealModelSchema, "deals");
+module.exports = mongoose.model("JOBOFFER", JobOfferModelSchema, "joboffers");

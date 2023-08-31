@@ -135,7 +135,7 @@ deal.patch('/deals/:dealId/start', verifyToken, async (req, res) => {
         const desginerIdToString = deal.designer.toString();
         const reqUserIdToString = req.user._id.toString();
 
-        if (req.user.role !== 'Designer' || deal.designer.toString() !== req.user._id.toString()) {
+        if (req.user.role !== 'Designer' || desginerIdToString !== reqUserIdToString) {
             return res.status(403).json({ message: 'Only the designer of the deal can start it' });
         }
 
@@ -166,7 +166,7 @@ deal.patch('/deals/:dealId/end', verifyToken, async (req, res) => {
         const desginerIdToString = deal.designer.toString();
         const reqUserIdToString = req.user._id.toString();
 
-        if (req.user.role !== 'Designer' || deal.designer.toString() !== req.user._id.toString()) {
+        if (req.user.role !== 'Designer' || desginerIdToString !== reqUserIdToString) {
             return res.status(403).json({ message: 'Only the designer of the deal can start it' });
         }
 
