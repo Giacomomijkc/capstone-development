@@ -1,6 +1,7 @@
 .signup-cover{
     width: 100%;
     height: 100vh;
+    object-fit: cover;
 }
 
 @media (max-width: 768px) {

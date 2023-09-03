@@ -16,7 +16,8 @@ export const uploadAvatar = createAsyncThunk('designers/uploadAvatar', async (av
 export const registerDesigner = createAsyncThunk('designers/registerDesigner', async (designerData,{ rejectWithValue }) => {
     try {
         const response = await axios.post('http://localhost:5050/designers/create', designerData);
-        return response.data.payload;
+        //return response.data.payload;
+        return response.data;
     } catch (error) {
         console.log(error)
         if (error.response && error.response.data && error.response.data.message) {
@@ -33,6 +34,19 @@ const designersSlice = createSlice({
     name: 'designers',
     initialState: {
       avatarURL: null,
+      successMessage: null,
+      designerData: {
+        surname: '',
+        nickname: '',
+        description: '',
+        tags: [],
+        website: '',
+        instagram: '',
+        email: '',
+        password: '',
+        address: '',
+        vatOrCf: '',
+      },
       // ... altri campi dello stato ...
     },
     reducers: {
@@ -48,6 +62,10 @@ const designersSlice = createSlice({
         })
         .addCase(registerDesigner.fulfilled, (state, action) => {
           // Gestisci la registrazione del designer qui, se necessario
+          state.successMessage = action.payload.message;
+
+          //perché non riesco qui a svuotare i campi / reindirizzare /
+    
         })
         .addCase(registerDesigner.rejected, (state, action) => {
           // Gestisci l'errore qui

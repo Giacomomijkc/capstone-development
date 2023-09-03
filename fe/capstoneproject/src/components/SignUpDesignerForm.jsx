@@ -1,23 +1,27 @@
 import React from 'react'
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
-import { setAvatarURL, uploadAvatar, registerDesigner } from '../redux/designersSlice';
+import { uploadAvatar, registerDesigner } from '../redux/designersSlice';
+import {useNavigate} from 'react-router-dom';
 import './SignUpDesignerForm.css';
+
+//sistemare il loading dell'avatar/bottone registrazione (se cambio immagine non torna il loader)
+//messaggi di errori specifici del middleware
 
 const SignUpDesignerForm = () => {
 
-        const [showForm, setShowForm] = useState(false);
+    const [showForm, setShowForm] = useState(false);
       
-        const handleShowForm = () => {
-          setShowForm(true);
-        };
+    const handleShowForm = () => {
+        setShowForm(true);
+    };
       
-        const handleCloseForm = () => {
-          setShowForm(false);
-        };
+    const handleCloseForm = () => {
+        setShowForm(false);
+    };
 
     const [formData, setFormData] = useState({
         name: '',
@@ -31,12 +35,15 @@ const SignUpDesignerForm = () => {
         password: '',
         address: '',
         vatOrCf: '',
-        //avatar: null,
     });
 
     const avatarURL = useSelector((state) => state.designers.avatarURL);
     const error = useSelector((state) => state.designers.error);
+    const successMessage = useSelector((state) => state.designers.successMessage);
+    const coverInputRef = useRef(null);
 
+ 
+    const navigate = useNavigate();
     const dispatch = useDispatch();
 
     const handleInputChange = (e) => {
@@ -63,7 +70,6 @@ const SignUpDesignerForm = () => {
     
         try {
             await dispatch(uploadAvatar(uploadData));
-            //dispatch(setAvatarURL(avatarURL)); // Imposta l'URL dell'avatar nello stato di Redux
         } catch (error) {
             console.error('File upload failed:', error);
         }
@@ -79,9 +85,29 @@ const SignUpDesignerForm = () => {
             ...formData,
             avatar: avatarURL,
         };
+
+        console.log(successMessage)
     
         try {
             await dispatch(registerDesigner(designerData));
+            setFormData({
+                name: '',
+                surname: '',
+                nickname: '',
+                description: '',
+                tags: [],
+                website: '',
+                instagram: '',
+                email: '',
+                password: '',
+                address: '',
+                vatOrCf: '',
+            });
+            coverInputRef.current.value = null;
+            setTimeout(() => {
+                navigate('/login');
+            }, 3000);
+
         } catch (error) {
             console.error('Designer registration failed:', error);
 
@@ -259,18 +285,23 @@ const SignUpDesignerForm = () => {
                                 type="file" 
                                 placeholder="Upload an image" 
                                 name="avatar"
+                                ref={coverInputRef}
                                 onChange={handleFileUpload} 
                                 />
                             </Form.Group>
                         </div>
                     </div>
                     <div className='d-flex flex-column'>
-                        <Button
-                        className='form-button my-2'
-                        type="submit"
-                        variant="success"
-                        >Create Your Designer Account
+                        {avatarURL ? (
+                        <Button 
+                        className='form-button my-2' 
+                        type="submit" 
+                        variant="success">
+                            Create Your Designer Account
                         </Button>
+                        ) : (
+                        <div className="custom-loader"></div>
+                        )}
                         <Button className='close-button my-3' onClick={handleCloseForm}>
                             Close
                         </Button>
@@ -278,6 +309,9 @@ const SignUpDesignerForm = () => {
                             <div className="alert alert-danger me-auto " role="alert">
                                 {error}
                             </div>
+                        )}
+                        {successMessage && (
+                             <div className="alert alert-success me-auto">{successMessage}</div>
                         )}
                     </div>
                 </Form>

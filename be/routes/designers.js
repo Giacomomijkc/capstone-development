@@ -75,7 +75,7 @@ designer.patch('/designers/:designerId/cloudUpdateImg', cloudUpload.single('avat
 
 
 //designer creation
-designer.post('/designers/create', async (req, res) =>{
+designer.post('/designers/create', validatePostDesigner, async (req, res) =>{
 
     const { nickname } = req.body;
     const {email} = req.body;
