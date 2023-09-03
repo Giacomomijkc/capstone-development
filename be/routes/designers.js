@@ -5,6 +5,7 @@ const cloudinary = require ('cloudinary').v2;
 const {CloudinaryStorage} = require('multer-storage-cloudinary');
 const multer = require('multer');
 const verifyToken = require('../middlewares/verifyToken');
+const {designersBodyParams, validatePostDesigner} = require('../middlewares/designerPostValidations')
 
 const DesignersModel = require('../models/DesignerModel');
 const ProjectsModel = require('../models/ProjectModel');
@@ -43,6 +44,7 @@ const cloudUpload = multer({storage: cloudStorage});
 designer.post('/designers/cloudUpload', cloudUpload.single('avatar'), async (req,res)=> {
     try {
         res.status(200).json({avatar: req.file.path})
+        console.log(req.file.path)
     } catch (error) {
         console.error('File upload failed',error);
         res.status(500).json({error: 'File upload failed'});
@@ -85,7 +87,7 @@ designer.post('/designers/create', async (req, res) =>{
         if (existingDesigner) {
             return res.status(400).json({
                 statusCode: 400,
-                message: `${nickname} already exists. Please choose a different nickname.`,
+                message: `${nickname} already exists!`,
             });
         }
 
@@ -94,7 +96,7 @@ designer.post('/designers/create', async (req, res) =>{
         if (existingEmail) {
             return res.status(400).json({
                 statusCode: 400,
-                message:`${email} already exists in database, try to login o use another email`
+                message:`${email} already exists!`
             })
         }
 
@@ -124,6 +126,7 @@ designer.post('/designers/create', async (req, res) =>{
             payload: designer
         })
     } catch (error) {
+        console.log(error);
         res.status(500).send({
             statusCode: 500,
             message:'Internal server Error ',

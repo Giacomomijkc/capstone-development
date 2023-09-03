@@ -1,0 +1,36 @@
+.logo{
+    width: 200px;
+    height: 150px;
+}
+
+.navbar{
+    position: sticky !important;
+    background-color: transparent !important;
+}
+
+.links{
+    font-weight: 500 !important;
+    font-size: large !important;
+}
+
+.search{
+    width: 170px !important;
+    border-radius: 100px !important;
+    border-color:  #BEBFFB !important;
+}
+
+.nav-buttons{
+    background-color: #BEBFFB !important;
+    border-radius: 20px !important;
+    border-color: #BEBFFB !important;
+    width: 80px !important;
+    color: white !important;
+}
+
+@media (max-width: 991px) {
+    .container {
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+  }

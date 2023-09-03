@@ -338,7 +338,11 @@ project.delete('/projects/:projectId', verifyToken, async (req, res) =>{
         //qui bisogna eliminare dal modello commenti tutti i commnenti relativi a questo progetto
         //poi bisogna togliere anche da client e designer model il progetto dai progetti liked
 
+        await CommentsModel.deleteMany({ project: projectId });
 
+        await ClientsModel.updateMany({}, { $pull: { liked_projects: { project_id: projectId } } });
+        await DesignersModel.updateMany({}, { $pull: { liked_projects: { project_id: projectId } } });
+        
         await ProjectsModel.findByIdAndDelete(projectId);
 
         res.status(200).json({ message: `Project with id ${projectId} deleted successfully` });
