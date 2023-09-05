@@ -41,6 +41,7 @@ const SignUpDesignerForm = () => {
     const error = useSelector((state) => state.designers.error);
     const successMessage = useSelector((state) => state.designers.successMessage);
     const coverInputRef = useRef(null);
+    const isUploadLoading = useSelector((state) => state.designers.isUploadLoading);
 
  
     const navigate = useNavigate();
@@ -81,7 +82,7 @@ const SignUpDesignerForm = () => {
         e.preventDefault();
     
     
-        const designerData = {
+    const designerData = {
             ...formData,
             avatar: avatarURL,
         };
@@ -292,16 +293,14 @@ const SignUpDesignerForm = () => {
                         </div>
                     </div>
                     <div className='d-flex flex-column'>
-                        {avatarURL ? (
-                        <Button 
-                        className='form-button my-2' 
-                        type="submit" 
-                        variant="success">
-                            Create Your Designer Account
-                        </Button>
-                        ) : (
+                        {isUploadLoading ?
                         <div className="custom-loader"></div>
-                        )}
+                       :  <Button 
+                       className='form-button my-2' 
+                       type="submit" 
+                       variant="success">
+                           Create Your Designer Account
+                       </Button>  }
                         <Button className='close-button my-3' onClick={handleCloseForm}>
                             Close
                         </Button>
