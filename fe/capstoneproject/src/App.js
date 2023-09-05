@@ -4,6 +4,7 @@ import Homepage from './pages/Homepage';
 import SingUpDesignerPage from './pages/SingUpDesignerPage';
 import SingUpOptionsPage from './pages/SignUpOptionsPage';
 import LogInPage from './pages/LogInPage';
+import Dashboard from './pages/Dashboard';
 import ErrorPage from './pages/ErrorPage';
 
 const App = () => {
@@ -15,6 +16,7 @@ const App = () => {
         <Route path="/signup-options" element={<SingUpOptionsPage/>}/>
         <Route path="/signup-designer" element={<SingUpDesignerPage/>}/>
         <Route path="/login" element={<LogInPage/>}/>
+        <Route path="/dashboard" element={<Dashboard />}/>
         <Route path="*" element={<ErrorPage/>}/>
       </Routes>
     </BrowserRouter>

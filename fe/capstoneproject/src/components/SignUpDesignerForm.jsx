@@ -4,12 +4,13 @@ import Button from 'react-bootstrap/Button';
 import { useState, useRef } from 'react';
 import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
-import { uploadAvatar, registerDesigner } from '../redux/designersSlice';
+import { uploadAvatar, registerDesigner, setAvatarURL } from '../redux/designersSlice';
 import {useNavigate} from 'react-router-dom';
 import './SignUpDesignerForm.css';
 
-//sistemare il loading dell'avatar/bottone registrazione (se cambio immagine non torna il loader)
+//non riesco a gestire i campi del form con redux ma devo usare useState
 //messaggi di errori specifici del middleware
+//se tolgo immagine dall'input file non riparte il loader
 
 const SignUpDesignerForm = () => {
 
@@ -62,6 +63,12 @@ const SignUpDesignerForm = () => {
         }
     };
 
+    /*const handleInputChange = (e) => {
+        const { name, value } = e.target;
+        // Aggiorna il campo del form nello stato di Redux
+        dispatch(registerDesigner({ ...designerData, [name]: value }));
+    };*/
+
     console.log(formData)
 
     const handleFileUpload = async (e) => {
@@ -81,16 +88,16 @@ const SignUpDesignerForm = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
     
-    
     const designerData = {
             ...formData,
             avatar: avatarURL,
         };
 
-        console.log(successMessage)
+    console.log(successMessage)
     
         try {
-            await dispatch(registerDesigner(designerData));
+            //await dispatch(registerDesigner({ ...designerData, avatar: avatarURL }));
+            const response = await dispatch(registerDesigner(designerData));
             setFormData({
                 name: '',
                 surname: '',
@@ -105,9 +112,11 @@ const SignUpDesignerForm = () => {
                 vatOrCf: '',
             });
             coverInputRef.current.value = null;
-            setTimeout(() => {
-                navigate('/login');
-            }, 3000);
+            if (registerDesigner.fulfilled.match(response)) {
+                setTimeout(() => {
+                    navigate('/login');
+                  }, 2000);
+            }
 
         } catch (error) {
             console.error('Designer registration failed:', error);

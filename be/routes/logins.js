@@ -19,6 +19,7 @@ login.post('/login', async (req, res) =>{
 
             return res.header('Authorization', token).status(200).send({
                 statusCode: 200,
+                message:'Login successfully executed',
                 token
             });
         }
@@ -35,6 +36,7 @@ login.post('/login', async (req, res) =>{
 
             return res.header('Authorization', token).status(200).send({
                 statusCode: 200,
+                message:'Login successfully executed',
                 token
             });
         }

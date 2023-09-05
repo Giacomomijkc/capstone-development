@@ -1,10 +1,13 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { getState } from '@reduxjs/toolkit';
 import axios from 'axios';
+const apiUrlUploadAvatar = `${process.env.REACT_APP_SERVER_BASE_URL}/designers/cloudUpload`;
+const apiUrlRegisterDesigner = `${process.env.REACT_APP_SERVER_BASE_URL}/designers/create`;
+const apiUrlFetchDesigners = `${process.env.REACT_APP_SERVER_BASE_URL}/designers/`;
 
-// Definisci la thunk per l'upload dell'avatar
 export const uploadAvatar = createAsyncThunk('designers/uploadAvatar', async (avatarFormData) => {
     try {
-        const response = await axios.post('http://localhost:5050/designers/cloudUpload', avatarFormData);
+        const response = await axios.post(apiUrlUploadAvatar, avatarFormData);
         return response.data.avatar;
     } catch (error) {
         console.log(error)
@@ -12,22 +15,47 @@ export const uploadAvatar = createAsyncThunk('designers/uploadAvatar', async (av
     }
 });
 
-// Definisci la thunk per la registrazione del designer
 export const registerDesigner = createAsyncThunk('designers/registerDesigner', async (designerData,{ rejectWithValue }) => {
     try {
-        const response = await axios.post('http://localhost:5050/designers/create', designerData);
+        const response = await axios.post(apiUrlRegisterDesigner, designerData);
         //return response.data.payload;
         return response.data;
     } catch (error) {
         console.log(error)
         if (error.response && error.response.data && error.response.data.message) {
           // Se il backend restituisce un messaggio di errore, utilizza rejectWithValue per passare il messaggio al componente
+          console.log(error.response.data.error.errors)
           return rejectWithValue(error.response.data.message);
         } else {
           // Altrimenti, rilancia l'errore originale
           throw error;
         }
     }
+});
+
+export const fetchDesigner = createAsyncThunk('designers/fetchDesigner', async (_, {getState}) => {
+
+
+  try {
+    const userId = getState().designers.userId;  
+    const response = await axios.get(apiUrlFetchDesigners+userId);
+    return response.data.designer;
+  } catch (error) {
+    console.error('Errore durante il recupero dei dati del designer', error);
+    throw new Error('Errore durante il recupero dei dati del designer');
+  }
+});
+
+export const fetchDesigners = createAsyncThunk('designers/fetchDesigners', async () => {
+
+
+  try {
+    const response = await axios.get(apiUrlFetchDesigners);
+    return response.data.designers;
+  } catch (error) {
+    console.error('Errore durante il recupero dei dati dei designers', error);
+    throw new Error('Errore durante il recupero dei dati dei designers');
+  }
 });
 
 const designersSlice = createSlice({
@@ -48,13 +76,20 @@ const designersSlice = createSlice({
         address: '',
         vatOrCf: '',
       },
-      // ... altri campi dello stato ...
+      isLogged: false,
+      userId: null,
     },
     reducers: {
-      // ... altre azioni e reducer ...
-      setAvatarURL: (state, action) => {
+      // a cosa servirebbe qui?
+      /*setAvatarURL: (state, action) => {
         state.avatarURL = action.payload;
+      },*/
+      setUserId: (state, action) => {
+        state.userId = action.payload;
       },
+      setIsLogged: (state, action) => {
+        state.isLogged = action.payload
+      }
     },
     extraReducers: (builder) => {
       builder
@@ -72,15 +107,34 @@ const designersSlice = createSlice({
           // Gestisci la registrazione del designer qui, se necessario
           state.successMessage = action.payload.message;
           //perché non riesco qui a svuotare i campi / reindirizzare /
-    
+          //per modificare l'oggetto devo creare una copia
+          /*state.designerData = {
+            ...state.designerData,
+            surname: '',
+            nickname: '',
+            description: '',
+            tags: [],
+            website: '',
+            instagram: '',
+            email: '',
+            password: '',
+            address: '',
+            vatOrCf: '',
+          };*/
         })
         .addCase(registerDesigner.rejected, (state, action) => {
           // Gestisci l'errore qui
           state.error = action.payload;
-        });
+        })
+        .addCase(fetchDesigner.fulfilled, (state, action) => {
+          state.designer = action.payload;
+        })
+        .addCase(fetchDesigners.fulfilled, (state, action) => {
+          state.designers = action.payload;
+        })
     },
   });
   
-  export const { setAvatarURL } = designersSlice.actions;
+  export const { setAvatarURL, setUserId, setIsLogged } = designersSlice.actions;
   
   export default designersSlice.reducer;

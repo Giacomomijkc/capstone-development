@@ -3,3 +3,9 @@
     height: 100vh;
     object-fit: cover;
 }
+
+@media (max-width: 768px) {
+    .login-cover {
+      height: 50vh !important;
+    }
+}

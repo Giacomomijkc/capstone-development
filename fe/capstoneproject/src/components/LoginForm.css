@@ -2,11 +2,16 @@
     background-color: white !important;
     border-radius: 20px !important;
     border-color: #BEBFFB !important;
-    width: 400px !important;
+    width: 230px !important;
     height: 40px;
     color: #BEBFFB !important;
     font-weight: 500;
     font-size: medium; 
+}
+
+.alert{
+    border-radius: 50px !important;
+    width: 400px;
 }
 
 @media (max-width: 768px) {
@@ -19,6 +24,6 @@
         width: 320px !important;
     }
     .alert{
-        max-width: 400px; 
+        max-width: 400px !important; 
     }
   }
