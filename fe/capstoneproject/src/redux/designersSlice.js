@@ -35,6 +35,7 @@ const designersSlice = createSlice({
     initialState: {
       avatarURL: null,
       successMessage: null,
+      isUploadLoading: true,
       designerData: {
         surname: '',
         nickname: '',
@@ -57,13 +58,19 @@ const designersSlice = createSlice({
     },
     extraReducers: (builder) => {
       builder
+        .addCase(uploadAvatar.pending, (state, action) => {
+          state.isUploadLoading = true;
+        })
         .addCase(uploadAvatar.fulfilled, (state, action) => {
           state.avatarURL = action.payload;
+          state.isUploadLoading = false;
+        })
+        .addCase(uploadAvatar.rejected, (state, action) => {
+          state.isUploadLoading = false;
         })
         .addCase(registerDesigner.fulfilled, (state, action) => {
           // Gestisci la registrazione del designer qui, se necessario
           state.successMessage = action.payload.message;
-
           //perché non riesco qui a svuotare i campi / reindirizzare /
     
         })
