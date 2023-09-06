@@ -27,8 +27,10 @@ const NavigationBar = () => {
   const dispatch = useDispatch();
 
   useEffect(()=> {
-    dispatch(fetchDesigner())
-  }, [])
+    if (isLogged) {
+      dispatch(fetchDesigner());
+    }
+  }, [dispatch, isLogged]);
 
   return (
   <Navbar expand="lg" className="navbar">
@@ -45,7 +47,9 @@ const NavigationBar = () => {
           }
           </Navbar.Collapse>
           <div className="position-relative" style={{ marginLeft: 'auto', marginRight: 'auto' }}>
-            <Navbar.Brand><img src={logoImage} alt="Logo" className="logo"/></Navbar.Brand>
+            <Link to="/">
+              <Navbar.Brand><img src={logoImage} alt="Logo" className="logo"/></Navbar.Brand>
+            </Link>
           </div>
           <Navbar.Collapse id="basic-navbar-nav ">
           <div className='ms-auto'>

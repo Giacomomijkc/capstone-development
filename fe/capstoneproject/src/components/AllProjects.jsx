@@ -6,7 +6,7 @@ import SingleProject from './SingleProject';
 
 const AllProjects = () =>{
     const dispatch = useDispatch();
-    const projects = useSelector((state) => state.projects);
+    const projects = useSelector((state) => state.projects.projects);
     const designers = useSelector((state) => state.designers.designers);
 
     useEffect(() => {
@@ -15,22 +15,24 @@ const AllProjects = () =>{
     }, [dispatch]);
 
     console.log(designers)
+    console.log(projects)
     return (
         <div>
-            <h1>Projects</h1>
             <div className='d-flex flex-wrap justify-content-center align-items-center'>
-                {projects.map((project) => {
-                // Ottieni il designer corrispondente in base all'ID dell'autore
-                const authorDesigner = designers.find(
-                    (designer) => designer._id === project.author
-                  );
-                console.log(authorDesigner)
-
-                return (
-                    <SingleProject key={project._id} project={project} authorDesigner={authorDesigner} />
-                );
-                })}
-      </div>
+                {designers && projects &&
+                projects.map((project) => {
+                    // Ottieni il designer corrispondente in base all'ID dell'autore
+                    const authorDesigner = designers.find(
+                        (designer) => designer._id === project.author
+                      );
+                    console.log(authorDesigner)
+    
+                    return (
+                        <SingleProject key={project._id} project={project} authorDesigner={authorDesigner} />
+                    );
+                    })
+                }
+            </div>
         </div>
     );
 }

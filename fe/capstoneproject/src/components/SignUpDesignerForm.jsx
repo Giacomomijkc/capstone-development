@@ -4,7 +4,7 @@ import Button from 'react-bootstrap/Button';
 import { useState, useRef } from 'react';
 import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
-import { uploadAvatar, registerDesigner, setAvatarURL } from '../redux/designersSlice';
+import { uploadAvatar, registerDesigner } from '../redux/designersSlice';
 import {useNavigate} from 'react-router-dom';
 import './SignUpDesignerForm.css';
 

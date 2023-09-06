@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
+const apiUrlFetchProjects = `${process.env.REACT_APP_SERVER_BASE_URL}/projects/`;
 
 // Crea un'azione asincrona per ottenere i progetti
 export const fetchProjects = createAsyncThunk('projects/fetchProjects', async () => {
@@ -51,20 +52,44 @@ export const createProject = createAsyncThunk('projects/createProject', async (p
 
 // Crea un'azione asincrona per ottenere un progetto singolo
 export const fetchSingleProject = createAsyncThunk('projects/fetchSingleProject', async (projectId) => {
-    const response = await axios.get(`http://localhost:5050/projects/${projectId}`);
+  try {
+    const response = await axios.get(`${apiUrlFetchProjects}${projectId}`);
     return response.data.project;
+  } catch (error) {
+    console.error('Errore durante il recupero dei dati del progetto', error);
+    throw new Error('Errore durante il recupero dei dati del progetto');
+  }
 });
+
+export const fetchDesignerProjects = createAsyncThunk('designers/fetchDesignerProjects', async (designerId) =>{
+  try {
+    const response = await axios.get(`${apiUrlFetchProjects}designer/${designerId}`);
+    return response.data.projects;
+  } catch (error) {
+    console.error('Errore durante il recupero dei progetti del designer', error);
+    throw new Error('Errore durante il recupero dei progetti del designer');
+  }
+})
 
 const projectsSlice = createSlice({
   name: 'projects',
-  initialState: [],
+  initialState: {
+    singleProject: {},
+    projects: [],
+    designerProjects: [],
+  },
   reducers: {},
   extraReducers: (builder) => {
     builder
-    
     .addCase(fetchProjects.fulfilled, (state, action) => {
-      return action.payload;
-    });
+      state.projects = action.payload;
+    })
+    .addCase(fetchSingleProject.fulfilled, (state, action) => {
+      state.singleProject = action.payload
+    })
+    .addCase(fetchDesignerProjects.fulfilled, (state, action) => {
+      state.designerProjects = action.payload
+    })
   },
 });
 

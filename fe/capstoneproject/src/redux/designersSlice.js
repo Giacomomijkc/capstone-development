@@ -47,14 +47,22 @@ export const fetchDesigner = createAsyncThunk('designers/fetchDesigner', async (
 });
 
 export const fetchDesigners = createAsyncThunk('designers/fetchDesigners', async () => {
-
-
   try {
     const response = await axios.get(apiUrlFetchDesigners);
     return response.data.designers;
   } catch (error) {
     console.error('Errore durante il recupero dei dati dei designers', error);
     throw new Error('Errore durante il recupero dei dati dei designers');
+  }
+});
+
+export const fetchDesignerById = createAsyncThunk('designers/fetchDesignerById', async (designerId) => {
+  try {
+    const response = await axios.get(`${apiUrlFetchDesigners}${designerId}`);
+    return response.data.designer;
+  } catch (error) {
+    console.error('Errore durante il recupero dei dati del designer', error);
+    throw new Error('Errore durante il recupero dei dati del designer');
   }
 });
 
@@ -78,12 +86,9 @@ const designersSlice = createSlice({
       },
       isLogged: false,
       userId: null,
+      singleDesigner: null, 
     },
     reducers: {
-      // a cosa servirebbe qui?
-      /*setAvatarURL: (state, action) => {
-        state.avatarURL = action.payload;
-      },*/
       setUserId: (state, action) => {
         state.userId = action.payload;
       },
@@ -104,37 +109,32 @@ const designersSlice = createSlice({
           state.isUploadLoading = false;
         })
         .addCase(registerDesigner.fulfilled, (state, action) => {
-          // Gestisci la registrazione del designer qui, se necessario
           state.successMessage = action.payload.message;
-          //perché non riesco qui a svuotare i campi / reindirizzare /
-          //per modificare l'oggetto devo creare una copia
-          /*state.designerData = {
-            ...state.designerData,
-            surname: '',
-            nickname: '',
-            description: '',
-            tags: [],
-            website: '',
-            instagram: '',
-            email: '',
-            password: '',
-            address: '',
-            vatOrCf: '',
-          };*/
         })
         .addCase(registerDesigner.rejected, (state, action) => {
-          // Gestisci l'errore qui
           state.error = action.payload;
         })
         .addCase(fetchDesigner.fulfilled, (state, action) => {
           state.designer = action.payload;
         })
+        .addCase(fetchDesigner.rejected, (state, action) => {
+          state.error = action.payload;
+        })
         .addCase(fetchDesigners.fulfilled, (state, action) => {
           state.designers = action.payload;
+        })
+        .addCase(fetchDesigners.rejected, (state, action) => {
+          state.error = action.payload;
+        })
+        .addCase(fetchDesignerById.fulfilled, (state, action) => {
+          state.singleDesigner = action.payload;
+        })
+        .addCase(fetchDesignerById.rejected, (state, action) => {
+          state.error = action.payload;
         })
     },
   });
   
-  export const { setAvatarURL, setUserId, setIsLogged } = designersSlice.actions;
+  export const { setUserId, setIsLogged } = designersSlice.actions;
   
   export default designersSlice.reducer;

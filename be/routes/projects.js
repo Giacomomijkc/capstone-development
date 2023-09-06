@@ -171,6 +171,39 @@ project.get('/projects/:projectId', async (req, res) => {
     }
 });
 
+//projects get da id designer
+
+project.get('/projects/designer/:designerId', async (req, res) => {
+    const { designerId } = req.params;
+  
+    try {
+      // Trova il designer con l'ID specificato
+      const designer = await DesignersModel.findById(designerId);
+  
+      if (!designer) {
+        return res.status(404).json({
+          statusCode: 404,
+          message: 'Designer not found',
+        });
+      }
+  
+      // Ottieni tutti i progetti associati a questo designer
+      const projects = await ProjectsModel.find({ author: designerId });
+  
+      res.status(200).json({
+        statusCode: 200,
+        message: 'All projects by designer fetched successfully',
+        projects,
+      });
+    } catch (error) {
+      res.status(500).json({
+        message: 'Internal server error',
+        error,
+      });
+    }
+  });
+  
+
 //project all get
 project.get('/projects', async (req, res) => {
     try {
