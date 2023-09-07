@@ -61,6 +61,7 @@ export const fetchSingleProject = createAsyncThunk('projects/fetchSingleProject'
   }
 });
 
+//Crea un'azione asincrona per ottenere i projects di un designer
 export const fetchDesignerProjects = createAsyncThunk('designers/fetchDesignerProjects', async (designerId) =>{
   try {
     const response = await axios.get(`${apiUrlFetchProjects}designer/${designerId}`);
@@ -71,10 +72,32 @@ export const fetchDesignerProjects = createAsyncThunk('designers/fetchDesignerPr
   }
 })
 
+//crea un'azione asincrona per mettere/togliere like a un progetto
+export const toggleLike = createAsyncThunk('projects/toggleLike', async (projectId, { rejectWithValue, getState }) => {
+  try {
+      const token = JSON.parse(localStorage.getItem("userLoggedIn"));
+      const response = await axios.post(`${apiUrlFetchProjects}${projectId}/like`, {}, {
+          headers: { 'Authorization': `${token}` }
+      });
+      const {updatedProject} = response.data;
+      console.log(response);
+      console.log(updatedProject)
+      return updatedProject
+  } catch (error) {
+    console.log(error)
+      if (error.response && error.response.data && error.response.data.message){
+          return rejectWithValue(error.response.data.message);
+      } else {
+          throw error;
+      }
+  }
+})
+
 const projectsSlice = createSlice({
   name: 'projects',
   initialState: {
     singleProject: {},
+    singleProjectLike: [],
     projects: [],
     designerProjects: [],
   },
@@ -90,6 +113,13 @@ const projectsSlice = createSlice({
     .addCase(fetchDesignerProjects.fulfilled, (state, action) => {
       state.designerProjects = action.payload
     })
+    .addCase(toggleLike.fulfilled, (state, action) => {
+      state.singleProject = action.payload;
+      //state.designerProjects = action.payload.updatedDesignerProjects;
+  })
+  .addCase(toggleLike.rejected, (state, action) => {
+      state.error = action.payload;
+  });
   },
 });
 

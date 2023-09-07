@@ -7,9 +7,11 @@ import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
 import { fetchDesigner } from '../redux/designersSlice';
+import { getDesignerDetails, getClientDetails } from '../redux/usersSlice';
 import Navbar from 'react-bootstrap/Navbar';
 import Nav from 'react-bootstrap/Nav';
 import './NavigationBar.css';
+import jwtDecode from 'jwt-decode';
 
 const NavigationBar = () => {
 
@@ -18,19 +20,40 @@ const NavigationBar = () => {
     window.location.href = "/";
   }
 
-  const userId = useSelector((state)=> state.designers.userId);
-  const isLogged = useSelector((state)=> state.designers.isLogged);
-  const designer = useSelector((state)=> state.designers.designer);
-
-  console.log(designer)
+  //const userId = useSelector((state)=> state.designers.userId);
+  //const isLogged = useSelector((state)=> state.designers.isLogged);
+  const isLogged = useSelector((state)=> state.users.isLogged);
+  const designer = useSelector((state)=> state.users.designer);
+  const client = useSelector((state)=> state.users.client);
 
   const dispatch = useDispatch();
+  const token = localStorage.getItem('userLoggedIn');
+  //const decodedToken = jwtDecode(token);
+  //const userId = decodedToken._id;
+  //const userRole = decodedToken.role;
+  //const user = useSelector(state => state.users.user);
 
-  useEffect(()=> {
-    if (isLogged) {
-      dispatch(fetchDesigner());
-    }
-  }, [dispatch, isLogged]);
+  let decodedToken;
+  let userId;
+  let userRole;
+
+  if (token) {
+    decodedToken = jwtDecode(token);
+    userId = decodedToken._id;
+    userRole = decodedToken.role;
+}
+
+  useEffect(() => {
+      if (token) {
+          if (userRole === 'Designer') {
+              dispatch(getDesignerDetails(userId));
+          } else if (userRole === 'Client') {
+              dispatch(getClientDetails(userId));
+          }
+      }
+  }, [dispatch, token, userId, userRole]);
+
+
 
   return (
   <Navbar expand="lg" className="navbar">
@@ -40,10 +63,10 @@ const NavigationBar = () => {
         <Navbar.Collapse id="basic-navbar-nav ">
           {isLogged &&
                       <Nav className="me-auto ">
-                      <Nav.Link href="#home" className='links'>Designers</Nav.Link>
-                      <Nav.Link href="#link" className='links'>Job Offers</Nav.Link>
-                      <Nav.Link href="#link" className='links'>How it works</Nav.Link>
-                    </Nav>
+                        <Nav.Link href="#home" className='links'>Designers</Nav.Link>
+                        <Nav.Link href="#link" className='links'>Job Offers</Nav.Link>
+                        <Nav.Link href="#link" className='links'>How it works</Nav.Link>
+                      </Nav>
           }
           </Navbar.Collapse>
           <div className="position-relative" style={{ marginLeft: 'auto', marginRight: 'auto' }}>
@@ -66,8 +89,8 @@ const NavigationBar = () => {
                   </Form>
                   <Button className='nav-buttons mx-2'>Project+</Button>
                   <Button className='logout-button mx-2' onClick={handleLogOut}>LogOut</Button>
-                  <span className='user-hi me-2'>Hi <span className='user-nickname'>{designer.nickname}</span></span>
-                  <img src={designer.avatar} alt="User Avatar" className="user-avatar" />
+                  <span className='user-hi me-2'>Hi <span className='user-nickname'>{designer.designer.nickname}</span></span>
+                  <img src={designer.designer.avatar} alt="User Avatar" className="user-avatar" />
                 </div>
               ) : (
                 // Gestisci il caso in cui designer sia undefined o null

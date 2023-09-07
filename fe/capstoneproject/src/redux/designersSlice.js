@@ -84,7 +84,7 @@ const designersSlice = createSlice({
         address: '',
         vatOrCf: '',
       },
-      isLogged: false,
+      //isLogged: false,
       userId: null,
       singleDesigner: null, 
     },
@@ -134,7 +134,7 @@ const designersSlice = createSlice({
         })
     },
   });
-  
-  export const { setUserId, setIsLogged } = designersSlice.actions;
+  //tolto setIsLogged
+  export const { setUserId } = designersSlice.actions;
   
   export default designersSlice.reducer;

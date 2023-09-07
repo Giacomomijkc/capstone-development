@@ -327,7 +327,10 @@ project.post('/projects/:projectId/like', verifyToken, async (req, res) => {
             }
         }
 
-        res.status(200).json({ message: 'Like updated successfully' });
+        res.status(200).json({
+            message: 'Like updated successfully',
+            updatedProject: project
+          });
 
     } catch (error) {
         res.status(500).json({

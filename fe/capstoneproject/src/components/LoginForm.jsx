@@ -6,7 +6,8 @@ import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { login } from '../redux/usersSlice';
-import { setUserId, setIsLogged } from '../redux/designersSlice';
+import { setUserId} from '../redux/designersSlice';
+import { setIsLogged } from '../redux/usersSlice';
 import jwtDecode from 'jwt-decode';
 import './LoginForm.css';
 
@@ -22,7 +23,8 @@ const LoginForm = () => {
     const successMessage = useSelector((state) => state.users.successMessage);
     //const setRole = useSelector((state) => state.users.role);
     const userId = useSelector((state)=> state.designers.userId);
-    const isLogged = useSelector((state)=> state.designers.isLogged);
+    //const isLogged = useSelector((state)=> state.designers.isLogged);
+    const isLogged = useSelector((state)=> state.users.isLogged);
 
     const handleLogin = async (e) => {
         e.preventDefault();
@@ -40,7 +42,7 @@ const LoginForm = () => {
               const decodedToken = jwtDecode(token);
               const designerId = decodedToken._id;
               dispatch(setUserId(designerId));
-              dispatch(setIsLogged(true));
+              //dispatch(setIsLogged(true));
 
         }
           // Se il login ha avuto successo, puoi fare altre azioni, come reindirizzare l'utente
