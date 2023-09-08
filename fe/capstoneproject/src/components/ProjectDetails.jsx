@@ -22,7 +22,7 @@ const ProjectDetails = ({project, designer}) => {
     const likedProjects = designerLogged ? designerLogged.designer.liked_projects : clientLogged?.client.liked_projects;
     const isLiked = likedProjects?.some(likedProject => likedProject.project_id === project._id);
 
-
+    console.log(designer)
     const dispatch = useDispatch();
 
     useEffect(() => {
@@ -34,7 +34,7 @@ const ProjectDetails = ({project, designer}) => {
     const otherDesignerProjects = designerProjects?.filter((designerProject) => designerProject._id?.toString() !== project._id?.toString());
 
 
-    const handleLikeClick = async() => {
+    const handleLikeClickBig = async() => {
         if (designerLogged) {
             await dispatch(toggleLike(project._id));
             dispatch(getDesignerDetails(designerLogged.designer._id));
@@ -72,7 +72,7 @@ const ProjectDetails = ({project, designer}) => {
                             <FontAwesomeIcon 
                             icon={isLiked ? solidHeart :regularHeart} 
                             className='mx-2 icons-project-details' 
-                            onClick={handleLikeClick} 
+                            onClick={handleLikeClickBig} 
                             />
                             {project.likes && (
                                 <span>{project.likes.length}</span>
@@ -117,7 +117,7 @@ const ProjectDetails = ({project, designer}) => {
                             {otherDesignerProjects.map((otherProject) => (
                                 <SingleProject
                                     key={otherProject._id}
-                                    project={otherProject}
+                                    projectToRender={otherProject}
                                     authorDesigner={designer}
                                 />
                                 ))}

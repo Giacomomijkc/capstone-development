@@ -93,10 +93,32 @@ export const toggleLike = createAsyncThunk('projects/toggleLike', async (project
   }
 })
 
+//crea una seconda azione asincrona per mettere/togliere al componente SingleProject
+export const toggleSingleProjectLike = createAsyncThunk('projects/toggleSingleProjectLike', async (projectId, { rejectWithValue, getState }) => {
+  try {
+      const token = JSON.parse(localStorage.getItem("userLoggedIn"));
+      const response = await axios.post(`${apiUrlFetchProjects}${projectId}/like`, {}, {
+          headers: { 'Authorization': `${token}` }
+      });
+      const {updatedProject} = response.data;
+      console.log(response);
+      console.log(updatedProject)
+      return updatedProject
+  } catch (error) {
+    console.log(error)
+      if (error.response && error.response.data && error.response.data.message){
+          return rejectWithValue(error.response.data.message);
+      } else {
+          throw error;
+      }
+  }
+})
+
 const projectsSlice = createSlice({
   name: 'projects',
   initialState: {
     singleProject: {},
+    singleProjectComponent: {},
     singleProjectLike: [],
     projects: [],
     designerProjects: [],
@@ -116,10 +138,16 @@ const projectsSlice = createSlice({
     .addCase(toggleLike.fulfilled, (state, action) => {
       state.singleProject = action.payload;
       //state.designerProjects = action.payload.updatedDesignerProjects;
-  })
-  .addCase(toggleLike.rejected, (state, action) => {
+    })
+    .addCase(toggleLike.rejected, (state, action) => {
       state.error = action.payload;
-  });
+    })
+    .addCase(toggleSingleProjectLike.fulfilled, (state, action) => {
+      state.singleProjectComponent = action.payload;
+    })
+    .addCase(toggleSingleProjectLike.rejected, (state, action) => {
+      state.error = action.payload;
+    })
   },
 });
 

@@ -28,7 +28,7 @@ const AllProjects = () =>{
                     console.log(authorDesigner)
     
                     return (
-                        <SingleProject key={project._id} project={project} authorDesigner={authorDesigner} />
+                        <SingleProject key={project._id} projectToRender={project} authorDesigner={authorDesigner} />
                     );
                     })
                 }
