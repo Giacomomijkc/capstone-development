@@ -51,6 +51,12 @@
     color: #BEBFFB ;
 }
 
+.user-company{
+    font-size: medium;
+    font-weight: bold;
+    color: #BEBFFB ;
+}
+
 @media (max-width: 991px) {
     .container {
       flex-direction: column;

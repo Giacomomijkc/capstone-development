@@ -56,27 +56,27 @@ const NavigationBar = () => {
 
 
   return (
-  <Navbar expand="lg" className="navbar">
-      <Container >
-        <div className='container d-flex justify-content-between align-items-center w-100'>
+    <Navbar expand="lg" className="navbar">
+    <Container>
+      <div className='container d-flex justify-content-between align-items-center w-100'>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav ">
-          {isLogged &&
-                      <Nav className="me-auto ">
-                        <Nav.Link href="#home" className='links'>Designers</Nav.Link>
-                        <Nav.Link href="#link" className='links'>Job Offers</Nav.Link>
-                        <Nav.Link href="#link" className='links'>How it works</Nav.Link>
-                      </Nav>
-          }
-          </Navbar.Collapse>
-          <div className="position-relative" style={{ marginLeft: 'auto', marginRight: 'auto' }}>
-            <Link to="/">
-              <Navbar.Brand><img src={logoImage} alt="Logo" className="logo"/></Navbar.Brand>
-            </Link>
-          </div>
-          <Navbar.Collapse id="basic-navbar-nav ">
+          {isLogged && (
+            <Nav className="me-auto">
+              <Nav.Link href="#home" className='links'>Designers</Nav.Link>
+              <Nav.Link href="#link" className='links'>Job Offers</Nav.Link>
+              <Nav.Link href="#link" className='links'>How it works</Nav.Link>
+            </Nav>
+          )}
+        </Navbar.Collapse>
+        <div className="position-relative" style={{ marginLeft: 'auto', marginRight: 'auto' }}>
+          <Link to="/">
+            <Navbar.Brand><img src={logoImage} alt="Logo" className="logo"/></Navbar.Brand>
+          </Link>
+        </div>
+        <Navbar.Collapse id="basic-navbar-nav ">
           <div className='ms-auto'>
-          {isLogged ? (
+            {isLogged ? (
               designer ? (
                 <div className='d-flex justify-content-center align-items-center'>
                   <Form className="d-flex mx-2">
@@ -87,30 +87,51 @@ const NavigationBar = () => {
                       aria-label="Search"
                     />
                   </Form>
-                  <Button className='nav-buttons mx-2'>Project+</Button>
+                  <Link to="/create-project" > 
+                    <Button className='nav-buttons mx-2'>Project+</Button>
+                  </Link>
                   <Button className='logout-button mx-2' onClick={handleLogOut}>LogOut</Button>
-                  <span className='user-hi me-2'>Hi <span className='user-nickname'>{designer.designer.nickname}</span></span>
-                  <img src={designer.designer.avatar} alt="User Avatar" className="user-avatar" />
+                  {designer && (
+                    <>
+                      <span className='user-hi me-2'>Hi <span className='user-nickname'>{designer.designer.nickname}</span></span>
+                      <img src={designer.designer.avatar} alt="User Avatar" className="user-avatar" />
+                    </>
+                  )}
                 </div>
               ) : (
-                // Gestisci il caso in cui designer sia undefined o null
-                null
+                <div className='d-flex justify-content-center align-items-center'>
+                  <Form className="d-flex mx-2">
+                    <Form.Control
+                      type="search"
+                      placeholder="Search"
+                      className="search me-2"
+                      aria-label="Search"
+                    />
+                  </Form>
+                  <Button className='logout-button mx-2' onClick={handleLogOut}>LogOut</Button>
+                  {client && (
+                    <>
+                      <span className='user-hi me-2'>Hi <span className='user-company'>{client.client.company}</span></span>
+                      <img src={client.client.avatar} alt="User Avatar" className="user-avatar" />
+                    </>
+                  )}
+                </div>
               )
             ) : (
-                <Form className="d-flex mx-2">
-                  <Link to="/signup-options">
-                    <Button className='nav-buttons mx-2'>SignUp</Button>
-                  </Link>
-                  <Link to="/login">
-                    <Button className='nav-buttons mx-2'>LogIn</Button>
-                  </Link>
-                </Form>
-              )}
+              <Form className="d-flex mx-2">
+                <Link to="/signup-options">
+                  <Button className='nav-buttons mx-2'>SignUp</Button>
+                </Link>
+                <Link to="/login">
+                  <Button className='nav-buttons mx-2'>LogIn</Button>
+                </Link>
+              </Form>
+            )}
           </div>
         </Navbar.Collapse>
-        </div>
-      </Container>
-    </Navbar>    
+      </div>
+    </Container>
+  </Navbar>  
   );
 };
 

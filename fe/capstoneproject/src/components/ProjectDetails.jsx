@@ -4,6 +4,7 @@ import Button from 'react-bootstrap/esm/Button';
 import {fetchDesignerProjects, toggleLike } from '../redux/projectsSlice';
 import { getDesignerDetails } from '../redux/usersSlice';
 import { getClientDetails } from '../redux/usersSlice';
+import { fetchProjects } from '../redux/projectsSlice';
 import { useSelector, useDispatch } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faComment } from '@fortawesome/free-regular-svg-icons';
@@ -37,9 +38,11 @@ const ProjectDetails = ({project, designer}) => {
     const handleLikeClickBig = async() => {
         if (designerLogged) {
             await dispatch(toggleLike(project._id));
+            dispatch(fetchProjects());
             dispatch(getDesignerDetails(designerLogged.designer._id));
           } else if (clientLogged) {
             await dispatch(toggleLike(project._id));
+            dispatch(fetchProjects());
             dispatch(getClientDetails(clientLogged.client._id));
           }
     };

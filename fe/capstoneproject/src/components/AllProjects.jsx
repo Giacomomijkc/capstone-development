@@ -21,12 +21,9 @@ const AllProjects = () =>{
             <div className='d-flex flex-wrap justify-content-center align-items-center'>
                 {designers && projects &&
                 projects.map((project) => {
-                    // Ottieni il designer corrispondente in base all'ID dell'autore
                     const authorDesigner = designers.find(
                         (designer) => designer._id === project.author
                       );
-                    console.log(authorDesigner)
-    
                     return (
                         <SingleProject key={project._id} projectToRender={project} authorDesigner={authorDesigner} />
                     );

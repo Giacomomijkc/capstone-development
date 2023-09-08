@@ -1,6 +1,9 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 const apiUrlFetchProjects = `${process.env.REACT_APP_SERVER_BASE_URL}/projects/`;
+const apirUrlFetchCoverProjectUpload = `${process.env.REACT_APP_SERVER_BASE_URL}/projects/cover/upload`;
+const apiUrlFetchImagesProjectUpload = `${process.env.REACT_APP_SERVER_BASE_URL}/projects/images/upload`;
+const apiUrlFetchProjectUpload = `${process.env.REACT_APP_SERVER_BASE_URL}/projects/create`;
 
 // Crea un'azione asincrona per ottenere i progetti
 export const fetchProjects = createAsyncThunk('projects/fetchProjects', async () => {
@@ -9,12 +12,14 @@ export const fetchProjects = createAsyncThunk('projects/fetchProjects', async ()
 });
 
 // Crea un'azione asincrona per caricare una cover per un progetto
-export const uploadCover = createAsyncThunk('projects/uploadCover', async (cover) => {
-    const formData = new FormData();
-    formData.append('cover', cover);
-  
-    const response = await axios.post('http://localhost:5050/projects/cover/upload', formData);
+export const uploadCover = createAsyncThunk('projects/uploadCover', async (coverFormData) => {
+  try {
+    const response = await axios.post(apirUrlFetchCoverProjectUpload, coverFormData);
     return response.data.cover;
+  } catch (error) {
+    console.log(error)
+        throw new Error('Errors uploading cover');
+  }
 });
 
 // Crea un'azione asincrona per aggiornare la cover di un progetto
@@ -27,12 +32,14 @@ export const updateCover = createAsyncThunk('projects/updateCover', async ({ pro
 });
 
 // Crea un'azione asincrona per caricare immagini per un progetto
-export const uploadImages = createAsyncThunk('projects/uploadImages', async (images) => {
-    const formData = new FormData();
-    images.forEach((image) => formData.append('images', image));
-  
-    const response = await axios.post('http://localhost:5050/projects/images/upload', formData);
-    return response.data.images;
+export const uploadImages = createAsyncThunk('projects/uploadImages', async (imagesFormData) => {
+    try {
+      const response = await axios.post(apiUrlFetchImagesProjectUpload, imagesFormData);
+      return response.data.images;
+    } catch (error) {
+      console.log(error)
+      throw new Error('Errors uploading images');
+    }
 });
 
 // Crea un'azione asincrona per aggiornare le immagini di un progetto
@@ -45,9 +52,21 @@ export const updateImages = createAsyncThunk('projects/updateImages', async ({ p
 });
 
 // Crea un'azione asincrona per creare un nuovo progetto
-export const createProject = createAsyncThunk('projects/createProject', async (projectData) => {
-    const response = await axios.post('http://localhost:5050/projects/create', projectData);
-    return response.data.project;
+export const createProject = createAsyncThunk('projects/createProject', async (projectData,{ rejectWithValue }) => {
+    try {
+      const token = JSON.parse(localStorage.getItem("userLoggedIn"));
+      const response = await axios.post(apiUrlFetchProjectUpload, projectData, {
+        headers: { 'Authorization': `${token}` }
+    })
+      return response.data.createdProject
+    } catch (error) {
+      if (error.response && error.response.data && error.response.data.message) {
+        console.log(error.response.data.error.errors)
+        return rejectWithValue(error.response.data.message);
+      } else {
+        throw error;
+      }
+    }
 });
 
 // Crea un'azione asincrona per ottenere un progetto singolo
@@ -100,10 +119,10 @@ export const toggleSingleProjectLike = createAsyncThunk('projects/toggleSinglePr
       const response = await axios.post(`${apiUrlFetchProjects}${projectId}/like`, {}, {
           headers: { 'Authorization': `${token}` }
       });
-      const {updatedProject} = response.data;
+      const {updatedSingleProject} = response.data;
       console.log(response);
-      console.log(updatedProject)
-      return updatedProject
+      console.log(updatedSingleProject)
+      return updatedSingleProject
   } catch (error) {
     console.log(error)
       if (error.response && error.response.data && error.response.data.message){
@@ -118,10 +137,16 @@ const projectsSlice = createSlice({
   name: 'projects',
   initialState: {
     singleProject: {},
+    isSingleProjectLoading: true,
     singleProjectComponent: {},
-    singleProjectLike: [],
     projects: [],
     designerProjects: [],
+    isUploadingCover: true,
+    isUploadingImages: true,
+    coverURL: null,
+    imagesURL: null,
+    successMessage: null,
+    createdProject: null
   },
   reducers: {},
   extraReducers: (builder) => {
@@ -131,6 +156,13 @@ const projectsSlice = createSlice({
     })
     .addCase(fetchSingleProject.fulfilled, (state, action) => {
       state.singleProject = action.payload
+      state.isSingleProjectLoading = false
+    })
+    .addCase(fetchSingleProject.pending, (state, action) => {
+      state.isSingleProjectLoading = true
+    })
+    .addCase(fetchSingleProject.rejected, (state, action) => {
+      state.isSingleProjectLoading = false
     })
     .addCase(fetchDesignerProjects.fulfilled, (state, action) => {
       state.designerProjects = action.payload
@@ -147,6 +179,35 @@ const projectsSlice = createSlice({
     })
     .addCase(toggleSingleProjectLike.rejected, (state, action) => {
       state.error = action.payload;
+    })
+    .addCase(uploadCover.rejected, (state, action) => {
+      state.error = action.payload;
+      state.isUploadingCover = false;
+    })
+    .addCase(uploadCover.pending, (state, action) => {
+      state.isUploadingCover = true;
+    })
+    .addCase(uploadCover.fulfilled, (state, action) => {
+      state.coverURL = action.payload;
+      state.isUploadingCover = false;
+    })
+    .addCase(uploadImages.rejected, (state, action) =>{
+      state.error = action.payload;
+      state.isUploadingImages = false;
+    })
+    .addCase(uploadImages.pending, (state, action) =>{
+      state.isUploadingImages = true;
+    })
+    .addCase(uploadImages.fulfilled, (state, action) =>{
+      state.imagesURL = action.payload;
+      state.isUploadingImages = false;
+    })
+    .addCase(createProject.rejected, (state, action) =>{
+      state.error = action.payload;
+    })
+    .addCase(createProject.fulfilled, (state, action) =>{
+      //state.successMessage = action.payload;
+      state.createdProject = action.payload;
     })
   },
 });

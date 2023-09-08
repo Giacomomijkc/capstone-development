@@ -3,32 +3,27 @@ import ProjectDetails from '../components/ProjectDetails';
 import NavigationBar from '../components/NavigationBar';
 import Footer from '../components/Footer';
 import { fetchSingleProject} from '../redux/projectsSlice';
-import { fetchDesignerById } from '../redux/designersSlice';
 import { useSelector, useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
+import './ProjectDetailsPage.css';
 
 const ProjectDetailsPage = () => {
 
   const { projectId } = useParams();
   const dispatch = useDispatch();
   const project = useSelector((state) => state.projects.singleProject);
-  const designer = useSelector((state) => state.designers.singleDesigner);
+  const designers = useSelector((state) => state.designers.designers);
+  const isSingleProjectLoading =useSelector((state) => state.projects.isSingleProjectLoading);
+  const designer = designers?.find((designer) => designer._id === project?.author);
 
-  console.log(project)
-  console.log(designer)
 
   useEffect(() => {
     dispatch(fetchSingleProject(projectId));
   }, [dispatch, projectId]);
 
-  useEffect(() => {
-    if (project && project.author) {
-      dispatch(fetchDesignerById(project.author));
-    }
-  }, [dispatch, project]);
-
-
-
+  if (isSingleProjectLoading) {
+    return <div className="custom-loader-single-project"></div>;
+  }
 
   return (
     <>

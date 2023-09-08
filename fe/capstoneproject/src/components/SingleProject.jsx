@@ -4,7 +4,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faComment } from '@fortawesome/free-regular-svg-icons';
 import { faHeart as regularHeart } from '@fortawesome/free-regular-svg-icons';
 import { faHeart as solidHeart } from '@fortawesome/free-solid-svg-icons';
-//import {toggleLike } from '../redux/projectsSlice';
 import { toggleSingleProjectLike } from '../redux/projectsSlice';
 import { fetchProjects } from '../redux/projectsSlice';
 import { getDesignerDetails } from '../redux/usersSlice';
@@ -27,10 +26,12 @@ const SingleProject = ({projectToRender, authorDesigner}) => {
         console.log("ho cliccato")
         await dispatch(toggleSingleProjectLike(projectToRender._id));
         console.log('ho eseguito tooggle')
+        dispatch(fetchProjects());
         dispatch(getDesignerDetails(designerLogged.designer._id));
         console.log('ho eseguito getDesignerDetails')
-        dispatch(fetchProjects());
+        console.log(projectToRender.likes?.length)
         console.log('ho eseguito fetchProjects')
+        console.log(projectToRender.likes.length)
       } else if (clientLogged) {
         await dispatch(toggleSingleProjectLike(projectToRender._id));
         dispatch(getClientDetails(clientLogged.client._id));
@@ -41,7 +42,7 @@ const SingleProject = ({projectToRender, authorDesigner}) => {
   return (
     <>
     <div className='d-flex flex-column my-5 mx-2' style={{ width: '250px' }}>
-      <Link to={`projects/${projectToRender._id}`}>
+      <Link to={`/projects/${projectToRender._id}`}>
         <img className='project-cover' alt='project-cover' src={projectToRender.cover} />
       </Link>
         <div className='d-flex justify-content-between align-items-center'>

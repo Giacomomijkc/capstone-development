@@ -63,12 +63,6 @@ const SignUpDesignerForm = () => {
         }
     };
 
-    /*const handleInputChange = (e) => {
-        const { name, value } = e.target;
-        // Aggiorna il campo del form nello stato di Redux
-        dispatch(registerDesigner({ ...designerData, [name]: value }));
-    };*/
-
     console.log(formData)
 
     const handleFileUpload = async (e) => {
@@ -96,7 +90,6 @@ const SignUpDesignerForm = () => {
     console.log(successMessage)
     
         try {
-            //await dispatch(registerDesigner({ ...designerData, avatar: avatarURL }));
             const response = await dispatch(registerDesigner(designerData));
             setFormData({
                 name: '',
@@ -123,8 +116,6 @@ const SignUpDesignerForm = () => {
 
         }
     };
-
-    console.log(error)
     
 
     return (

@@ -21,9 +21,11 @@ const SignUpOptionsLayout = () => {
                         </Button>
                     </Link>
                         <p className='my-3'>OR</p>
-                    <Button className='button-email-singup'>
-                        Sign up as Client
-                    </Button>
+                    <Link to="/signup-client">
+                        <Button className='button-email-singup'>
+                            Sign up as Client
+                        </Button>
+                    </Link>
                 </div>
             </Col>
         </Row>

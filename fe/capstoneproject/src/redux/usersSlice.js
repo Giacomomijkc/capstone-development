@@ -42,7 +42,7 @@ export const getDesignerDetails = createAsyncThunk('users/getDesignerDetails', a
 
 export const getClientDetails = createAsyncThunk('users/getClientDetails', async (clientId, { rejectWithValue }) => {
   try {
-      const response = await axios.get(`${apiUrlFetchDesigners}${clientId}`);
+      const response = await axios.get(`${apiUrlFetchClients}${clientId}`);
       return response.data;
   } catch (error) {
       if (error.response && error.response.data && error.response.data.message){
@@ -105,6 +105,7 @@ const loginSlice = createSlice({
           })
           .addCase(getDesignerDetails.fulfilled, (state, action) => {
             state.designer = action.payload;
+            state.client = action.payload;
         })
         .addCase(getDesignerDetails.rejected, (state, action) => {
             state.error = action.payload;
