@@ -1,6 +1,7 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import "./ProjectDetails.css";
 import Button from 'react-bootstrap/esm/Button';
+import RelatedProjects from './RelatedProjects';
 import {fetchDesignerProjects, toggleLike } from '../redux/projectsSlice';
 import { getDesignerDetails } from '../redux/usersSlice';
 import { getClientDetails } from '../redux/usersSlice';
@@ -11,7 +12,6 @@ import { faComment } from '@fortawesome/free-regular-svg-icons';
 import { faHeart as regularHeart } from '@fortawesome/free-regular-svg-icons';
 import { faHeart as solidHeart } from '@fortawesome/free-solid-svg-icons';
 
-import SingleProject from './SingleProject';
 
 const ProjectDetails = ({project, designer}) => {
 
@@ -23,26 +23,28 @@ const ProjectDetails = ({project, designer}) => {
     const likedProjects = designerLogged ? designerLogged.designer.liked_projects : clientLogged?.client.liked_projects;
     const isLiked = likedProjects?.some(likedProject => likedProject.project_id === project._id);
 
-    console.log(designer)
     const dispatch = useDispatch();
-
-    useEffect(() => {
-        if (designer && designer._id) {
-            dispatch(fetchDesignerProjects(designer._id));
-        }
-    }, [dispatch, designer]);
 
     const otherDesignerProjects = designerProjects?.filter((designerProject) => designerProject._id?.toString() !== project._id?.toString());
 
+   useEffect(() => {
+        if (designer && designer._id) {
+            dispatch(fetchDesignerProjects(designer._id));
+            console.log("eseguo fetchDesignerProjects ")
+        }
+        //con designerProjects nell'array contiua a eseguire la chiamata, ma se lo tolgo non aggiorno i likes
+    }, [dispatch, designer, designerProjects]);
+
+    
 
     const handleLikeClickBig = async() => {
         if (designerLogged) {
             await dispatch(toggleLike(project._id));
-            dispatch(fetchProjects());
+            await dispatch(fetchProjects());
             dispatch(getDesignerDetails(designerLogged.designer._id));
           } else if (clientLogged) {
             await dispatch(toggleLike(project._id));
-            dispatch(fetchProjects());
+            await dispatch(fetchProjects());
             dispatch(getClientDetails(clientLogged.client._id));
           }
     };
@@ -112,20 +114,17 @@ const ProjectDetails = ({project, designer}) => {
             </div>
             <div className='d-flex flex-column justify-content-center align-items-center mt-5'>
                 <div>
-                <span className='other-project-title'>Other Projects by <span className='designer-nickname'>{designer.nickname}</span></span>
+                <span className='other-project-title'>Other<span className='ms-2 tags'>
+                    {project.tags?.map((tag, index) => (
+                        <React.Fragment key={tag}>
+                        {index > 0 && <span className='tag-separator'> | </span>}
+                        {tag}
+                        </React.Fragment>
+                    ))}
+                </span> Projects</span>
                 </div>                    
                 <div className='d-flex flex-wrap justify-content-center align-items-center'>
-                        {project && designer && (
-                            <>
-                            {otherDesignerProjects.map((otherProject) => (
-                                <SingleProject
-                                    key={otherProject._id}
-                                    projectToRender={otherProject}
-                                    authorDesigner={designer}
-                                />
-                                ))}
-                            </>
-                        )}
+                    <RelatedProjects projectTags={project.tags}/>
                 </div>
             </div>
         </div>

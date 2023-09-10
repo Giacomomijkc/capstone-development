@@ -81,7 +81,7 @@ export const fetchSingleProject = createAsyncThunk('projects/fetchSingleProject'
 });
 
 //Crea un'azione asincrona per ottenere i projects di un designer
-export const fetchDesignerProjects = createAsyncThunk('designers/fetchDesignerProjects', async (designerId) =>{
+export const fetchDesignerProjects = createAsyncThunk('projects/fetchDesignerProjects', async (designerId) =>{
   try {
     const response = await axios.get(`${apiUrlFetchProjects}designer/${designerId}`);
     return response.data.projects;
@@ -140,6 +140,7 @@ const projectsSlice = createSlice({
     isSingleProjectLoading: true,
     singleProjectComponent: {},
     projects: [],
+    isDesignerProjectsLoading: true,
     designerProjects: [],
     isUploadingCover: true,
     isUploadingImages: true,
@@ -166,6 +167,14 @@ const projectsSlice = createSlice({
     })
     .addCase(fetchDesignerProjects.fulfilled, (state, action) => {
       state.designerProjects = action.payload
+      state.isDesignerProjectsLoading= false
+    })
+    .addCase(fetchDesignerProjects.pending, (state, action) => {
+      state.isDesignerProjectsLoading= true
+    })
+    .addCase(fetchDesignerProjects.rejected, (state, action) => {
+      state.error= action.payload
+      state.isDesignerProjectsLoading= false
     })
     .addCase(toggleLike.fulfilled, (state, action) => {
       state.singleProject = action.payload;

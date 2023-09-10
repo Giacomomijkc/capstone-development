@@ -1,10 +1,10 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import './SingleProject.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faComment } from '@fortawesome/free-regular-svg-icons';
 import { faHeart as regularHeart } from '@fortawesome/free-regular-svg-icons';
 import { faHeart as solidHeart } from '@fortawesome/free-solid-svg-icons';
-import { toggleSingleProjectLike } from '../redux/projectsSlice';
+import { toggleSingleProjectLike, fetchDesignerProjects } from '../redux/projectsSlice';
 import { fetchProjects } from '../redux/projectsSlice';
 import { getDesignerDetails } from '../redux/usersSlice';
 import { getClientDetails } from '../redux/usersSlice';
@@ -21,23 +21,25 @@ const SingleProject = ({projectToRender, authorDesigner}) => {
 
   const dispatch = useDispatch();
 
+ 
+
   const handleLikeClick = async() => {
     if (designerLogged) {
         console.log("ho cliccato")
         await dispatch(toggleSingleProjectLike(projectToRender._id));
-        console.log('ho eseguito tooggle')
         dispatch(fetchProjects());
+        console.log('sto chiamando fetchProject')
         dispatch(getDesignerDetails(designerLogged.designer._id));
-        console.log('ho eseguito getDesignerDetails')
-        console.log(projectToRender.likes?.length)
-        console.log('ho eseguito fetchProjects')
-        console.log(projectToRender.likes.length)
+        console.log('sto chiamando getDesignerDetails')
       } else if (clientLogged) {
         await dispatch(toggleSingleProjectLike(projectToRender._id));
         dispatch(getClientDetails(clientLogged.client._id));
+        console.log('sto chiamando getClientDetails')
         dispatch(fetchProjects());
+        console.log('sto chiamando fetchProject')
       }
   };
+ 
 
   return (
     <>
