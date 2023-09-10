@@ -1,8 +1,8 @@
-import React, { useEffect, useRef } from 'react';
+import React from 'react';
 import "./ProjectDetails.css";
 import Button from 'react-bootstrap/esm/Button';
 import RelatedProjects from './RelatedProjects';
-import {fetchDesignerProjects, toggleLike } from '../redux/projectsSlice';
+import { toggleLike } from '../redux/projectsSlice';
 import { getDesignerDetails } from '../redux/usersSlice';
 import { getClientDetails } from '../redux/usersSlice';
 import { fetchProjects } from '../redux/projectsSlice';
@@ -16,7 +16,6 @@ import { faHeart as solidHeart } from '@fortawesome/free-solid-svg-icons';
 const ProjectDetails = ({project, designer}) => {
 
     const projects = useSelector((state) => state.projects.projects);
-    const designerProjects = useSelector((state) => state.projects.designerProjects);
     const isLogged = useSelector((state)=> state.users.isLogged);
     const designerLogged = useSelector((state)=> state.users.designer);
     const clientLogged = useSelector((state)=> state.users.client);
@@ -24,17 +23,6 @@ const ProjectDetails = ({project, designer}) => {
     const isLiked = likedProjects?.some(likedProject => likedProject.project_id === project._id);
 
     const dispatch = useDispatch();
-
-    const otherDesignerProjects = designerProjects?.filter((designerProject) => designerProject._id?.toString() !== project._id?.toString());
-
-   useEffect(() => {
-        if (designer && designer._id) {
-            dispatch(fetchDesignerProjects(designer._id));
-            console.log("eseguo fetchDesignerProjects ")
-        }
-        //con designerProjects nell'array contiua a eseguire la chiamata, ma se lo tolgo non aggiorno i likes
-    }, [dispatch, designer, designerProjects]);
-
     
 
     const handleLikeClickBig = async() => {
@@ -124,7 +112,7 @@ const ProjectDetails = ({project, designer}) => {
                 </span> Projects</span>
                 </div>                    
                 <div className='d-flex flex-wrap justify-content-center align-items-center'>
-                    <RelatedProjects projectTags={project.tags}/>
+                    <RelatedProjects projectTags={project.tags} projectId={project._id}/>
                 </div>
             </div>
         </div>

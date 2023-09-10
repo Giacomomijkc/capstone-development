@@ -4,7 +4,7 @@ import { fetchProjects } from '../redux/projectsSlice';
 import { fetchDesigners } from '../redux/designersSlice';
 import SingleProject from './SingleProject';
 
-const RelatedProject = ({ projectTags }) => {
+const RelatedProject = ({ projectTags, projectId }) => {
   const dispatch = useDispatch();
   const projects = useSelector((state) => state.projects.projects);
   const designers = useSelector((state) => state.designers.designers);
@@ -18,11 +18,15 @@ const RelatedProject = ({ projectTags }) => {
     project.tags.some((tag) => projectTags.includes(tag))
   );
 
+  const filteredProjects = matchingProjects.filter(
+    (project) => project._id !== projectId
+  );
+
   return (
     <div>
       <div className='d-flex flex-wrap justify-content-center align-items-center'>
-        {matchingProjects.length > 0 ? (
-          matchingProjects.map((project) => {
+        {filteredProjects.length > 0 ? (
+          filteredProjects.map((project) => {
             const authorDesigner = designers.find(
               (designer) => designer._id === project.author
             );

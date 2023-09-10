@@ -10,7 +10,8 @@ import ErrorPage from './pages/ErrorPage';
 import ProtectedRoutes from './middlewares/ProtectedRoutes';
 import ProjectDetailsPage from './pages/ProjectDetailsPage';
 import ProjectUploadPage from './pages/ProjectUploadPage';
-import { setIsLogged, setToken } from '../src/redux/usersSlice';
+import jwtDecode from 'jwt-decode';
+import { setRole, setIsLogged, setToken, setClientId, setDesignerId } from '../src/redux/usersSlice';
 import { useDispatch } from 'react-redux';
 
 const App = () => {
@@ -22,6 +23,16 @@ const App = () => {
     if (token) {
       dispatch(setIsLogged(true));
       dispatch(setToken(token));
+
+      const decodedToken = jwtDecode(token);
+      const userRole = decodedToken.role;
+      if (userRole === 'Client') {
+        dispatch(setRole(userRole));
+        dispatch(setClientId(decodedToken._id))
+      } else if (userRole === 'Designer') {
+        dispatch(setRole(userRole));
+        dispatch(setDesignerId(decodedToken._id))
+      }
     }
   }, [dispatch]);
 

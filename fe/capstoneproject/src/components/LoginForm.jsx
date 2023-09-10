@@ -38,10 +38,10 @@ const LoginForm = () => {
             setTimeout(() => {
                 navigate('/dashboard');
               }, 2000);
-              const token = localStorage.getItem('userLoggedIn');
-              const decodedToken = jwtDecode(token);
-              const designerId = decodedToken._id;
-              dispatch(setUserId(designerId));
+              //const token = localStorage.getItem('userLoggedIn');
+              //const decodedToken = jwtDecode(token);
+              //const designerId = decodedToken._id;
+              //dispatch(setUserId(designerId));
               //dispatch(setIsLogged(true));
 
         }

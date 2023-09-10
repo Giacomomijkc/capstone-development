@@ -18,16 +18,13 @@ export const uploadAvatar = createAsyncThunk('designers/uploadAvatar', async (av
 export const registerDesigner = createAsyncThunk('designers/registerDesigner', async (designerData,{ rejectWithValue }) => {
     try {
         const response = await axios.post(apiUrlRegisterDesigner, designerData);
-        //return response.data.payload;
         return response.data;
     } catch (error) {
         console.log(error)
         if (error.response && error.response.data && error.response.data.message) {
-          // Se il backend restituisce un messaggio di errore, utilizza rejectWithValue per passare il messaggio al componente
           console.log(error.response.data.error.errors)
           return rejectWithValue(error.response.data.message);
         } else {
-          // Altrimenti, rilancia l'errore originale
           throw error;
         }
     }
@@ -84,7 +81,6 @@ const designersSlice = createSlice({
         address: '',
         vatOrCf: '',
       },
-      //isLogged: false,
       userId: null,
       singleDesigner: null, 
     },
@@ -134,7 +130,6 @@ const designersSlice = createSlice({
         })
     },
   });
-  //tolto setIsLogged
   export const { setUserId } = designersSlice.actions;
   
   export default designersSlice.reducer;
