@@ -204,7 +204,37 @@ deal.get('/deals/designer/:designerId', async (req, res) => {
   
       res.status(200).json({
         statusCode: 200,
-        message: 'All deals by designer fetched successfully',
+        message: 'All designer deals fetched successfully',
+        deals,
+      });
+    } catch (error) {
+      res.status(500).json({
+        message: 'Internal server error',
+        error,
+      });
+    }
+  });
+
+  deal.get('/deals/client/:clientId', async (req, res) => {
+    const { clientId } = req.params;
+  
+    try {
+      // Trova il designer con l'ID specificato
+      const client = await ClientsModel.findById(clientId);
+  
+      if (!client) {
+        return res.status(404).json({
+          statusCode: 404,
+          message: 'Client not found',
+        });
+      }
+  
+      // Ottieni tutti i progetti associati a questo designer
+      const deals = await DealsModel.find({ client: clientId });
+  
+      res.status(200).json({
+        statusCode: 200,
+        message: 'All client deals fetched successfully',
         deals,
       });
     } catch (error) {

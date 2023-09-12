@@ -101,6 +101,36 @@ jobOffer.get('/joboffers/:jobOfferId', async (req, res) => {
     }
 });
 
+//projects get da id designer
+
+jobOffer.get('/joboffers/client/:clientId', async (req, res) => {
+    const { clientId } = req.params;
+  
+    try {
+      const client = await ClientsModel.findById(clientId);
+  
+      if (!client) {
+        return res.status(404).json({
+          statusCode: 404,
+          message: 'Client not found',
+        });
+      }
+
+      const jobOffers = await JobOffersModel.find({ client: clientId });
+  
+      res.status(200).json({
+        statusCode: 200,
+        message: 'All client job offers fetched successfully',
+        jobOffers,
+      });
+    } catch (error) {
+      res.status(500).json({
+        message: 'Internal server error',
+        error,
+      });
+    }
+  });
+
 // Get di tutte le job offers
 jobOffer.get('/joboffers', async (req, res) => {
     try {

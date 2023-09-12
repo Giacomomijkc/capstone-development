@@ -139,6 +139,33 @@ client.get('/clients/:clientId', async (req, res) => {
     }
 });
 
+//liked project client
+client.get('/clients/:clientId/liked_projects', verifyToken, async (req, res) => {
+    try {
+        const { clientId } = req.params;
+    
+        const client = await ClientsModel.findById(clientId);
+    
+        if (!client) {
+          return res.status(404).json({ message: `Client with id ${clientId} not found` });
+        }
+    
+        const likedProjects = client.liked_projects;
+    
+        res.status(200).json({ 
+            statusCode: 200,
+            message: `Projects liked by Client with id ${clientId} fetched successfully`,
+            likedProjects 
+        });
+      } catch (error) {
+        res.status(500).json({
+            statusCode: 500,
+            message: 'Internal server error',
+            error
+        });
+      }
+})
+
 //all client get
 client.get('/clients', async (req, res) => {
     try {

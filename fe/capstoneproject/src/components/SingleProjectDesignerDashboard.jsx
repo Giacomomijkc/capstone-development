@@ -8,7 +8,6 @@ import './SingleProjectDesignerDashboard.css';
 const SingleProjectDesignerDashboard = ({ designerId }) => {
   const dispatch = useDispatch();
   const designerProjects = useSelector((state) => state.projects.designerProjects)
-  console.log(designerId)
 
   useEffect(() => {
         dispatch(fetchDesignerProjects(designerId));

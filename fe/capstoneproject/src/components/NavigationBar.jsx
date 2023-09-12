@@ -50,9 +50,9 @@ const NavigationBar = () => {
               <Nav className="me-auto">
                 {role === 'Designer' ? (
                   <>
-                    <Nav.Item className='links'>Companies</Nav.Item>
-                    <Nav.Item className='links'>Job Offers</Nav.Item>
-                    <Nav.Item className='links'>How it works</Nav.Item>
+                    <Nav.Item className='links mx-2'>Companies</Nav.Item>
+                    <Nav.Item className='links mx-2'>Job Offers</Nav.Item>
+                    <Nav.Item className='links mx-2'>How it works</Nav.Item>
                   </>
                 ) : role === 'Client' ? (
                   <>
@@ -91,8 +91,10 @@ const NavigationBar = () => {
                       <Button className='logout-button mx-2' onClick={handleLogOut}>LogOut</Button>
                       {designer && (
                         <>
+                        <Link to="/dashboard" className='links'>
                           <span className='user-hi me-2'>Hi <span className='user-nickname'>{designer.designer.nickname}</span></span>
                           <img src={designer.designer.avatar} alt="User Avatar" className="user-avatar" />
+                        </Link>
                         </>
                       )}
                     </>
@@ -102,8 +104,10 @@ const NavigationBar = () => {
                       <Button className='logout-button mx-2' onClick={handleLogOut}>LogOut</Button>
                       {client && (
                         <>
+                        <Link className='links' to="/dashboard">
                           <span className='user-hi me-2'>Hi <span className='user-company'>{client.client.company}</span></span>
                           <img src={client.client.avatar} alt="User Avatar" className="user-avatar" />
+                        </Link>
                         </>
                       )}
                     </>

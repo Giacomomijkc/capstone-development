@@ -4,6 +4,7 @@ import designersReducer from './designersSlice';
 import loginReducer from './usersSlice';
 import clientsReducer from './clientsSlice';
 import dealsReducer from './dealsSlice';
+import jobOffersReducer from './jobOffersSlice';
 
 export const store = configureStore({
     reducer: {
@@ -11,7 +12,8 @@ export const store = configureStore({
       designers: designersReducer,
       users: loginReducer,
       clients: clientsReducer,
-      deals: dealsReducer
+      deals: dealsReducer,
+      joboffers: jobOffersReducer
       // ... altri reducer se necessario ...
     },
   });

@@ -4,12 +4,17 @@ import Button from "react-bootstrap/Button";
 import React, { useEffect } from 'react';
 import SingleProjectDesignerDashboard from '../components/SingleProjectDesignerDashboard';
 import SingleDealDesignerDashboard from '../components/SingleDealDesignerDashboard';
+import SingleDealClientDashboard from '../components/SingleDealClientDashboard';
 import SingleLikedProjectDesignerDashboard from '../components/SingleLikedProjectDesignerDashboard';
+import SingleLikedProjectClientDashboard from '../components/SingleLikedProjectClientDashboard';
+import SingleJobOfferClientDashboard from '../components/SingleJobOfferClientDashboard';
 import { useSelector, useDispatch } from 'react-redux';
 import { getDesignerDetails, getClientDetails } from '../redux/usersSlice';
 import { fetchDesigners } from '../redux/designersSlice';
 import {  fetchProjectsLikedByDesigner } from '../redux/designersSlice';
+import {  fetchProjectsLikedByClient } from '../redux/clientsSlice';
 import { fetchDesignerProjects } from '../redux/projectsSlice';
+import { fetchClientJobOffers } from '../redux/jobOffersSlice';
 import './Dashboard.css';
 
 const Dashboard = () => {
@@ -19,12 +24,15 @@ const Dashboard = () => {
   const designerProjects = useSelector((state)=> state.projects.designerProjects);
   const designerDeals = useSelector((state)=> state.deals.designerDeals);
   const client = useSelector((state)=> state.users.client);
-  const clientJobOffer = useSelector((state)=> state.users.client?.client.job_offers);
+  //const clientJobOffer = useSelector((state)=> state.users.client?.client.job_offers);
+  const clientDeals = useSelector((state)=> state.deals.clientDeals);
+  const clientJobOffers = useSelector((state)=> state.joboffers.jobOffers);
   const role = useSelector((state)=> state.users.role);
   const designerId = useSelector((state)=> state.users.designerId);
   const clientId = useSelector((state)=> state.users.clientId);
   const designers = useSelector((state) => state.designers.designers);
   const likedProjects = useSelector((state) => state.designers.likedProjects)
+  const likedProjectsByClient = useSelector((state) => state.clients.likedProjects)
   const token = localStorage.getItem('userLoggedIn');
  
   
@@ -34,10 +42,12 @@ const Dashboard = () => {
     if (token) {
         if (role === 'Designer') {
             dispatch(getDesignerDetails(designerId));
-            dispatch(fetchDesignerProjects(designerId))
+            dispatch(fetchDesignerProjects(designerId));
             dispatch(fetchProjectsLikedByDesigner(designerId));
         } else if (role === 'Client') {
             dispatch(getClientDetails(clientId));
+            dispatch(fetchClientJobOffers(clientId));
+            dispatch(fetchProjectsLikedByClient(clientId));
         }
     }
 }, [dispatch, token, designerId, clientId, role]);
@@ -94,28 +104,25 @@ const Dashboard = () => {
             </div>
           </div>
           <div className='d-flex justify-content-center algin-items-center mt-5' >
-            <h2 className=''>You Posted <span  className='nickname'>{clientJobOffer?.length}</span> Job Offer</h2>
+            <h2 className=''>You Posted <span  className='nickname'>{clientJobOffers?.length}</span> Job Offer</h2>
           </div>
-          {/*<div className='d-flex flex-wrap justify-content-center algin-items-center mb-5'>
-            <SingleProjectDesignerDashboard designerId={designerId} />
-      </div>*/}
+          <div className='d-flex flex-wrap justify-content-center algin-items-center mb-5'>
+            <SingleJobOfferClientDashboard clientId={clientId} />
+          </div>
           <div className='d-flex justify-content-center algin-items-center mt-5' >
-            <h2 className=''>You Have <span  className='nickname'></span> Deals</h2>
+            <h2 className=''>You Have <span  className='nickname'>{clientDeals?.length}</span> Deals</h2>
           </div>
-          {/*<div className='d-flex flex-wrap justify-content-center algin-items-center mb-5'>
-            <SingleDealDesignerDashboard designerId={designerId} />
-          </div>*/}
+          <div className='d-flex flex-wrap justify-content-center algin-items-center mb-5'>
+            <SingleDealClientDashboard clientId={clientId} />
+          </div>
           <div className='d-flex justify-content-center algin-items-center mt-5' >
-            <h2 className=''>You Liked <span  className='nickname'></span> Projects</h2>
+            <h2 className=''>You Liked <span  className='nickname'>{likedProjectsByClient?.length}</span> Projects</h2>
           </div>
-          {/*<div className='d-flex flex-wrap justify-content-center algin-items-center mb-5'>
-            {likedProjects && likedProjects.map((project) => (
-              <SingleLikedProjectDesignerDashboard projectId={project.project_id} designers={designers} />
+          <div className='d-flex flex-wrap justify-content-center algin-items-center mb-5'>
+            {likedProjectsByClient && likedProjectsByClient.map((project) => (
+              <SingleLikedProjectClientDashboard projectId={project.project_id} designers={designers} />
             ))}
-          </div>*/}
-          {/* Ad esempio: */}
-          {/* <SingleProjectClientDashboard clientId={clientId} /> */}
-          {/* <SingleDealClientDashboard clientId={clientId} /> */}
+          </div>
         </>
       )}
     </div>

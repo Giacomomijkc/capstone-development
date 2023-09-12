@@ -73,8 +73,8 @@ export const fetchProjectsLikedByDesigner = createAsyncThunk('designers/fetchPro
     return response.data.likedProjects;
   } catch (error) {
     console.log(error)
-    console.error('Errore durante il recupero dei dati del designer', error);
-    throw new Error('Errore durante il recupero dei dati del designer');
+    console.error('Errors occuring while fetching liked projects', error);
+    throw new Error('Errors occuring while fetching liked projects');
   }
 });
 

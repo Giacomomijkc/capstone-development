@@ -35,8 +35,23 @@ export const fetchClientById = createAsyncThunk('clients/fetchClientById', async
       const response = await axios.get(`${apirUrlFetchClients}${clientId}`);
       return response.data.client;
   } catch (error) {
-    console.error('Errore durante il recupero dei progetti del designer', error);
-    throw new Error('Errore durante il recupero dei progetti del designer');
+    console.error('Errors occuring while fetching Client', error);
+    throw new Error('Errors occuring while fetching Client');
+  }
+});
+
+export const fetchProjectsLikedByClient = createAsyncThunk('designers/fetchProjectsLikedByClient', async (clientId) => {
+  try {
+    const token = JSON.parse(localStorage.getItem("userLoggedIn"));
+    const response = await axios.get(`${apirUrlFetchClients}${clientId}/liked_projects`, {
+      headers: { 'Authorization': `${token}` }
+  });
+    console.log(response.data.likedProjects)
+    return response.data.likedProjects;
+  } catch (error) {
+    console.log(error)
+    console.error('Errors occuring while fetching liked projects', error);
+    throw new Error('Errors occuring while fetching liked projects');
   }
 });
 
@@ -48,6 +63,8 @@ const clientsSlice = createSlice({
       isUploadLoading: true,
       client: null,
       clientIsLoading: true,
+      likedProjects: [],
+      isLikedProjectsLoading: true,
     },
     reducers: {
     },
@@ -79,6 +96,18 @@ const clientsSlice = createSlice({
         .addCase(fetchClientById.rejected, (state, action) => {
           state.error = action.payload;
           state.clientIsLoading = false;
+        })
+        .addCase(fetchProjectsLikedByClient.fulfilled, (state, action) =>{
+          state.likedProjects = action.payload
+          state.isLikedProjectsLoading = false
+        })
+        .addCase(fetchProjectsLikedByClient.pending, (state, action) =>{
+          state.likedProjects = action.payload
+          state.isLikedProjectsLoading = true
+        })
+        .addCase(fetchProjectsLikedByClient.rejected, (state, action) =>{
+          state.error = action.payload
+          state.isLikedProjectsLoading = false
         })
     },
   });

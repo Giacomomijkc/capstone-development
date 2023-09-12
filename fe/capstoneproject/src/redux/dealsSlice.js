@@ -8,16 +8,29 @@ export const fetchDesignerDeals = createAsyncThunk('deals/fetchDesignerDeals', a
       console.log(response.data.deals)
       return response.data.deals;
     } catch (error) {
-      console.error('Errore durante il recupero dei progetti del designer', error);
-      throw new Error('Errore durante il recupero dei progetti del designer');
+      console.error('Errors occuring while loading designer deals', error);
+      throw new Error('Errors occuring while loading designer deals');
     }
   })
+
+export const fetchClientDeals = createAsyncThunk('deals/fetchClientDeals', async (clientId) =>{
+    try {
+      const response = await axios.get(`${apiUrlFetchDeals}client/${clientId}`);
+      console.log(response.data.deals)
+      return response.data.deals;
+    } catch (error) {
+      console.error('Errors occuring while loading client deals', error);
+      throw new Error('Errors occuring while loading client deals');
+    }
+})
 
   const dealsSlice = createSlice({
     name: 'deals',
     initialState: {
       designerDeals: [],
-      isLoading: true,
+      isLoadingDesignerDeals: true,
+      clientDeals: [],
+      isLoadingClientDeals: true, 
     },
     reducers: {
     },
@@ -25,14 +38,25 @@ export const fetchDesignerDeals = createAsyncThunk('deals/fetchDesignerDeals', a
       builder
       .addCase(fetchDesignerDeals.fulfilled, (state, action) => {
         state.designerDeals = action.payload;
-        state.isLoading = false;
+        state.isLoadingDesignerDeals = false;
       })
       .addCase(fetchDesignerDeals.pending, (state, action) => {
-        state.isLoading = true;
+        state.isLoadingDesignerDeals = true;
       })
       .addCase(fetchDesignerDeals.rejected, (state, action) => {
         state.error = action.payload;
-        state.isLoading = false;
+        state.isLoadingDesignerDeals = false;
+      })
+      .addCase(fetchClientDeals.fulfilled, (state, action) => {
+        state.clientDeals = action.payload;
+        state.isLoadingClientDeals = false;
+      })
+      .addCase(fetchClientDeals.pending, (state, action) => {
+        state.isLoadingClientDeals = true;
+      })
+      .addCase(fetchClientDeals.rejected, (state, action) => {
+        state.error = action.payload;
+        state.isLoadingClientDeals = false;
       })
     },
   });

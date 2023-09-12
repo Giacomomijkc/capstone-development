@@ -2,9 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';  
 import { fetchSingleProject } from '../redux/projectsSlice';
-import './SingleLikedProjectDesignerDashboard.css';
 
-const SingleLikedProjectDesignerDashboard = ({ projectId, designers }) => {
+const SingleLikedProjectClientDashboard = ({ projectId, designers }) => {
     const dispatch = useDispatch();
     const [projectData, setProjectData] = useState(null);
 
@@ -47,4 +46,4 @@ const SingleLikedProjectDesignerDashboard = ({ projectId, designers }) => {
     );
 };
 
-export default SingleLikedProjectDesignerDashboard;
+export default SingleLikedProjectClientDashboard;

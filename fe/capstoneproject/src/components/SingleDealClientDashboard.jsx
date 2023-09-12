@@ -1,12 +1,12 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchDesignerDeals } from '../redux/dealsSlice';
-import ClientInfo from './ClientInfo';
+import { fetchClientDeals } from '../redux/dealsSlice';
+import DesignerInfo from './DesignerInfo';
 import { Link } from 'react-router-dom';
 import Button from "react-bootstrap/Button";
-import './SingleDealDesignerDashboard.css';
+import './SingleDealClientDashboard.css';
 
-const SingleDealDesignerDashboard = ({ designerId }) => {
+const SingleDealClientDashboard = ({ clientId }) => {
     const getStatusClass = (status) => {
         switch (status) {
           case 'offered':
@@ -24,28 +24,28 @@ const SingleDealDesignerDashboard = ({ designerId }) => {
 
 
     const dispatch = useDispatch();
-    const designerDeals = useSelector((state) => state.deals.designerDeals)
+    const clientDeals = useSelector((state) => state.deals.clientDeals)
 
     useEffect(() => {
-        dispatch(fetchDesignerDeals(designerId));
-    }, [dispatch, designerId]);
+        dispatch(fetchClientDeals(clientId));
+    }, [dispatch, clientId]);
     
   return (
     <>
-    {designerDeals && designerDeals.map(designerDeal => (
-      <div className='d-flex flex-column my-5 mx-2 deal' style={{ width: '300px' }} key={designerDeal._id}>
-          {designerDeal.client && (
-        <ClientInfo clientId={designerDeal.client} />
+    {clientDeals && clientDeals.map(clientDeal => (
+      <div className='d-flex flex-column my-5 mx-2 deal' style={{ width: '300px' }} key={clientDeal._id}>
+          {clientDeal.designer && (
+        <DesignerInfo designerId={clientDeal.designer} />
       )}
         <div className='d-flex justify-content-center align-items-center'>
           <div className='mt-2'>
-            <span className='info'>{designerDeal.description}</span>
+            <span className='info'>{clientDeal.description}</span>
           </div>
         </div>
         <div className='d-flex justify-content-center align-items-center'>
           <div className='mt-2'>
             <span className='tags'>                  
-            {designerDeal.tags?.map((tag, index) => (
+            {clientDeal.tags?.map((tag, index) => (
                         <React.Fragment key={tag}>
                         {index > 0 && <span className='tag-separator'> | </span>}
                         {tag}
@@ -56,56 +56,56 @@ const SingleDealDesignerDashboard = ({ designerId }) => {
         </div>
         <div className='d-flex justify-content-center align-items-center'>
           <div className='info mt-2'>
-            <span className=''>Reworks included: {designerDeal.rework_limit}</span>
+            <span className=''>Reworks included: {clientDeal.rework_limit}</span>
           </div>
         </div>
         <div className='d-flex justify-content-between align-items-center'>
           <div className='mt-2'>
-          <span className='amount'>{designerDeal.timing.timing_value} {designerDeal.timing.timing_unit}</span>
+          <span className='amount'>{clientDeal.timing.timing_value} {clientDeal.timing.timing_unit}</span>
           </div>
           <div className='mt-2'>
-            <span className='amount'>{designerDeal.amount.amount_value} {designerDeal.amount.amount_unit}</span>
+            <span className='amount'>{clientDeal.amount.amount_value} {clientDeal.amount.amount_unit}</span>
           </div>
         </div>
         <div>
-  {designerDeal.status === 'accepted' && (
+  {clientDeal.status === 'accepted' && (
     <div className='d-flex justify-content-center align-items-center mt-2'>
-      <span className='accepted-status'>Accepted on: {designerDeal.updatedAt.slice(0, 10)}</span>
+      <span className='accepted-status'>Accepted on: {clientDeal.updatedAt.slice(0, 10)}</span>
     </div>
   )}
 
-  {designerDeal.status === 'offered' && (
+  {clientDeal.status === 'offered' && (
     <div className='d-flex justify-content-center align-items-center mt-2'>
-      <span className='accepted-status'>Offered on: {designerDeal.updatedAt.slice(0, 10)}</span>
+      <span className='accepted-status'>Offered on: {clientDeal.updatedAt.slice(0, 10)}</span>
     </div>
   )}
 
-  {designerDeal.status === 'denied' && (
+  {clientDeal.status === 'denied' && (
     <div className='d-flex justify-content-center align-items-center mt-2'>
-      <span className='accepted-status'>Denied on: {designerDeal.updatedAt.slice(0, 10)}</span>
+      <span className='accepted-status'>Denied on: {clientDeal.updatedAt.slice(0, 10)}</span>
     </div>
   )}
 
-  {designerDeal.status === 'in progress' && (
+  {clientDeal.status === 'in progress' && (
     <div className='d-flex justify-content-center align-items-center mt-2'>
-      <span className='accepted-status'>In progress on: {designerDeal.updatedAt.slice(0, 10)}</span>
+      <span className='accepted-status'>In progress on: {clientDeal.updatedAt.slice(0, 10)}</span>
     </div>
   )}
 
-  {designerDeal.status === 'completed' && (
+  {clientDeal.status === 'completed' && (
     <div className='d-flex justify-content-center align-items-center mt-2'>
-      <span className='accepted-status'>Completed on: {designerDeal.updatedAt.slice(0, 10)}</span>
+      <span className='accepted-status'>Completed on: {clientDeal.updatedAt.slice(0, 10)}</span>
     </div>
   )}
 </div>
         <div className='d-flex justify-content-between align-items-center mt-3'>
             <div>
-            <Link to={`/deals/${designerDeal._id}`}>
+            <Link to={`/deals/${clientDeal._id}`}>
                 <Button className='edit-deal-button'>Manage</Button>
             </Link>
             </div>
             <div>
-                <span className={`${getStatusClass(designerDeal.status)}`}>{designerDeal.status.toUpperCase()}</span>
+                <span className={`${getStatusClass(clientDeal.status)}`}>{clientDeal.status.toUpperCase()}</span>
             </div>
         </div>
       </div>
@@ -114,4 +114,4 @@ const SingleDealDesignerDashboard = ({ designerId }) => {
   )
 }
 
-export default SingleDealDesignerDashboard
+export default SingleDealClientDashboard
