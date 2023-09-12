@@ -184,4 +184,35 @@ deal.patch('/deals/:dealId/end', verifyToken, async (req, res) => {
     }
 });
 
+
+deal.get('/deals/designer/:designerId', async (req, res) => {
+    const { designerId } = req.params;
+  
+    try {
+      // Trova il designer con l'ID specificato
+      const designer = await DesignersModel.findById(designerId);
+  
+      if (!designer) {
+        return res.status(404).json({
+          statusCode: 404,
+          message: 'Designer not found',
+        });
+      }
+  
+      // Ottieni tutti i progetti associati a questo designer
+      const deals = await DealsModel.find({ designer: designerId });
+  
+      res.status(200).json({
+        statusCode: 200,
+        message: 'All deals by designer fetched successfully',
+        deals,
+      });
+    } catch (error) {
+      res.status(500).json({
+        message: 'Internal server error',
+        error,
+      });
+    }
+  });
+
 module.exports = deal;

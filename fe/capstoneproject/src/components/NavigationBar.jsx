@@ -50,15 +50,17 @@ const NavigationBar = () => {
               <Nav className="me-auto">
                 {role === 'Designer' ? (
                   <>
-                    <Nav.Link href="#home" className='links'>Companies</Nav.Link>
-                    <Nav.Link href="#link" className='links'>Job Offers</Nav.Link>
-                    <Nav.Link href="#link" className='links'>How it works</Nav.Link>
+                    <Nav.Item className='links'>Companies</Nav.Item>
+                    <Nav.Item className='links'>Job Offers</Nav.Item>
+                    <Nav.Item className='links'>How it works</Nav.Item>
                   </>
                 ) : role === 'Client' ? (
                   <>
-                    <Nav.Link href="#home" className='links'>Designers</Nav.Link>
-                    <Nav.Link href="#link" className='links'>Projects</Nav.Link>
-                    <Nav.Link href="#link" className='links'>How it works</Nav.Link>
+                    <Nav.Item className='links mx-2'>Designers</Nav.Item>
+                    <Link className='links' to="/all-projects">
+                      <Nav.Item className='mx-2'>All Projects</Nav.Item>
+                    </Link>
+                    <Nav.Item className='links mx-2'>How it works</Nav.Item>
                   </>
                 ) : null}
               </Nav>

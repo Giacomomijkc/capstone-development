@@ -11,6 +11,8 @@
 .links{
     font-weight: 500 !important;
     font-size: large !important;
+    text-decoration: none !important;
+    color: black;
 }
 
 .search{

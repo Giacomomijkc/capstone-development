@@ -202,9 +202,8 @@ project.get('/projects/designer/:designerId', async (req, res) => {
       });
     }
   });
-  
 
-//project all get
+  //project all get
 project.get('/projects', async (req, res) => {
     try {
         const projects = await ProjectsModel.find();
@@ -370,9 +369,6 @@ project.delete('/projects/:projectId', verifyToken, async (req, res) =>{
         }
 
     try {
-
-        //qui bisogna eliminare dal modello commenti tutti i commnenti relativi a questo progetto
-        //poi bisogna togliere anche da client e designer model il progetto dai progetti liked
 
         await CommentsModel.deleteMany({ project: projectId });
 

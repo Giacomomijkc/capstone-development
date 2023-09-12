@@ -6,9 +6,15 @@ const apiUrlFetchImagesProjectUpload = `${process.env.REACT_APP_SERVER_BASE_URL}
 const apiUrlFetchProjectUpload = `${process.env.REACT_APP_SERVER_BASE_URL}/projects/create`;
 
 // Crea un'azione asincrona per ottenere i progetti
+
 export const fetchProjects = createAsyncThunk('projects/fetchProjects', async () => {
-  const response = await axios.get('http://localhost:5050/projects/');
-  return response.data.projects;
+  try {
+    const response = await axios.get('http://localhost:5050/projects/');
+    return response.data.projects;
+  } catch (error) {
+    console.log(error)
+    throw new Error('Errors uploading cover'); 
+  }
 });
 
 // Crea un'azione asincrona per caricare una cover per un progetto
@@ -73,6 +79,7 @@ export const createProject = createAsyncThunk('projects/createProject', async (p
 export const fetchSingleProject = createAsyncThunk('projects/fetchSingleProject', async (projectId) => {
   try {
     const response = await axios.get(`${apiUrlFetchProjects}${projectId}`);
+    console.log(response.data.project)
     return response.data.project;
   } catch (error) {
     console.error('Errore durante il recupero dei dati del progetto', error);
@@ -85,6 +92,16 @@ export const fetchDesignerProjects = createAsyncThunk('projects/fetchDesignerPro
   try {
     const response = await axios.get(`${apiUrlFetchProjects}designer/${designerId}`);
     return response.data.projects;
+  } catch (error) {
+    console.error('Errore durante il recupero dei progetti del designer', error);
+    throw new Error('Errore durante il recupero dei progetti del designer');
+  }
+})
+
+export const fetchDesignerLikedProjects = createAsyncThunk('projects-liked/fetchDesignerLikedProjects', async (designerId) =>{
+  try {
+    const response = await axios.get(`${apiUrlFetchProjects}liked/designer/${designerId}`);
+    return response.data.liked_projects;
   } catch (error) {
     console.error('Errore durante il recupero dei progetti del designer', error);
     throw new Error('Errore durante il recupero dei progetti del designer');
@@ -140,6 +157,8 @@ const projectsSlice = createSlice({
     isSingleProjectLoading: true,
     singleProjectComponent: {},
     projects: [],
+    liked_projects: [],
+    isLikedProjectsLoading: true,
     isDesignerProjectsLoading: true,
     designerProjects: [],
     isUploadingCover: true,
@@ -149,7 +168,11 @@ const projectsSlice = createSlice({
     successMessage: null,
     createdProject: null
   },
-  reducers: {},
+  reducers: {
+    setCurrentPage: (state, action) => {
+      state.currentPage = action.payload;
+    },
+  },
   extraReducers: (builder) => {
     builder
     .addCase(fetchProjects.fulfilled, (state, action) => {
@@ -178,7 +201,6 @@ const projectsSlice = createSlice({
     })
     .addCase(toggleLike.fulfilled, (state, action) => {
       state.singleProject = action.payload;
-      //state.designerProjects = action.payload.updatedDesignerProjects;
     })
     .addCase(toggleLike.rejected, (state, action) => {
       state.error = action.payload;
@@ -215,10 +237,22 @@ const projectsSlice = createSlice({
       state.error = action.payload;
     })
     .addCase(createProject.fulfilled, (state, action) =>{
-      //state.successMessage = action.payload;
       state.createdProject = action.payload;
+    })
+    .addCase(fetchDesignerLikedProjects.fulfilled, (state, action) => {
+      state.liked_projects = action.payload;
+      state.isLikedProjectsLoading = false;
+    })
+    .addCase(fetchDesignerLikedProjects.rejected, (state, action) => {
+      state.error = action.payload;
+      state.isLikedProjectsLoading = false;
+    })
+    .addCase(fetchDesignerLikedProjects.pending, (state, action) => {
+      state.isLikedProjectsLoading = true;
     })
   },
 });
+
+export const { setCurrentPage } = projectsSlice.actions;
 
 export default projectsSlice.reducer;

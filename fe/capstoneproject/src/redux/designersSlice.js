@@ -63,6 +63,21 @@ export const fetchDesignerById = createAsyncThunk('designers/fetchDesignerById',
   }
 });
 
+export const fetchProjectsLikedByDesigner = createAsyncThunk('designers/fetchProjectsLikedByDesigner', async (designerId) => {
+  try {
+    const token = JSON.parse(localStorage.getItem("userLoggedIn"));
+    const response = await axios.get(`${apiUrlFetchDesigners}${designerId}/liked_projects`, {
+      headers: { 'Authorization': `${token}` }
+  });
+    console.log(response.data.likedProjects)
+    return response.data.likedProjects;
+  } catch (error) {
+    console.log(error)
+    console.error('Errore durante il recupero dei dati del designer', error);
+    throw new Error('Errore durante il recupero dei dati del designer');
+  }
+});
+
 const designersSlice = createSlice({
     name: 'designers',
     initialState: {
@@ -81,6 +96,8 @@ const designersSlice = createSlice({
         address: '',
         vatOrCf: '',
       },
+      likedProjects: [],
+      isLikedProjectsLoading: true,
       userId: null,
       singleDesigner: null, 
     },
@@ -127,6 +144,18 @@ const designersSlice = createSlice({
         })
         .addCase(fetchDesignerById.rejected, (state, action) => {
           state.error = action.payload;
+        })
+        .addCase(fetchProjectsLikedByDesigner.fulfilled, (state, action) =>{
+          state.likedProjects = action.payload
+          state.isLikedProjectsLoading = false
+        })
+        .addCase(fetchProjectsLikedByDesigner.pending, (state, action) =>{
+          state.likedProjects = action.payload
+          state.isLikedProjectsLoading = true
+        })
+        .addCase(fetchProjectsLikedByDesigner.rejected, (state, action) =>{
+          state.error = action.payload
+          state.isLikedProjectsLoading = false
         })
     },
   });

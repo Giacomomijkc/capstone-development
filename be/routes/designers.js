@@ -158,6 +158,34 @@ designer.get('/designers/:designerId', async (req, res) => {
     }
 });
 
+//liked project designer
+designer.get('/designers/:designerId/liked_projects', verifyToken, async (req, res) => {
+    try {
+        const { designerId } = req.params;
+    
+        const designer = await DesignersModel.findById(designerId);
+    
+        if (!designer) {
+          return res.status(404).json({ message: `Designer with id ${designerId} not found` });
+        }
+    
+        const likedProjects = designer.liked_projects;
+    
+        res.status(200).json({ 
+            statusCode: 200,
+            message: `Projects liked by Designer with id ${designerId} fetched successfully`,
+            likedProjects 
+        });
+      } catch (error) {
+        res.status(500).json({
+            statusCode: 500,
+            message: 'Internal server error',
+            error
+        });
+      }
+})
+
+
 //all designer get
 designer.get('/designers', async (req, res) => {
     try {

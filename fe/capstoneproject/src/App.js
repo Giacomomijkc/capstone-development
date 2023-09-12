@@ -10,6 +10,7 @@ import ErrorPage from './pages/ErrorPage';
 import ProtectedRoutes from './middlewares/ProtectedRoutes';
 import ProjectDetailsPage from './pages/ProjectDetailsPage';
 import ProjectUploadPage from './pages/ProjectUploadPage';
+import AllProjectsPage from './pages/AllProjectsPage';
 import jwtDecode from 'jwt-decode';
 import { setRole, setIsLogged, setToken, setClientId, setDesignerId } from '../src/redux/usersSlice';
 import { useDispatch } from 'react-redux';
@@ -50,6 +51,7 @@ const App = () => {
         <Route exact path="/signup-client" element={<SignUpClientPage/>}/>
         <Route exact path="/login" element={<LogInPage/>}/>
         <Route exact path="/projects/:projectId" element={<ProjectDetailsPage/>}/>
+        <Route exact path="/all-projects" element={<AllProjectsPage/>}/>
         <Route path="*" element={<ErrorPage/>}/>
       </Routes>
     </BrowserRouter>

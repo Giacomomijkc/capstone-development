@@ -20,18 +20,18 @@ const ProjectDetails = ({project, designer}) => {
     const designerLogged = useSelector((state)=> state.users.designer);
     const clientLogged = useSelector((state)=> state.users.client);
     const likedProjects = designerLogged ? designerLogged.designer.liked_projects : clientLogged?.client.liked_projects;
-    const isLiked = likedProjects?.some(likedProject => likedProject.project_id === project._id);
+    const isLiked = likedProjects?.some(likedProject => likedProject.project_id === project?._id);
 
     const dispatch = useDispatch();
     
 
     const handleLikeClickBig = async() => {
         if (designerLogged) {
-            await dispatch(toggleLike(project._id));
+            await dispatch(toggleLike(project?._id));
             await dispatch(fetchProjects());
             dispatch(getDesignerDetails(designerLogged.designer._id));
           } else if (clientLogged) {
-            await dispatch(toggleLike(project._id));
+            await dispatch(toggleLike(project?._id));
             await dispatch(fetchProjects());
             dispatch(getClientDetails(clientLogged.client._id));
           }

@@ -21,14 +21,12 @@ const SingleProject = ({projectToRender, authorDesigner}) => {
 
   const dispatch = useDispatch();
 
- 
-
   const handleLikeClick = async() => {
     if (designerLogged) {
         console.log("ho cliccato")
         await dispatch(toggleSingleProjectLike(projectToRender._id));
         dispatch(fetchProjects());
-        console.log('sto chiamando fetchProject')
+        console.log('sto chiamando fetchProjects')
         dispatch(getDesignerDetails(designerLogged.designer._id));
         console.log('sto chiamando getDesignerDetails')
       } else if (clientLogged) {
@@ -36,7 +34,7 @@ const SingleProject = ({projectToRender, authorDesigner}) => {
         dispatch(getClientDetails(clientLogged.client._id));
         console.log('sto chiamando getClientDetails')
         dispatch(fetchProjects());
-        console.log('sto chiamando fetchProject')
+        console.log('sto chiamando fetchProjects')
       }
   };
  
