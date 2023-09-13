@@ -50,17 +50,21 @@ const NavigationBar = () => {
               <Nav className="me-auto">
                 {role === 'Designer' ? (
                   <>
-                    <Nav.Item className='links mx-2'>Companies</Nav.Item>
-                    <Nav.Item className='links mx-2'>Job Offers</Nav.Item>
-                    <Nav.Item className='links mx-2'>How it works</Nav.Item>
+                    <Link className='links' to="/all-companies">
+                      <Nav.Item className='links mx-2'>Companies</Nav.Item>
+                    </Link>
+                    <Link className='links' to="/all-job-offers">
+                      <Nav.Item className='links mx-2'>Job Offers</Nav.Item>
+                    </Link>
                   </>
                 ) : role === 'Client' ? (
                   <>
-                    <Nav.Item className='links mx-2'>Designers</Nav.Item>
+                    <Link className='links' to="/all-designers">
+                      <Nav.Item className='links mx-2'>All Designers</Nav.Item>
+                    </Link>
                     <Link className='links' to="/all-projects">
                       <Nav.Item className='mx-2'>All Projects</Nav.Item>
                     </Link>
-                    <Nav.Item className='links mx-2'>How it works</Nav.Item>
                   </>
                 ) : null}
               </Nav>
@@ -100,7 +104,9 @@ const NavigationBar = () => {
                     </>
                   ) : role === 'Client' ? (
                     <>
-                      <Button className='nav-buttons mx-2'>Offer+</Button>
+                      <Link className='links' to="/create-job-offer">
+                        <Button className='nav-buttons mx-2'>Offer+</Button>
+                      </Link>
                       <Button className='logout-button mx-2' onClick={handleLogOut}>LogOut</Button>
                       {client && (
                         <>

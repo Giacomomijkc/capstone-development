@@ -1,6 +1,7 @@
 import NavigationBar from '../components/NavigationBar';
 import Footer from '../components/Footer';
 import Button from "react-bootstrap/Button";
+import { Link } from 'react-router-dom';
 import React, { useEffect } from 'react';
 import SingleProjectDesignerDashboard from '../components/SingleProjectDesignerDashboard';
 import SingleDealDesignerDashboard from '../components/SingleDealDesignerDashboard';
@@ -69,16 +70,16 @@ const Dashboard = () => {
             </div>
           </div>
           <div className='d-flex justify-content-center algin-items-center mt-5' >
-            <h2 className=''>You Posted <span  className='nickname'>{designerProjects?.length}</span> project</h2>
-          </div>
-          <div className='d-flex flex-wrap justify-content-center algin-items-center mb-5'>
-            <SingleProjectDesignerDashboard designerId={designerId} />
-          </div>
-          <div className='d-flex justify-content-center algin-items-center mt-5' >
             <h2 className=''>You Made <span  className='nickname'>{designerDeals?.length}</span> Deals</h2>
           </div>
           <div className='d-flex flex-wrap justify-content-center algin-items-center mb-5'>
             <SingleDealDesignerDashboard designerId={designerId} />
+          </div>
+          <div className='d-flex justify-content-center algin-items-center mt-5' >
+            <h2 className=''>You Posted <span  className='nickname'>{designerProjects?.length}</span> project</h2>
+          </div>
+          <div className='d-flex flex-wrap justify-content-center algin-items-center mb-5'>
+            <SingleProjectDesignerDashboard designerId={designerId} />
           </div>
           <div className='d-flex justify-content-center algin-items-center mt-5' >
             <h2 className=''>You Liked <span  className='nickname'>{likedProjects?.length}</span> Projects</h2>
@@ -100,20 +101,22 @@ const Dashboard = () => {
             </div>
             <div className='d-flex flex-column justify-content-center algin-items-center'>
               <Button className='edit-datas-button mb-2'>Edit personal info</Button>
-              <Button className='make-deal-button mt-2'>Make a Job offer</Button>
+              <Link className="links" to="/create-job-offer">
+                <Button className='make-deal-button mt-2'>Make a Job offer</Button>
+              </Link>
             </div>
-          </div>
-          <div className='d-flex justify-content-center algin-items-center mt-5' >
-            <h2 className=''>You Posted <span  className='nickname'>{clientJobOffers?.length}</span> Job Offer</h2>
-          </div>
-          <div className='d-flex flex-wrap justify-content-center algin-items-center mb-5'>
-            <SingleJobOfferClientDashboard clientId={clientId} />
           </div>
           <div className='d-flex justify-content-center algin-items-center mt-5' >
             <h2 className=''>You Have <span  className='nickname'>{clientDeals?.length}</span> Deals</h2>
           </div>
           <div className='d-flex flex-wrap justify-content-center algin-items-center mb-5'>
             <SingleDealClientDashboard clientId={clientId} />
+          </div>
+          <div className='d-flex justify-content-center algin-items-center mt-5' >
+            <h2 className=''>You Posted <span  className='nickname'>{clientJobOffers?.length}</span> Job Offer</h2>
+          </div>
+          <div className='d-flex flex-wrap justify-content-center algin-items-center mb-5'>
+            <SingleJobOfferClientDashboard clientId={clientId} />
           </div>
           <div className='d-flex justify-content-center algin-items-center mt-5' >
             <h2 className=''>You Liked <span  className='nickname'>{likedProjectsByClient?.length}</span> Projects</h2>

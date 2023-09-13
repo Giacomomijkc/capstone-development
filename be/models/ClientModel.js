@@ -46,7 +46,7 @@ const ClientModelSchema = new mongoose.Schema({
             job_offer_id:{
                 type: mongoose.Schema.Types.ObjectId,
                 ref: "JOBOFFER",
-                default: []
+                //default: []
             }
         }
     ],

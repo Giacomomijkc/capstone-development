@@ -1,5 +1,6 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
+import Container from 'react-bootstrap/esm/Container';
 import Row from 'react-bootstrap/esm/Row';
 import Button from 'react-bootstrap/esm/Button';
 import Col from 'react-bootstrap/esm/Col';
@@ -20,216 +21,54 @@ const HomepageComponent = () => {
     <div>
     {client ? (
         <>
-        <Row className="full-height">
-            <Col md={6} className='col-md-6 p-0'>
-                <img src={Homepage1} alt="LoginCover" className='login-cover '/>
-            </Col>
-            <Col md={6} className='col-md-6 p-0 d-flex justify-content-center align-items-center'>
-                <div className='d-flex flex-column justify-content-center align-items-center'>
-                    <div className='d-flex justify-content-center align-items-center'>
-                        <h5>Easily manage professional relationships with designers</h5>
-                    </div>
-                    <div>
-                        <Link to="/dashboard" className='links'>
-                            <Button className='dashboard-button'>Go to Dashboard</Button>
-                        </Link>
-                    </div>
-                </div>
-            </Col>
+        <Container>
+        <Row>
+            <div className='d-flex flex-column justify-content-center align-items-center mt-5'>
+                <h1 className='homepage-title'>Easily Manage Your Creative Deals</h1>
+                <span className='homepage-body mt-2'>Hubby is your personal hub where you can receive and interact with deals from designers you want to work with.</span>
+            </div>
+            <div className='d-flex justify-content-center align-items-center mt-4 mb-5 buttons-container'>
+            <Link to="/dashboard" className='links'>
+                <Button className='homepage-button'>See your Deals</Button>
+            </Link>
+            </div>
         </Row>
-        <Row className="full-height">
-            <Col md={6} className='col-md-6 p-0 d-flex justify-content-center align-items-center'>
-                <div className='d-flex flex-column justify-content-center align-items-center'>
-                    <div className='d-flex justify-content-center align-items-center'>
-                        <h5>Easily manage deals with designers</h5>
-                    </div>
-                    <div>
-                        <Link className='links' to="/dashboard">
-                            <Button className='dashboard-button'>Go to Dashboard</Button>
-                        </Link>
-                    </div>
-                </div>
-            </Col>
-            <Col md={6} className='col-md-6 p-0'>
-                <img src={Homepage2} alt="LoginCover" className='login-cover '/>
-            </Col>
-        </Row>
-        <Row className="full-height">
-            <Col md={6} className='col-md-6 p-0'>
-                <img src={Homepage3} alt="LoginCover" className='login-cover '/>
-            </Col>
-            <Col md={6} className='col-md-6 p-0 d-flex justify-content-center align-items-center'>
-                <div className='d-flex flex-column justify-content-center align-items-center'>
-                    <div className='d-flex justify-content-center align-items-center'>
-                        <h5>Easily find designers, artists and creative professionals</h5>
-                    </div>
-                    <div>
-                        <Link className='links' to="/all-projects">
-                            <Button className='dashboard-button links'>Find a talent</Button>
-                        </Link>
-                    </div>
-                </div>
-            </Col>
-        </Row>
-        <Row className="full-height">
-            <Col md={6} className='col-md-6 p-0 d-flex justify-content-center align-items-center'>
-            <div className='d-flex flex-column justify-content-center align-items-center'>
-                    <div className='d-flex justify-content-center align-items-center'>
-                        <h5>Easily post your creative needs</h5>
-                    </div>
-                    <div>
-                        <Link>
-                            <Button className='dashboard-button links'>Post a jobOffer</Button>
-                        </Link>
-                    </div>
-                </div>
-            </Col>
-            <Col md={6} className='col-md-6 p-0'>
-                <img src={Homepage4} alt="LoginCover" className='login-cover '/>
-            </Col>
-        </Row>
+        </Container>
         </>
     ) : designer ? (
         <>
-        <Row className="full-height">
-            <Col md={6} className='col-md-6 p-0'>
-                <img src={Homepage1} alt="LoginCover" className='login-cover '/>
-            </Col>
-            <Col md={6} className='col-md-6 p-0 d-flex justify-content-center align-items-center'>
-                <div className='d-flex flex-column justify-content-center align-items-center'>
-                    <div className='d-flex justify-content-center align-items-center'>
-                        <h5>Easily manage business relationships</h5>
-                    </div>
-                    <div>
-                        <Link to="/dashboard" className='links'>
-                            <Button className='dashboard-button'>Go to Dashboard</Button>
-                        </Link>
-                    </div>
+        <Container>
+            <Row >
+                <div className='d-flex flex-column justify-content-center align-items-center mt-5'>
+                    <h1 className='homepage-title'>Easily Manage Your Creative Deals</h1>
+                    <span className='homepage-body mt-2'>Hubby is your personal hub where you can create and interact with creative deals for your clients.</span>
                 </div>
-            </Col>
-        </Row>
-        <Row className="full-height">
-            <Col md={6} className='col-md-6 p-0 d-flex justify-content-center align-items-center'>
-                <div className='d-flex flex-column justify-content-center align-items-center'>
-                    <div className='d-flex justify-content-center align-items-center'>
-                        <h5>Easily manage deals with designers</h5>
-                    </div>
-                    <div>
-                        <Link className='links' to="/dashboard">
-                            <Button className='dashboard-button'>Go to Dashboard</Button>
-                        </Link>
-                    </div>
+                <div className='d-flex justify-content-center align-items-center mt-4 mb-5 buttons-container'>
+                <Link to="/dashboard" className='links'>
+                    <Button className='homepage-button'>See your Deals</Button>
+                </Link>
                 </div>
-            </Col>
-            <Col md={6} className='col-md-6 p-0'>
-                <img src={Homepage2} alt="LoginCover" className='login-cover '/>
-            </Col>
-        </Row>
-        <Row className="full-height">
-            <Col md={6} className='col-md-6 p-0'>
-                <img src={Homepage5} alt="LoginCover" className='login-cover '/>
-            </Col>
-            <Col md={6} className='col-md-6 p-0 d-flex justify-content-center align-items-center'>
-                <div className='d-flex flex-column justify-content-center align-items-center'>
-                    <div className='d-flex justify-content-center align-items-center'>
-                        <h5>Easily find business opportunity</h5>
-                    </div>
-                    <div>
-                        <Link className='links' to="/all-projects">
-                            <Button className='dashboard-button links'>Find a Job</Button>
-                        </Link>
-                    </div>
-                </div>
-            </Col>
-        </Row>
-        <Row className="full-height">
-            <Col md={6} className='col-md-6 p-0 d-flex justify-content-center align-items-center'>
-            <div className='d-flex flex-column justify-content-center align-items-center'>
-                    <div className='d-flex justify-content-center align-items-center'>
-                        <h5>Easily show your skills</h5>
-                    </div>
-                    <div>
-                        <Link className='links' to="/create-project">
-                            <Button className='dashboard-button links'>Post a Project</Button>
-                        </Link>
-                    </div>
-                </div>
-            </Col>
-            <Col md={6} className='col-md-6 p-0'>
-                <img src={Homepage6} alt="LoginCover" className='login-cover '/>
-            </Col>
-        </Row>
+            </Row>
+        </Container>
         </>
     ) : (
         <>
-        <Row className="full-height">
-            <Col md={6} className='col-md-6 p-0'>
-                <img src={Homepage1} alt="LoginCover" className='login-cover '/>
-            </Col>
-            <Col md={6} className='col-md-6 p-0 d-flex justify-content-center align-items-center'>
-                <div className='d-flex flex-column justify-content-center align-items-center'>
-                    <div className='d-flex justify-content-center align-items-center'>
-                        <h5>Easily manage creative works</h5>
-                    </div>
-                    <div>
-                        <Link to="/signup-options" className='links'>
-                            <Button className='dashboard-button'>SignUp</Button>
-                        </Link>
-                    </div>
+        <Container>
+            <Row >
+                <div className='d-flex flex-column justify-content-center align-items-center mt-5'>
+                    <h1 className='homepage-title'>Easily Manage Your Creative Deals</h1>
+                    <span className='homepage-body mt-2'>Hubby is your personal hub where you can manage your creative deals, whether you're a company or a designer.</span>
                 </div>
-            </Col>
-        </Row>
-        <Row className="full-height">
-            <Col md={6} className='col-md-6 p-0 d-flex justify-content-center align-items-center'>
-                <div className='d-flex flex-column justify-content-center align-items-center'>
-                    <div className='d-flex justify-content-center align-items-center'>
-                        <h5>Easily manage creative deals </h5>
-                    </div>
-                    <div>
-                        <Link className='links' to="/signup-options">
-                            <Button className='dashboard-button'>SignUp</Button>
-                        </Link>
-                    </div>
+                <div className='d-flex justify-content-center align-items-center mt-4 mb-5 buttons-container'>
+                <Link to="/signup-designer" className='links'>
+                    <Button className='homepage-button mx-2 my-2'>Sign Up as Designer</Button>
+                </Link>
+                <Link to="/signup-client" className='links'>
+                    <Button className='homepage-button-2 mx-2 my-2'>Sign Up as Client</Button>
+                </Link>
                 </div>
-            </Col>
-            <Col md={6} className='col-md-6 p-0'>
-                <img src={Homepage2} alt="LoginCover" className='login-cover '/>
-            </Col>
-        </Row>
-        <Row className="full-height">
-            <Col md={6} className='col-md-6 p-0'>
-                <img src={Homepage5} alt="LoginCover" className='login-cover '/>
-            </Col>
-            <Col md={6} className='col-md-6 p-0 d-flex justify-content-center align-items-center'>
-                <div className='d-flex flex-column justify-content-center align-items-center'>
-                    <div className='d-flex justify-content-center align-items-center'>
-                        <h5>Easily find or post business opportunity</h5>
-                    </div>
-                    <div>
-                        <Link className='links' to="/signup-options">
-                            <Button className='dashboard-button links'>SignUp</Button>
-                        </Link>
-                    </div>
-                </div>
-            </Col>
-        </Row>
-        <Row className="full-height">
-            <Col md={6} className='col-md-6 p-0 d-flex justify-content-center align-items-center'>
-            <div className='d-flex flex-column justify-content-center align-items-center'>
-                    <div className='d-flex justify-content-center align-items-center'>
-                        <h5>Easily show or appreciate talent</h5>
-                    </div>
-                    <div>
-                        <Link className='links' to="/signup-options">
-                            <Button className='dashboard-button links'>SignUp</Button>
-                        </Link>
-                    </div>
-                </div>
-            </Col>
-            <Col md={6} className='col-md-6 p-0'>
-                <img src={Homepage6} alt="LoginCover" className='login-cover '/>
-            </Col>
-        </Row>
+            </Row>
+        </Container>
         </>
     )}
   </div>

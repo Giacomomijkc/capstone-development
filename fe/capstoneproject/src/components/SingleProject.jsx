@@ -17,7 +17,7 @@ const SingleProject = ({projectToRender, authorDesigner}) => {
   const designerLogged = useSelector((state)=> state.users.designer);
   const clientLogged = useSelector((state)=> state.users.client);
   const likedProjects = designerLogged ? designerLogged.designer.liked_projects : clientLogged?.client.liked_projects;
-  const isLiked = likedProjects?.some(likedProject => likedProject.project_id === projectToRender._id);
+  const isLiked = likedProjects?.some(likedProject => likedProject.project_id === projectToRender?._id);
 
   const dispatch = useDispatch();
 
@@ -33,6 +33,7 @@ const SingleProject = ({projectToRender, authorDesigner}) => {
         await dispatch(toggleSingleProjectLike(projectToRender._id));
         dispatch(getClientDetails(clientLogged.client._id));
         console.log('sto chiamando getClientDetails')
+        //questo mi fa effettivamente aggiornare i like
         dispatch(fetchProjects());
         console.log('sto chiamando fetchProjects')
       }
@@ -42,8 +43,8 @@ const SingleProject = ({projectToRender, authorDesigner}) => {
   return (
     <>
     <div className='d-flex flex-column my-5 mx-2' style={{ width: '250px' }}>
-      <Link to={`/projects/${projectToRender._id}`}>
-        <img className='project-cover' alt='project-cover' src={projectToRender.cover} />
+      <Link to={`/projects/${projectToRender?._id}`}>
+        <img className='project-cover' alt='project-cover' src={projectToRender?.cover} />
       </Link>
         <div className='d-flex justify-content-between align-items-center'>
             <div className='mt-2'>
@@ -58,8 +59,8 @@ const SingleProject = ({projectToRender, authorDesigner}) => {
             </div>
             {isLogged && (
               <div className='mt-2'>
-                <span className='project-like'><FontAwesomeIcon icon={isLiked ? solidHeart :regularHeart} className='mx-2 icons' onClick={handleLikeClick}/>{projectToRender.likes?.length}</span>
-                <span className='project-comment'> <FontAwesomeIcon icon={faComment} className='mx-2 icons' />{projectToRender.comments?.length}</span>
+                <span className='project-like'><FontAwesomeIcon icon={isLiked ? solidHeart :regularHeart} className='mx-2 icons' onClick={handleLikeClick}/>{projectToRender?.likes?.length}</span>
+                <span className='project-comment'> <FontAwesomeIcon icon={faComment} className='mx-2 icons' />{projectToRender?.comments?.length}</span>
               </div>
             )}
         </div>

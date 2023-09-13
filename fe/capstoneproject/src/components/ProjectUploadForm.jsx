@@ -96,8 +96,7 @@ const ProjectUploadForm = () => {
             imagesInputRef.current.value = null;
             if (createProject.fulfilled.match(response)) {
                 setTimeout(() => {
-                    //provare a rimandare a dashboard
-                    navigate(`/`);
+                    navigate(`/dashboard`);
                   }, 2000);
             }
 

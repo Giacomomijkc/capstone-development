@@ -15,7 +15,7 @@ import { faHeart as solidHeart } from '@fortawesome/free-solid-svg-icons';
 
 const ProjectDetails = ({project, designer}) => {
 
-    const projects = useSelector((state) => state.projects.projects);
+    //const projects = useSelector((state) => state.projects.projects);
     const isLogged = useSelector((state)=> state.users.isLogged);
     const designerLogged = useSelector((state)=> state.users.designer);
     const clientLogged = useSelector((state)=> state.users.client);
@@ -40,7 +40,7 @@ const ProjectDetails = ({project, designer}) => {
 
   return (
     <div className='container-project'>
-      {project && designer && projects && (
+      {project && designer &&  (
         <>
         <div>
             <div className='d-flex justify-content-center align-items-center mb-3 title-tags-container'>

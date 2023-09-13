@@ -8,10 +8,6 @@ import { uploadAvatar, registerDesigner } from '../redux/designersSlice';
 import {useNavigate} from 'react-router-dom';
 import './SignUpDesignerForm.css';
 
-//non riesco a gestire i campi del form con redux ma devo usare useState
-//messaggi di errori specifici del middleware
-//se tolgo immagine dall'input file non riparte il loader
-
 const SignUpDesignerForm = () => {
 
     const [showForm, setShowForm] = useState(false);

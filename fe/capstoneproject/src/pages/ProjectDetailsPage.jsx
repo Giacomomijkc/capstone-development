@@ -18,12 +18,11 @@ const ProjectDetailsPage = () => {
   const isSingleProjectLoading = useSelector((state) => state.projects.isSingleProjectLoading);
   const designer = designers?.find((designer) => designer._id === project?.author);
   
-  
 
   useEffect(() => {
     dispatch(fetchSingleProject(projectId));
     console.log('sto chiamando fetchSingleProject')
-    dispatch(fetchProjects());
+    //dispatch(fetchProjects());
     console.log('sto chiamando fetchProjects')
     dispatch(fetchDesigners())
     console.log('sto chiamando fetchDesigners')

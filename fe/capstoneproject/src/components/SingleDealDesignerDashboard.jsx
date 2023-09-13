@@ -101,7 +101,7 @@ const SingleDealDesignerDashboard = ({ designerId }) => {
         <div className='d-flex justify-content-between align-items-center mt-3'>
             <div>
             <Link to={`/deals/${designerDeal._id}`}>
-                <Button className='edit-deal-button'>Manage</Button>
+                <Button className='edit-project-button'>Manage</Button>
             </Link>
             </div>
             <div>

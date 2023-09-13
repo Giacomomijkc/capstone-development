@@ -3,9 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { fetchProjects } from '../redux/projectsSlice';
 import { fetchDesigners } from '../redux/designersSlice';
 import { setCurrentPage } from '../redux/projectsSlice';
-import Button from "react-bootstrap/Button";
 import SingleProject from './SingleProject';
-import { current } from '@reduxjs/toolkit';
 
 const AllProjects = () =>{
     const dispatch = useDispatch();

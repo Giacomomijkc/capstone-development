@@ -1,0 +1,18 @@
+.container-designer{
+    border: solid 1px #BEBFFB;
+    border-radius: 40px;
+}
+
+.profile-button{
+    background-color: #BEBFFB !important;
+    border-radius: 20px !important;
+    border-color: #BEBFFB !important;
+    width: 150px !important;
+    color: white !important;
+}
+
+.designer-nickname{
+    color: #BEBFFB;
+    font-weight: 700;
+    font-style: bold;
+}

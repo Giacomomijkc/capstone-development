@@ -143,6 +143,7 @@ export const toggleSingleProjectLike = createAsyncThunk('projects/toggleSinglePr
   } catch (error) {
     console.log(error)
       if (error.response && error.response.data && error.response.data.message){
+        console.log(error.response)
           return rejectWithValue(error.response.data.message);
       } else {
           throw error;

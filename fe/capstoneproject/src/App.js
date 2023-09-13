@@ -11,6 +11,11 @@ import ProtectedRoutes from './middlewares/ProtectedRoutes';
 import ProjectDetailsPage from './pages/ProjectDetailsPage';
 import ProjectUploadPage from './pages/ProjectUploadPage';
 import AllProjectsPage from './pages/AllProjectsPage';
+import AllDesignersPage from './pages/AllDesignersPage';
+import AllCompaniesPage from './pages/AllCompaniesPage';
+import AllJobOffersPage from './pages/AllJobOffers';
+import DesignerProfilePage from './pages/DesignerProfilePage';
+import CreateJobOfferPage from './pages/CreateJobOfferPage';
 import jwtDecode from 'jwt-decode';
 import { setRole, setIsLogged, setToken, setClientId, setDesignerId } from '../src/redux/usersSlice';
 import { useDispatch } from 'react-redux';
@@ -45,13 +50,18 @@ const App = () => {
         <Route element={<ProtectedRoutes />}>
           <Route exact path="/dashboard" element={<Dashboard />}/>
           <Route path="/create-project" element={<ProjectUploadPage />}/>
+          <Route exact path="/projects/:projectId" element={<ProjectDetailsPage/>}/>
+          <Route exact path="/all-projects" element={<AllProjectsPage/>}/>
+          <Route exact path="/all-designers" element={<AllDesignersPage />}/>
+          <Route exact path="all-companies" element={<AllCompaniesPage/>}/>
+          <Route exact path="all-job-offers" element={<AllJobOffersPage/>}/>
+          <Route exact path="designers/:designerId" element={<DesignerProfilePage/>}/>
+          <Route exatc path="create-job-offer" element={<CreateJobOfferPage />}/>
         </Route>
         <Route exact path="/signup-options" element={<SingUpOptionsPage/>}/>
         <Route exact path="/signup-designer" element={<SingUpDesignerPage/>}/>
         <Route exact path="/signup-client" element={<SignUpClientPage/>}/>
         <Route exact path="/login" element={<LogInPage/>}/>
-        <Route exact path="/projects/:projectId" element={<ProjectDetailsPage/>}/>
-        <Route exact path="/all-projects" element={<AllProjectsPage/>}/>
         <Route path="*" element={<ErrorPage/>}/>
       </Routes>
     </BrowserRouter>

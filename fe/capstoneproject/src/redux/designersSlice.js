@@ -56,6 +56,7 @@ export const fetchDesigners = createAsyncThunk('designers/fetchDesigners', async
 export const fetchDesignerById = createAsyncThunk('designers/fetchDesignerById', async (designerId) => {
   try {
     const response = await axios.get(`${apiUrlFetchDesigners}${designerId}`);
+    console.log(response)
     return response.data.designer;
   } catch (error) {
     console.error('Errore durante il recupero dei dati del designer', error);
@@ -84,7 +85,7 @@ const designersSlice = createSlice({
       avatarURL: null,
       successMessage: null,
       isUploadLoading: true,
-      designerData: {
+      /*designerData: {
         surname: '',
         nickname: '',
         description: '',
@@ -95,11 +96,13 @@ const designersSlice = createSlice({
         password: '',
         address: '',
         vatOrCf: '',
-      },
+      },*/
       likedProjects: [],
       isLikedProjectsLoading: true,
       userId: null,
+      designer: null,
       singleDesigner: null, 
+      designers: null,
     },
     reducers: {
       setUserId: (state, action) => {
@@ -135,9 +138,14 @@ const designersSlice = createSlice({
         })
         .addCase(fetchDesigners.fulfilled, (state, action) => {
           state.designers = action.payload;
+          state.isDesignerLoading = false;
         })
         .addCase(fetchDesigners.rejected, (state, action) => {
           state.error = action.payload;
+          state.isDesignerLoading = false;
+        })
+        .addCase(fetchDesigners.pending, (state, action) => {
+          state.isDesignerLoading = true;
         })
         .addCase(fetchDesignerById.fulfilled, (state, action) => {
           state.singleDesigner = action.payload;

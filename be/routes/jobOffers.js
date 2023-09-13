@@ -101,7 +101,7 @@ jobOffer.get('/joboffers/:jobOfferId', async (req, res) => {
     }
 });
 
-//projects get da id designer
+//jobOffers get da id designer
 
 jobOffer.get('/joboffers/client/:clientId', async (req, res) => {
     const { clientId } = req.params;

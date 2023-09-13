@@ -36,7 +36,7 @@ const SingleJobOfferClientDashboard = ({ clientId }) => {
             </div>
             <div className='d-flex flex-column justify-content-center align-items-center'>
                 <div>
-                    <span className='price'>{clientJobOffer.budget.budget_value}{clientJobOffer.budget.budget_unit}</span>
+                    <span className='price'>{clientJobOffer.budget.budget_value} {clientJobOffer.budget.budget_unit}</span>
                 </div>
                 <div>
                     <span className='info'>Deadline: {clientJobOffer.deadline}</span>

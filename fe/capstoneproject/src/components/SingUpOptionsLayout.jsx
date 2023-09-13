@@ -26,6 +26,11 @@ const SignUpOptionsLayout = () => {
                             Sign up as Client
                         </Button>
                     </Link>
+                    <div>
+                        <Link to="/login" className='links'>
+                        <span className='info'>Already registered? Click to LogIn</span>
+                        </Link>
+                    </div>
                 </div>
             </Col>
         </Row>

@@ -40,6 +40,16 @@ export const fetchClientById = createAsyncThunk('clients/fetchClientById', async
   }
 });
 
+export const fetchClients= createAsyncThunk('clients/fetchClients', async () => {
+  try {
+      const response = await axios.get(`${apirUrlFetchClients}`);
+      return response.data.clients;
+  } catch (error) {
+    console.error('Errors occuring while fetching Client', error);
+    throw new Error('Errors occuring while fetching Client');
+  }
+});
+
 export const fetchProjectsLikedByClient = createAsyncThunk('designers/fetchProjectsLikedByClient', async (clientId) => {
   try {
     const token = JSON.parse(localStorage.getItem("userLoggedIn"));
@@ -65,6 +75,8 @@ const clientsSlice = createSlice({
       clientIsLoading: true,
       likedProjects: [],
       isLikedProjectsLoading: true,
+      clients: null,
+      isClientsLoading: true,
     },
     reducers: {
     },
@@ -108,6 +120,17 @@ const clientsSlice = createSlice({
         .addCase(fetchProjectsLikedByClient.rejected, (state, action) =>{
           state.error = action.payload
           state.isLikedProjectsLoading = false
+        })
+        .addCase(fetchClients.fulfilled, (state, action) =>{
+          state.clients = action.payload
+          state.isClientsLoading = false
+        })
+        .addCase(fetchClients.pending, (state, action) => {
+          state.isClientsLoading = true
+        })
+        .addCase(fetchClients.rejected, (state, action) => {
+          state.error = action.payload
+          state.isClientsLoading = false
         })
     },
   });

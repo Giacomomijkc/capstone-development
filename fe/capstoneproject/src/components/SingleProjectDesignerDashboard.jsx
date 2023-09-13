@@ -17,7 +17,9 @@ const SingleProjectDesignerDashboard = ({ designerId }) => {
     <>
       {designerProjects && designerProjects.map(designerProject => (
         <div className='d-flex flex-column my-5 mx-2' style={{ width: '250px' }} key={designerProject._id}>
+          <Link to={`/projects/${designerProject._id}`}>
             <img className='project-cover' alt='project-cover' src={designerProject.cover} />
+          </Link>
           <div className='d-flex justify-content-between align-items-center'>
             <div className='mt-2'>
               <span className='author-nickname mx-2'>{designerProject.title}</span>
