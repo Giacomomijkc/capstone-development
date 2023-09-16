@@ -43,6 +43,82 @@ export const createDeal = createAsyncThunk('deals/createDeal', async (dealData,{
   }
 })
 
+export const acceptDeal = createAsyncThunk('deals/acceptDeal', async (dealId,{ rejectWithValue }) =>{
+  try {
+      const token = JSON.parse(localStorage.getItem("userLoggedIn"));
+      const response = await axios.patch(`${apiUrlFetchDeals}${dealId}/accept`, null, {
+        headers: { 'Authorization': `${token}` }
+      });
+      console.log(response)
+      return response.data.deal;
+
+  } catch (error) {
+    console.log(error)
+    if (error.response && error.response.data && error.response.data.message){
+        return rejectWithValue(error.response.data.message);
+    } else {
+        throw error;
+    }
+  }
+})
+
+export const denyDeal = createAsyncThunk('deals/denyDeal', async (dealId,{ rejectWithValue }) =>{
+  try {
+      const token = JSON.parse(localStorage.getItem("userLoggedIn"));
+      const response = await axios.patch(`${apiUrlFetchDeals}${dealId}/deny`, null, {
+        headers: { 'Authorization': `${token}` }
+      });
+      console.log(response)
+      return response.data.deal;
+
+  } catch (error) {
+    console.log(error)
+    if (error.response && error.response.data && error.response.data.message){
+        return rejectWithValue(error.response.data.message);
+    } else {
+        throw error;
+    }
+  }
+})
+
+export const startDeal = createAsyncThunk('deals/startDeal', async (dealId,{ rejectWithValue }) =>{
+  try {
+      const token = JSON.parse(localStorage.getItem("userLoggedIn"));
+      const response = await axios.patch(`${apiUrlFetchDeals}${dealId}/start`, null, {
+        headers: { 'Authorization': `${token}` }
+      });
+      console.log(response)
+      return response.data.deal;
+
+  } catch (error) {
+    console.log(error)
+    if (error.response && error.response.data && error.response.data.message){
+        return rejectWithValue(error.response.data.message);
+    } else {
+        throw error;
+    }
+  }
+})
+
+export const endDeal = createAsyncThunk('deals/endDeal', async (dealId,{ rejectWithValue }) =>{
+  try {
+      const token = JSON.parse(localStorage.getItem("userLoggedIn"));
+      const response = await axios.patch(`${apiUrlFetchDeals}${dealId}/end`, null, {
+        headers: { 'Authorization': `${token}` }
+      });
+      console.log(response)
+      return response.data.deal;
+
+  } catch (error) {
+    console.log(error)
+    if (error.response && error.response.data && error.response.data.message){
+        return rejectWithValue(error.response.data.message);
+    } else {
+        throw error;
+    }
+  }
+})
+
   const dealsSlice = createSlice({
     name: 'deals',
     initialState: {
@@ -53,6 +129,14 @@ export const createDeal = createAsyncThunk('deals/createDeal', async (dealData,{
       isLoadingClientDeals: true,
       newDeal: null,
       isNewDealLoading: true, 
+      acceptDeal: null,
+      isAcceptDealLoading: true,
+      denyDeal: null,
+      isDenyDealLoading: true,
+      startDeal: null,
+      isStartDealLoading: true,
+      endDeal: null,
+      isEndDealLoading: true,
     },
     reducers: {
     },
@@ -93,6 +177,54 @@ export const createDeal = createAsyncThunk('deals/createDeal', async (dealData,{
       .addCase(createDeal.rejected, (state, action) => {
         state.error = action.payload;
         state.isNewDealLoading = false;
+      })
+      .addCase(acceptDeal.fulfilled, (state, action) => {
+        state.acceptDeal = action.payload;
+        state.isAcceptDealLoading = false;
+        state.successMessage = action.payload.message
+      })
+      .addCase(acceptDeal.pending, (state, action) => {
+        state.isAcceptDealLoading = true;
+      })
+      .addCase(acceptDeal.rejected, (state, action) => {
+        state.error = action.payload;
+        state.isAcceptDealLoading = false;
+      })
+      .addCase(denyDeal.fulfilled, (state, action) => {
+        state.denyDeal = action.payload;
+        state.isDenyDealLoading = false;
+        state.successMessage = action.payload.message
+      })
+      .addCase(denyDeal.pending, (state, action) => {
+        state.isDenyDealLoading = true;
+      })
+      .addCase(denyDeal.rejected, (state, action) => {
+        state.error = action.payload;
+        state.isDenyDealLoading = false;
+      })
+      .addCase(startDeal.fulfilled, (state, action) => {
+        state.startDeal = action.payload;
+        state.isStartDealLoading = false;
+        state.successMessage = action.payload.message
+      })
+      .addCase(startDeal.pending, (state, action) => {
+        state.isStartDealLoading = true;
+      })
+      .addCase(startDeal.rejected, (state, action) => {
+        state.error = action.payload;
+        state.isStartDealLoading = false;
+      })
+      .addCase(endDeal.fulfilled, (state, action) => {
+        state.endDeal = action.payload;
+        state.isEndDealLoading = false;
+        state.successMessage = action.payload.message
+      })
+      .addCase(endDeal.pending, (state, action) => {
+        state.isEndDealLoading = true;
+      })
+      .addCase(endDeal.rejected, (state, action) => {
+        state.error = action.payload;
+        state.isEndDealLoading = false;
       })
     },
   });

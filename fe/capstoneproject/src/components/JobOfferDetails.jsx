@@ -9,7 +9,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import {createDeal} from '../redux/dealsSlice';
 
 const JobOfferDetails = ({jobOffer}) => {
-    
+    //togliere bottone make a deal in questa pagina
     
     console.log(jobOffer)
     console.log(jobOffer?.client)

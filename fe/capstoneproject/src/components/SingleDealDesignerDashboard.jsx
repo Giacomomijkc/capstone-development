@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchDesignerDeals } from '../redux/dealsSlice';
+import { fetchDesignerDeals, startDeal, endDeal } from '../redux/dealsSlice';
 import { fetchClients } from '../redux/clientsSlice';
 import { Link } from 'react-router-dom';
 import Button from "react-bootstrap/Button";
@@ -17,6 +17,8 @@ const SingleDealDesignerDashboard = ({ designerId }) => {
             return 'status-red'; 
           case 'completed':
             return 'status-purple'; 
+          case 'in progress':
+            return 'status-blu'; 
           default:
             return ''; 
         }
@@ -34,13 +36,31 @@ const SingleDealDesignerDashboard = ({ designerId }) => {
     }, [dispatch, designerId]);
 
     console.log(clients)
+
+    //non riesco ad aggiornare i deal dopo start/end..
+
+    const handleStartDeal = async (dealId) => {
+      await dispatch(startDeal(dealId));
+      await dispatch(fetchDesignerDeals(designerId));
+      console.log('lanciato fetchDesignerDeals')
+      await dispatch(fetchClients());
+      console.log('lanciato fetchClients')
+    }
+
+    const handleEndDeal = async (dealId) => {
+      await dispatch(endDeal(dealId));
+      await dispatch(fetchDesignerDeals(designerId));
+      console.log('lanciato fetchDesignerDeals')
+      await dispatch(fetchClients());
+      console.log('lanciato fetchClients')
+    }
     
   return (
     <>
 {designerDeals && designerDeals.map(designerDeal => {
   const client = clients?.find(c => c._id === designerDeal.client);
   return (
-    <div className='d-flex flex-column my-5 mx-2 deal' style={{ width: '300px' }} key={designerDeal._id}>
+    <div className='d-flex flex-column my-5 mx-2 deal' style={{ width: '350px' }} key={designerDeal._id}>
       {client && (
         <div className='d-flex justify-content-between align-items-center'>
           <Link className='links' to={`/clients/${client._id}`}>
@@ -114,21 +134,57 @@ const SingleDealDesignerDashboard = ({ designerId }) => {
           </div>
         )}
       </div>
-      <div className='d-flex justify-content-between align-items-center mt-3'>
+              {/* Gestione dinamica in base allo stato */}
+              <div className='d-flex justify-content-between align-items-center mt-3'>
           <div>
-          <Link to={`/deals/${designerDeal._id}`}>
-              <Button className='edit-project-button'>Manage</Button>
-          </Link>
+            {/* Stato OFFERED */}
+            {designerDeal.status === 'offered' && (
+              <span className='status-text'>Waiting for Client Action</span>
+            )}
+            {/* Stato ACCEPTED */}
+            {designerDeal.status === 'accepted' && (
+              <>
+              <div className='d-flex justify-content-center align-itmes-center'>
+              <Button className='edit-deal-buttons mx-2' onClick={() => handleStartDeal(designerDeal._id)}>Start</Button>
+              </div>
+              </>
+            )}
+            {/* Stato DENIED */}
+            {designerDeal.status === 'denied' && (
+            <>
+            <div className='d-flex justify-content-center align-itmes-center'>
+            <Button className='edit-deal-buttons mx-2'>Delete</Button>
+            </div>
+            </>
+            )}
+            {/* Stato IN PROGRESS */}
+            {designerDeal.status === 'in progress' && (
+              <>
+              <div className='d-flex justify-content-center align-itmes-center'>
+              <Button className='edit-deal-buttons mx-2' onClick={() => handleEndDeal(designerDeal._id)}>End</Button>
+              </div>
+              </>
+            )}
+            {/* Stato COMPLETED */}
+            {designerDeal.status === 'completed' && (
+              <>
+              <div className='d-flex justify-content-center align-itmes-center'>
+              <Button className='edit-deal-buttons mx-2'>Invoice</Button>
+              </div>
+              </>
+            )}
           </div>
           <div>
-              <span className={`${getStatusClass(designerDeal.status)}`}>{designerDeal.status.toUpperCase()}</span>
+            <span className={`${getStatusClass(designerDeal.status)}`}>{designerDeal.status.toUpperCase()}</span>
           </div>
-      </div>
+        </div>
     </div>
   );
 })}
   </>
   )
 }
+
+
 
 export default SingleDealDesignerDashboard

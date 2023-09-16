@@ -56,4 +56,12 @@
     font-weight: 700;
     padding: 5px;
   }
+
+  .status-blu {
+    color: #171aec;
+    border: 1px solid #171aec;
+    border-radius: 20px;
+    font-weight: 700;
+    padding: 5px;
+  }
   
