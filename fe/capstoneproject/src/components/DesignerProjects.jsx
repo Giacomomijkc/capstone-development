@@ -1,17 +1,7 @@
-import React, { useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { fetchDesignerProjects } from '../redux/projectsSlice';
+import React from 'react';
 import SingleProject from './SingleProject';
 
 const DesignerProjects = ({ designer, designerProjects }) => {
-  
-
-  const dispatch = useDispatch();
-  //const designerProjects = useSelector((state) => state.projects.designerProjects);
-
-  /*useEffect(() => {
-    dispatch(fetchDesignerProjects(designer?._id));
-  }, [dispatch]);*/
 
   return (
     <div>

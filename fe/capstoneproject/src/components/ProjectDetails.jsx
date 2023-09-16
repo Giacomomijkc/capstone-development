@@ -3,6 +3,7 @@ import "./ProjectDetails.css";
 import Button from 'react-bootstrap/esm/Button';
 import RelatedProjects from './RelatedProjects';
 import { toggleLike } from '../redux/projectsSlice';
+import { Link } from 'react-router-dom';
 import { getDesignerDetails } from '../redux/usersSlice';
 import { getClientDetails } from '../redux/usersSlice';
 import { fetchProjects } from '../redux/projectsSlice';
@@ -97,8 +98,10 @@ const ProjectDetails = ({project, designer}) => {
                 ))}
             </div>
             <div className='d-flex justify-content-center align-items-center mt-3 buttons-container'>
+                <Link className='links' to={`/designers/${designer._id}`}>
                     <Button className='button-profile mx-2'> View profile</Button>
-                    <Button className='button-chat mx-2'> Open Chat</Button>
+                </Link>
+
             </div>
             <div className='d-flex flex-column justify-content-center align-items-center mt-5'>
                 <div>

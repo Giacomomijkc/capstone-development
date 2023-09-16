@@ -16,7 +16,7 @@ const AllCompanies = () => {
     {clients &&
     clients.map((client) => {
         return (
-            <SingleCompany client={client} />
+            <SingleCompany client={client} key={client._id} />
         );
         })
     }

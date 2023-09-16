@@ -40,6 +40,10 @@ export const fetchClientById = createAsyncThunk('clients/fetchClientById', async
   }
 });
 
+export const selectClientById = (state, clientId) => {
+  return state.clients.clients?.find(client => client.id === clientId)
+}
+
 export const fetchClients= createAsyncThunk('clients/fetchClients', async () => {
   try {
       const response = await axios.get(`${apirUrlFetchClients}`);

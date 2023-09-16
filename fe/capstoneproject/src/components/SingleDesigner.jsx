@@ -5,7 +5,7 @@ import './SingleDesigner.css';
 
 const SingleDesigner = ({designer}) => {
   return (
-    <div className='d-flex justify-content-between align-items-center container-designer my-3 p-2' key={designer._id} style={{ width: '600px' }}>
+    <div className='d-flex justify-content-between align-items-center container-designer my-3 p-2' key={designer._id} style={{ width: '800px' }}>
         <img src={designer.avatar} alt="designer avatar" className='user-avatar'/>
         <span className='designer-nickname'>{designer.nickname}</span>
         <span>{designer.description}</span>

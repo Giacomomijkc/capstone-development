@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';  
 import { fetchSingleProject } from '../redux/projectsSlice';
-import './SingleLikedProjectDesignerDashboard.css';
 
 const SingleLikedProjectDesignerDashboard = ({ projectId, designers }) => {
     const dispatch = useDispatch();

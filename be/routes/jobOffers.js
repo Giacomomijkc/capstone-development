@@ -92,7 +92,10 @@ jobOffer.get('/joboffers/:jobOfferId', async (req, res) => {
             return res.status(404).json({ message: 'Job offer not found' });
         }
 
-        res.status(200).json({ jobOffer });
+        res.status(200).json({ 
+            statusCode: 200,
+            message: 'Job Offer fetched successfully',
+            jobOffer });
     } catch (error) {
         res.status(500).json({
             message: 'Internal server error',

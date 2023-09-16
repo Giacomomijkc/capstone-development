@@ -2,20 +2,24 @@
     border: solid 1px #BEBFFB;
     border-radius: 20px;
     margin: 0;
+    height: 300px; /* Altezza della card, modifica secondo necessità */
+    background-image: linear-gradient(to bottom, white 20%, #BEBFFB 80%);
+    background-size: 100% 100%; /* 100% sull'altezza, 100% sulla larghezza */
+    background-repeat: no-repeat;
 }
 
 .offer-title{
     font-size: medium;
     font-weight: bold;
-    color: white;
+    color: #BEBFFB;
 }
 
 .edit-button{
-    background-color: #BEBFFB !important;
+    background-color: white !important;
     border-radius: 20px !important;
     border-color: #BEBFFB !important;
     width: 80px !important;
-    color: white !important;
+    color: #BEBFFB  !important;
     margin-bottom: 10px;
 }
 
@@ -32,8 +36,3 @@
     font-size: small;
 }
 
-.header{
-    background-color: #BEBFFB;
-    border-radius: 20px 20px 0px 0px;
-    padding: 5px;
-}

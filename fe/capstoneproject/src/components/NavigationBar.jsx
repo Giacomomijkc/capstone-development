@@ -79,14 +79,14 @@ const NavigationBar = () => {
             <div className='ms-auto'>
               {isLogged ? (
                 <div className='d-flex justify-content-center align-items-center'>
-                  <Form className="d-flex mx-2">
+                  {/*<Form className="d-flex mx-2">
                     <Form.Control
                       type="search"
                       placeholder="Search"
                       className="search me-2"
                       aria-label="Search"
                     />
-                  </Form>
+              </Form>*/}
                   {role === 'Designer' ? (
                     <>
                       <Link to="/create-project">
@@ -105,7 +105,7 @@ const NavigationBar = () => {
                   ) : role === 'Client' ? (
                     <>
                       <Link className='links' to="/create-job-offer">
-                        <Button className='nav-buttons mx-2'>Offer+</Button>
+                        <Button className='nav-buttons mx-2'>Job+</Button>
                       </Link>
                       <Button className='logout-button mx-2' onClick={handleLogOut}>LogOut</Button>
                       {client && (

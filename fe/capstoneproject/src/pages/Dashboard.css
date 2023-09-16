@@ -17,6 +17,22 @@
     color: #BEBFFB !important;
 }
 
+.show-close-button{
+    background-color: #BEBFFB !important;
+    border-radius: 20px !important;
+    border-color: #BEBFFB !important;
+    width: 200px !important;
+    color: white !important;
+}
+
+.buttons-show-container{
+    margin-bottom: 100px;
+}
+
+.button-close-container{
+    margin-bottom: 100px;  
+}
+
 .make-deal-button{
     background-color: #BEBFFB !important;
     border-radius: 20px !important;

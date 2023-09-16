@@ -17,8 +17,8 @@ const SingleJobOfferClientDashboard = ({ clientId }) => {
     <>
       {clientJobOffers && clientJobOffers.map(clientJobOffer => (
         <div className='d-flex flex-column my-5 mx-2 job-offer' style={{ width: '250px' }} key={clientJobOffer._id}>
-            <div className='header d-flex justify-content-center'>
-                <span className='offer-title mx-2'>{clientJobOffer.title.toUpperCase()}</span>
+            <div className=' d-flex justify-content-center'>
+                <span className='offer-title mx-2 mt-4'>{clientJobOffer.title.toUpperCase()}</span>
             </div>
           <div className='d-flex flex-column justify-content-between align-items-center'>
             <div className='mt-1'>

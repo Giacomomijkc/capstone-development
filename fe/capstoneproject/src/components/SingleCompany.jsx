@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 
 const SingleCompany = ({client}) => {
   return (
-    <div className='d-flex justify-content-between align-items-center container-designer my-3 p-2' key={client._id} style={{ width: '600px' }}>
+    <div className='d-flex justify-content-between align-items-center container-designer my-3 p-2' style={{ width: '600px' }}>
         <img src={client.avatar} alt="designer avatar" className='user-avatar'/>
         <span className='designer-nickname'>{client.company}</span>
         <span>{client.description}</span>

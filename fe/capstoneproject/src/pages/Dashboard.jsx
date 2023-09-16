@@ -2,7 +2,7 @@ import NavigationBar from '../components/NavigationBar';
 import Footer from '../components/Footer';
 import Button from "react-bootstrap/Button";
 import { Link } from 'react-router-dom';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import SingleProjectDesignerDashboard from '../components/SingleProjectDesignerDashboard';
 import SingleDealDesignerDashboard from '../components/SingleDealDesignerDashboard';
 import SingleDealClientDashboard from '../components/SingleDealClientDashboard';
@@ -25,7 +25,6 @@ const Dashboard = () => {
   const designerProjects = useSelector((state)=> state.projects.designerProjects);
   const designerDeals = useSelector((state)=> state.deals.designerDeals);
   const client = useSelector((state)=> state.users.client);
-  //const clientJobOffer = useSelector((state)=> state.users.client?.client.job_offers);
   const clientDeals = useSelector((state)=> state.deals.clientDeals);
   const clientJobOffers = useSelector((state)=> state.joboffers.jobOffers);
   const role = useSelector((state)=> state.users.role);
@@ -35,6 +34,52 @@ const Dashboard = () => {
   const likedProjects = useSelector((state) => state.designers.likedProjects)
   const likedProjectsByClient = useSelector((state) => state.clients.likedProjects)
   const token = localStorage.getItem('userLoggedIn');
+
+  const [showProjectsPosted, setShowProjectsPosted] = useState (false);
+  const [showJobOffers, setShowJobOffers] = useState (false);
+  const [showProjectsLiked, setShowProjectsLiked] = useState (false);
+  const [showProjectsClientLiked, setShowProjectsClientLiked] = useState (false);
+  const [showButtons, setShowButtons] = useState(true)
+
+  const handleShowProjectsPosted = () => {
+    setShowProjectsPosted(true)
+    setShowButtons(false)
+  }
+
+  const handleShowProjectsLiked = () => {
+    setShowProjectsLiked(true)
+    setShowButtons(false)
+  }
+
+  const handleCloseProjectsPosted = () => {
+    setShowProjectsPosted(false)
+    setShowButtons(true)
+  }
+
+  const handleCloseProjectsLiked = () => {
+    setShowProjectsLiked(false)
+    setShowButtons(true)
+  }
+
+  const handleShowJobOffers = () => {
+    setShowJobOffers(true)
+    setShowButtons(false)
+  }
+
+  const handleCloseJobOffers = () => {
+    setShowJobOffers(false)
+    setShowButtons(true)
+  }
+
+  const handleShowProjectsClientLiked = () => {
+    setShowProjectsClientLiked(true)
+    setShowButtons(false)
+  }
+ 
+  const handleCloseProjectsClientLiked = () => {
+    setShowProjectsClientLiked(false)
+    setShowButtons(true)
+  }
  
   
 
@@ -66,29 +111,53 @@ const Dashboard = () => {
             </div>
             <div className='d-flex flex-column justify-content-center algin-items-center'>
               <Button className='edit-datas-button mb-2'>Edit personal info</Button>
-              <Button className='make-deal-button mt-2'>Make a Deal</Button>
+              <Link className='links' to="/create-deal">
+                <Button className='make-deal-button mt-2'>Make a Deal</Button>
+              </Link>
             </div>
           </div>
           <div className='d-flex justify-content-center algin-items-center mt-5' >
             <h2 className=''>You Made <span  className='nickname'>{designerDeals?.length}</span> Deals</h2>
           </div>
-          <div className='d-flex flex-wrap justify-content-center algin-items-center mb-5'>
+          <div className='d-flex flex-wrap justify-content-center algin-items-center'>
             <SingleDealDesignerDashboard designerId={designerId} />
           </div>
-          <div className='d-flex justify-content-center algin-items-center mt-5' >
-            <h2 className=''>You Posted <span  className='nickname'>{designerProjects?.length}</span> project</h2>
-          </div>
-          <div className='d-flex flex-wrap justify-content-center algin-items-center mb-5'>
-            <SingleProjectDesignerDashboard designerId={designerId} />
-          </div>
-          <div className='d-flex justify-content-center algin-items-center mt-5' >
-            <h2 className=''>You Liked <span  className='nickname'>{likedProjects?.length}</span> Projects</h2>
-          </div>
-          <div className='d-flex flex-wrap justify-content-center algin-items-center mb-5'>
-            {likedProjects && likedProjects.map((project) => (
-              <SingleLikedProjectDesignerDashboard projectId={project.project_id} designers={designers} />
-            ))}
-          </div>
+          {showButtons &&
+            <div className='d-flex justify-content-center algin-items-center buttons-show-container'>
+              <div className='d-flex justify-content-center algin-items-center'>
+                <Button className='show-close-button mx-2' onClick={handleShowProjectsPosted}>Your Projects</Button>
+                <Button className='show-close-button mx-2'onClick={handleShowProjectsLiked}>Projects Liked</Button>
+              </div>
+            </div>
+          }
+          {showProjectsPosted &&
+          <>
+            <div className='d-flex justify-content-center algin-items-center mt-5' >
+              <h2 className=''>You Posted <span  className='nickname'>{designerProjects?.length}</span> project</h2>
+            </div>
+            <div className='d-flex flex-wrap justify-content-center algin-items-center mb-5'>
+              <SingleProjectDesignerDashboard designerId={designerId} />
+            </div>
+            <div className='d-flex justify-content-center algin-items-center button-close-container'>
+              <Button className='show-close-button' onClick={handleCloseProjectsPosted}>Close</Button>
+            </div>
+          </>
+          }
+          { showProjectsLiked &&
+            <>
+             <div className='d-flex justify-content-center algin-items-center mt-5' >
+             <h2 className=''>You Liked <span  className='nickname'>{likedProjects?.length}</span> Projects</h2>
+           </div>
+           <div className='d-flex flex-wrap justify-content-center algin-items-center mb-5'>
+             {likedProjects && likedProjects.map((project) => (
+               <SingleLikedProjectDesignerDashboard projectId={project.project_id} designers={designers} />
+             ))}
+           </div>
+           <div className='d-flex justify-content-center algin-items-center button-close-container'>
+              <Button className='show-close-button' onClick={handleCloseProjectsLiked}>Close</Button>
+            </div>
+             </>
+          }
         </>
       )}
 
@@ -112,12 +181,29 @@ const Dashboard = () => {
           <div className='d-flex flex-wrap justify-content-center algin-items-center mb-5'>
             <SingleDealClientDashboard clientId={clientId} />
           </div>
-          <div className='d-flex justify-content-center algin-items-center mt-5' >
-            <h2 className=''>You Posted <span  className='nickname'>{clientJobOffers?.length}</span> Job Offer</h2>
-          </div>
-          <div className='d-flex flex-wrap justify-content-center algin-items-center mb-5'>
-            <SingleJobOfferClientDashboard clientId={clientId} />
-          </div>
+          {showButtons &&
+            <div className='d-flex justify-content-center algin-items-center buttons-show-container'>
+              <div className='d-flex justify-content-center algin-items-center'>
+                <Button className='show-close-button mx-2' onClick={handleShowJobOffers}>Your JobOffer</Button>
+                <Button className='show-close-button mx-2'onClick={handleShowProjectsClientLiked}>Projects Liked</Button>
+              </div>
+            </div>
+          }
+          {showJobOffers &&
+          <>
+            <div className='d-flex justify-content-center algin-items-center mt-5' >
+              <h2 className=''>You Posted <span  className='nickname'>{clientJobOffers?.length}</span> Job Offer</h2>
+            </div>
+            <div className='d-flex flex-wrap justify-content-center algin-items-center mb-5'>
+              <SingleJobOfferClientDashboard clientId={clientId} />
+            </div>
+            <div className='d-flex justify-content-center algin-items-center button-close-container'>
+              <Button className='show-close-button' onClick={handleCloseJobOffers}>Close</Button>
+            </div>
+          </>
+          }
+          {showProjectsClientLiked &&
+          <>
           <div className='d-flex justify-content-center algin-items-center mt-5' >
             <h2 className=''>You Liked <span  className='nickname'>{likedProjectsByClient?.length}</span> Projects</h2>
           </div>
@@ -126,6 +212,11 @@ const Dashboard = () => {
               <SingleLikedProjectClientDashboard projectId={project.project_id} designers={designers} />
             ))}
           </div>
+          <div className='d-flex justify-content-center algin-items-center button-close-container'>
+              <Button className='show-close-button' onClick={handleCloseProjectsClientLiked}>Close</Button>
+          </div>
+          </>
+          }
         </>
       )}
     </div>

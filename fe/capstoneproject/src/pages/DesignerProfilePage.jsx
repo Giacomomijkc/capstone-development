@@ -4,7 +4,6 @@ import NavigationBar from '../components/NavigationBar';
 import Footer from '../components/Footer';
 import { fetchDesignerById } from '../redux/designersSlice';  
 import { fetchDesignerProjects } from '../redux/projectsSlice';
-import { fetchProjects} from '../redux/projectsSlice';
 import { useSelector, useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import './ProjectDetailsPage.css';
@@ -15,7 +14,6 @@ const DesignerProfilePage = () => {
     const {designerId} = useParams();
     const singleDesigner = useSelector((state) => state.designers.singleDesigner);
     const designerProjects = useSelector((state) => state.projects.designerProjects);
-    //console.log(designerId)
     
 
 
@@ -23,7 +21,6 @@ const DesignerProfilePage = () => {
         dispatch(fetchDesignerById(designerId));
         dispatch(fetchDesignerProjects(designerId));
         console.log('ho chiamato fetchDesignerProjects')
-        //dispatch(fetchProjects());
       }, [dispatch, designerId]);
 
   return (

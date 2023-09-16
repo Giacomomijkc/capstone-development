@@ -3,7 +3,6 @@ import ProjectDetails from '../components/ProjectDetails';
 import NavigationBar from '../components/NavigationBar';
 import Footer from '../components/Footer';
 import { fetchSingleProject} from '../redux/projectsSlice';
-import { fetchProjects} from '../redux/projectsSlice';
 import { fetchDesigners } from '../redux/designersSlice';
 import { useSelector, useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
@@ -22,7 +21,6 @@ const ProjectDetailsPage = () => {
   useEffect(() => {
     dispatch(fetchSingleProject(projectId));
     console.log('sto chiamando fetchSingleProject')
-    //dispatch(fetchProjects());
     console.log('sto chiamando fetchProjects')
     dispatch(fetchDesigners())
     console.log('sto chiamando fetchDesigners')

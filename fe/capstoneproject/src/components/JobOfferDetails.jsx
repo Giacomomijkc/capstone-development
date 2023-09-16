@@ -1,31 +1,39 @@
-import React from 'react'
+import React from 'react';
+import { useState } from 'react';
+import SingleJobOffer from './SingleJobOffer';
+import Container from 'react-bootstrap/esm/Container';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
-import { useState, useRef } from 'react';
-import { useDispatch } from 'react-redux';
-import { useSelector } from 'react-redux';
 import {useNavigate} from 'react-router-dom';
-import {createJobOffer}  from '../redux/jobOffersSlice';
-import './CreateJobOfferForm.css';
+import { useSelector, useDispatch } from 'react-redux';
+import {createDeal} from '../redux/dealsSlice';
 
-const CreateJobOfferForm = () => {
+const JobOfferDetails = ({jobOffer}) => {
+    
+    
+    console.log(jobOffer)
+    console.log(jobOffer?.client)
+
+    const error = useSelector((state) => state.deals.error);
+    const successMessage = useSelector((state) => state.deals.successMessage);
+    const isNewDealLoading = useSelector((state) => state.deals.isNewDealLoading);
+
 
     const [formData, setFormData] = useState({
-        title: '',
-        deadline: '',
+        rework_limit:'',
         description: '',
         tags: [],
-        budget:{
-            budget_value: '',
-            budget_unit: ''
+        amount:{
+            amount_value: '',
+            amount_unit: ''
+        },
+        timing:{
+            timing_value: '',
+            timing_unit: ''
         }
     });
 
     console.log(formData)
-
-    const error = useSelector((state) => state.joboffers.error);
-    const successMessage = useSelector((state) => state.joboffers.successMessage);
-    const isNewJobOfferLoading = useSelector((state) => state.joboffers.isNewJobOfferLoading);
 
     const navigate = useNavigate();
     const dispatch = useDispatch();
@@ -37,11 +45,19 @@ const CreateJobOfferForm = () => {
                 ...formData,
                 [name]: value.split(',').map(tag => tag.trim()),
             });
-        } else if (name === 'budget_value' || name === 'budget_unit') {
+        } else if (name === 'amount_value' || name === 'amount_unit') {
             setFormData({
                 ...formData,
-                budget: {
-                    ...formData.budget,
+                amount: {
+                    ...formData.amount,
+                    [name]: value,
+                }
+            });
+        } else if (name === 'timing_value' || name === 'timing_unit') {
+            setFormData({
+                ...formData,
+                timing: {
+                    ...formData.timing,
                     [name]: value,
                 }
             });
@@ -52,30 +68,35 @@ const CreateJobOfferForm = () => {
             });
         }
     };
-
-
+    
+    
     const handleSubmit = async (e) => {
         e.preventDefault();
     
-    const jonOfferData = {
+    const dealData = {
             ...formData,
+            client: jobOffer.client
         };
+
 
     console.log(successMessage)
     
         try {
-            const response = await dispatch(createJobOffer(jonOfferData));
+            const response = await dispatch(createDeal(dealData));
             setFormData({
-                title: '',
-                deadline: '',
+                rework_limit:'',
                 description: '',
                 tags: [],
-                budget:{
-                    budget_value: '',
-                    budget_unit: ''
+                amount:{
+                    amount_value: '',
+                    amount_unit: ''
+                },
+                timing:{
+                    timing_value: '',
+                    timing_unit: ''
                 }
             });
-            if (createJobOffer.fulfilled.match(response)) {
+            if (createDeal.fulfilled.match(response)) {
                 setTimeout(() => {
                     navigate(`/dashboard`);
                   }, 2000);
@@ -89,28 +110,19 @@ const CreateJobOfferForm = () => {
     
 
   return (
-    <Form style={{ width: '30rem'}} encType='multipart/form-data' className='form' onSubmit={handleSubmit}>
+    <>
+    <Container className='fluid'>
+    <div className='d-flex justify-content-evenly align-items-center'>
+        <SingleJobOffer jobOffer={jobOffer}/>
+        <Form style={{ width: '30rem'}} className='form' onSubmit={handleSubmit}>
                     <div className='row'>
                         <div className='col-md-6'>
                             <Form.Group className="mb-3" controlId="createAuthorForm.ControlInput1">
-                                <Form.Label>Title</Form.Label>
-                                <Form.Control 
-                                className='input'
-                                type="text" 
-                                placeholder="Job Offer Title" 
-                                name="title"  
-                                value={formData.title}
-                                onChange={handleInputChange}
-                                />
-                            </Form.Group>
-                        </div>
-                        <div className='col-md-6'>
-                            <Form.Group className="mb-3" controlId="createAuthorForm.ControlInput2">
                                 <Form.Label>Tags</Form.Label>
                                 <Form.Control 
                                 className='input'
                                 type="text" 
-                                placeholder="Tags about Job Offer" 
+                                placeholder="Tags about Deal" 
                                 name="tags" 
                                 value={formData.tags}
                                 onChange={handleInputChange}
@@ -118,38 +130,38 @@ const CreateJobOfferForm = () => {
                             </Form.Group>
                         </div>
                         <div className='col-md-6'>
-                            <Form.Group className="mb-3" controlId="createAuthorForm.ControlInput3">
-                                <Form.Label>Budget value</Form.Label>
+                            <Form.Group className="mb-3" controlId="createAuthorForm.ControlInput2">
+                                <Form.Label>Amount value</Form.Label>
                                 <Form.Control 
                                 className='input'
                                 type="text" 
-                                placeholder="Job Offer budget Value" 
-                                name="budget_value" 
-                                value={formData.budget.budget_value}
+                                placeholder="Deal Amount Value" 
+                                name="amount_value" 
+                                value={formData.amount.amount_value}
+                                onChange={handleInputChange}
+                                />
+                            </Form.Group>
+                        </div>
+                        <div className='col-md-6'>
+                            <Form.Group className="mb-3" controlId="createAuthorForm.ControlInput3">
+                                <Form.Label>Amount unit</Form.Label>
+                                <Form.Control 
+                                className='input'
+                                type="text" 
+                                placeholder="Deal Amount Unit" 
+                                name="amount_unit" 
+                                value={formData.amount.amount_unit}
                                 onChange={handleInputChange}
                                 />
                             </Form.Group>
                         </div>
                         <div className='col-md-6'>
                             <Form.Group className="mb-3" controlId="createAuthorForm.ControlInput4">
-                                <Form.Label>Budget unit</Form.Label>
-                                <Form.Control 
-                                className='input'
-                                type="text" 
-                                placeholder="Job Offer budget Unit" 
-                                name="budget_unit" 
-                                value={formData.budget.budget_unit}
-                                onChange={handleInputChange}
-                                />
-                            </Form.Group>
-                        </div>
-                        <div className='col-md-6'>
-                            <Form.Group className="mb-3" controlId="createAuthorForm.ControlInput5">
                                 <Form.Label>Description</Form.Label>
                                 <Form.Control 
                                 className='input'
                                 type="text" 
-                                placeholder="Job Offer description" 
+                                placeholder="Deal description" 
                                 name="description" 
                                 value={formData.description}
                                 onChange={handleInputChange}
@@ -157,14 +169,40 @@ const CreateJobOfferForm = () => {
                             </Form.Group>
                         </div>
                         <div className='col-md-6'>
-                            <Form.Group className="mb-3" controlId="createAuthorForm.ControlInput6">
-                                <Form.Label>Deadline</Form.Label>
+                            <Form.Group className="mb-3" controlId="createAuthorForm.ControlInput5">
+                                <Form.Label>Rework Limit</Form.Label>
                                 <Form.Control 
                                 className='input'
                                 type="text" 
                                 placeholder="Job Offer deadline" 
-                                name="deadline" 
-                                value={formData.deadline}
+                                name="rework_limit" 
+                                value={formData.rework_limit}
+                                onChange={handleInputChange}
+                                />
+                            </Form.Group>
+                        </div>
+                        <div className='col-md-6'>
+                            <Form.Group className="mb-3" controlId="createAuthorForm.ControlInput6">
+                                <Form.Label>Timing value</Form.Label>
+                                <Form.Control 
+                                className='input'
+                                type="text" 
+                                placeholder="Deal Timing Value" 
+                                name="timing_value" 
+                                value={formData.timing.timing_value}
+                                onChange={handleInputChange}
+                                />
+                            </Form.Group>
+                        </div>
+                        <div className='col-md-6'>
+                            <Form.Group className="mb-3" controlId="createAuthorForm.ControlInput7">
+                                <Form.Label>Timing unit</Form.Label>
+                                <Form.Control 
+                                className='input'
+                                type="text" 
+                                placeholder="Deal Timing Unit" 
+                                name="timing_unit" 
+                                value={formData.timing.timing_unit}
                                 onChange={handleInputChange}
                                 />
                             </Form.Group>
@@ -179,7 +217,7 @@ const CreateJobOfferForm = () => {
                             type="submit"
                             variant="success"
                         >
-                            Create Job Offer
+                            Create Your Deal
                         </Button>
                     )}                 
                         {error && (
@@ -192,7 +230,10 @@ const CreateJobOfferForm = () => {
                         )}
                     </div>
                 </Form>
+    </div>
+    </Container>
+    </>
   )
 }
 
-export default CreateJobOfferForm
+export default JobOfferDetails

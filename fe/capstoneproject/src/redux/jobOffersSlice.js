@@ -57,6 +57,22 @@ export const fetchClientJobOffers = createAsyncThunk('joboffers/fetchClientJobOf
     }
   })
 
+  export const fetchSingleJobOffer = createAsyncThunk('joboffers/fetchSignleJobOffer', async (jobOfferId, {rejectWithValue}) =>{
+    try {
+        const response = await axios.get(`${apiUrlFetchJobOffers}${jobOfferId}`);
+        console.log(response)
+        return response.data.jobOffer;
+
+    } catch (error) {
+      console.log(error)
+      if (error.response && error.response.data && error.response.data.message){
+          return rejectWithValue(error.response.data.message);
+      } else {
+          throw error;
+      }
+    }
+  })
+
 
   const jobOffersSlice = createSlice({
     name: 'joboffers',
@@ -68,6 +84,8 @@ export const fetchClientJobOffers = createAsyncThunk('joboffers/fetchClientJobOf
       isAllJobOffersLoading: true,
       newJobOffer: null,
       isNewJobOfferLoading: true,
+      singleJobOffer: null,
+      singleJobOfferIsLoading: true
     },
     extraReducers: (builder) => {
       builder
@@ -104,6 +122,18 @@ export const fetchClientJobOffers = createAsyncThunk('joboffers/fetchClientJobOf
       .addCase(createJobOffer.rejected, (state, action) => {
         state.error = action.payload.message
         state.isNewJobOfferLoading = false
+      })
+      .addCase(fetchSingleJobOffer.fulfilled, (state, action) => {
+        state.singleJobOffer = action.payload
+        state.successMessage = action.payload.message
+        state.singleJobOfferIsLoading = false
+      })
+      .addCase(fetchSingleJobOffer.pending, (state, action) => {
+        state.singleJobOfferIsLoading = true
+      })
+      .addCase(fetchSingleJobOffer.rejected, (state, action) => {
+        state.error = action.payload.message
+        state.singleJobOfferIsLoading = false
       })
     },
   });

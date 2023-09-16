@@ -12,11 +12,11 @@ const AllJobOffers = () => {
         dispatch(fetchJobOffers())
     }, [dispatch]);
   return (
-    <div className='d-flex flex-wrap justify-content-center align-items-center'>
+    <div className='d-flex flex-wrap justify-content-center align-items-center mb-5'>
     {allJobOffers &&
-    allJobOffers.map((jobOffer) => {
+    allJobOffers?.map((jobOffer) => {
         return (
-            <SingleJobOffer jobOffer={jobOffer} />
+            <SingleJobOffer jobOffer={jobOffer} key={jobOffer._id} />
         );
         })
     }

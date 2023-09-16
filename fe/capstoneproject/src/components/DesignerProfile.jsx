@@ -1,9 +1,11 @@
 import React, { useEffect } from 'react';
-import SingleProject from './SingleProject';
-import { useSelector, useDispatch } from 'react-redux';
-import { fetchDesignerProjects } from '../redux/projectsSlice';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useDispatch } from 'react-redux';
+import { faEnvelope, faGlobe, faLink  } from '@fortawesome/free-solid-svg-icons';
+
 import { fetchProjects } from '../redux/projectsSlice';
 import DesignerProjects from './DesignerProjects';
+import './DesignerProfile.css';
 
 const DesignerProfile = ({designer, designerProjects}) => {
     const dispatch = useDispatch();
@@ -12,18 +14,12 @@ const DesignerProfile = ({designer, designerProjects}) => {
       }, [dispatch, designerProjects]);
     return (
     <>
-    <div className='d-flex justify-content-center align-items-center designer-info-container' >
+    <div className='d-flex justify-content-evenly align-items-center border-box border-box-container' >
         <div className='d-flex flex-column justify-content-center align-items-center'>
             <img src={designer?.avatar} alt='designer avatar' className='user-avatar' />
             <span>{designer?.name} {designer?.surname}</span>
         </div>
-        <div className='d-flex flex-column justify-content-center align-items-center'>
-            <span>Email: {designer?.email}</span>
-            <span>Website: {designer?.website}</span>
-            <span>Ig: {designer?.instagram}</span>
-        </div>
-    </div>
-    <div className='d-flex flex-column justify-content-center align-items-center mt-3 mb-3 title-tags-container'>
+        <div className='d-flex flex-column justify-content-center align-items-center mt-3 mb-3 title-tags-container'>
         <div>
             <span className='me-2 project-title'>{designer?.description}</span>
         </div>
@@ -38,12 +34,19 @@ const DesignerProfile = ({designer, designerProjects}) => {
             </span>
         </div>
     </div>
+        <div className='d-flex flex-column justify-content-center align-items-center'>
+            {designer.email && 
+                <span><FontAwesomeIcon icon={faEnvelope} className='mx-2 icons' /> {designer?.email}</span>
+            }
+            {designer.website &&
+                <span><FontAwesomeIcon icon={faGlobe} className='mx-2 icons' /> {designer?.website}</span>
+            }
+            {designer.instagram &&
+                <span><FontAwesomeIcon icon={faLink} className='mx-2 icons' />{designer?.instagram}</span>
+            }
+        </div>
+    </div>
     <div className='d-flex justify-content-center align-items-center'>
-        {/*{designerProjects && designerProjects.map((designerProject) =>{
-            return (
-                <SingleProject projectToRender={designerProject} authorDesigner={designer} key={designerProject._id} />
-            )
-    })}*/}
     <DesignerProjects designer={designer} designerProjects={designerProjects}/>
     </div>
     </>
