@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchDesignerDeals, startDeal, endDeal } from '../redux/dealsSlice';
+import { fetchDesignerDeals, startDeal, endDeal, deleteDeal } from '../redux/dealsSlice';
 import { fetchClients } from '../redux/clientsSlice';
 import { Link } from 'react-router-dom';
 import Button from "react-bootstrap/Button";
@@ -37,8 +37,6 @@ const SingleDealDesignerDashboard = ({ designerId }) => {
 
     console.log(clients)
 
-    //non riesco ad aggiornare i deal dopo start/end..
-
     const handleStartDeal = async (dealId) => {
       await dispatch(startDeal(dealId));
       await dispatch(fetchDesignerDeals(designerId));
@@ -49,6 +47,14 @@ const SingleDealDesignerDashboard = ({ designerId }) => {
 
     const handleEndDeal = async (dealId) => {
       await dispatch(endDeal(dealId));
+      await dispatch(fetchDesignerDeals(designerId));
+      console.log('lanciato fetchDesignerDeals')
+      await dispatch(fetchClients());
+      console.log('lanciato fetchClients')
+    }
+
+    const handleDeleteDeal = async (dealId) => {
+      await dispatch(deleteDeal(dealId));
       await dispatch(fetchDesignerDeals(designerId));
       console.log('lanciato fetchDesignerDeals')
       await dispatch(fetchClients());
@@ -153,7 +159,7 @@ const SingleDealDesignerDashboard = ({ designerId }) => {
             {designerDeal.status === 'denied' && (
             <>
             <div className='d-flex justify-content-center align-itmes-center'>
-            <Button className='edit-deal-buttons mx-2'>Delete</Button>
+            <Button className='edit-deal-buttons mx-2' onClick={() => handleDeleteDeal(designerDeal._id)}>Delete</Button>
             </div>
             </>
             )}

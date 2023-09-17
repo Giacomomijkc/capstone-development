@@ -119,6 +119,25 @@ export const endDeal = createAsyncThunk('deals/endDeal', async (dealId,{ rejectW
   }
 })
 
+export const deleteDeal = createAsyncThunk('deals/deleteDeal', async (dealId,{ rejectWithValue }) =>{
+  try {
+      const token = JSON.parse(localStorage.getItem("userLoggedIn"));
+      const response = await axios.delete(`${apiUrlFetchDeals}${dealId}/delete`, {
+        headers: { 'Authorization': `${token}` }
+      });
+      console.log(response)
+      return response.data.dealDeleted;
+
+  } catch (error) {
+    console.log(error)
+    if (error.response && error.response.data && error.response.data.message){
+        return rejectWithValue(error.response.data.message);
+    } else {
+        throw error;
+    }
+  }
+})
+
   const dealsSlice = createSlice({
     name: 'deals',
     initialState: {
@@ -137,6 +156,8 @@ export const endDeal = createAsyncThunk('deals/endDeal', async (dealId,{ rejectW
       isStartDealLoading: true,
       endDeal: null,
       isEndDealLoading: true,
+      dealDeleted: null,
+      isDealDeletedLoading: true,
     },
     reducers: {
     },
@@ -225,6 +246,18 @@ export const endDeal = createAsyncThunk('deals/endDeal', async (dealId,{ rejectW
       .addCase(endDeal.rejected, (state, action) => {
         state.error = action.payload;
         state.isEndDealLoading = false;
+      })
+      .addCase(deleteDeal.fulfilled, (state, action) => {
+        state.deleteDeal = action.payload;
+        state.isDealDeletedLoading = false;
+        state.successMessage = action.payload.message
+      })
+      .addCase(deleteDeal.pending, (state, action) => {
+        state.isDealDeletedLoading = true;
+      })
+      .addCase(deleteDeal.rejected, (state, action) => {
+        state.error = action.payload;
+        state.isDealDeletedLoading   = false;
       })
     },
   });

@@ -184,6 +184,49 @@ deal.patch('/deals/:dealId/end', verifyToken, async (req, res) => {
     }
 });
 
+deal.delete('/deals/:dealId/delete', verifyToken, async (req, res) => {
+    const { dealId } = req.params;
+
+    try {
+        const deal = await DealsModel.findById(dealId);
+        if (!deal) {
+            return res.status(404).json({ message: 'Deal not found' });
+        }
+
+        const designerIdToString = deal.designer.toString();
+        const reqUserIdToString = req.user._id.toString();
+
+        if (req.user.role !== 'Designer' || designerIdToString !== reqUserIdToString) {
+            return res.status(403).json({ message: 'Only the designer of the deal can delete it' });
+        }
+
+        const designer = await DesignersModel.findById(deal.designer);
+        const client = await ClientsModel.findById(deal.client);
+
+        if (designer) {
+            designer.deals.pull(dealId);
+            await designer.save();
+        }
+
+        if (client) {
+            client.deals.pull(dealId);
+            await client.save();
+        }
+
+        await DealsModel.findByIdAndDelete(dealId);
+
+        res.status(200).json({ 
+            statusCode: 200,
+            message: 'Deal deleted successfully',
+            dealDeleted: deal
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Error deleting the deal' });
+    }
+});
+
+
 
 deal.get('/deals/designer/:designerId', async (req, res) => {
     const { designerId } = req.params;
