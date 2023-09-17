@@ -113,7 +113,7 @@ const JobOfferDetails = ({jobOffer}) => {
     <>
     <Container className='fluid'>
     <div className='d-flex justify-content-evenly align-items-center'>
-        <SingleJobOffer jobOffer={jobOffer}/>
+        <SingleJobOffer jobOffer={jobOffer} showDealButton={false}/>
         <Form style={{ width: '30rem'}} className='form' onSubmit={handleSubmit}>
                     <div className='row'>
                         <div className='col-md-6'>

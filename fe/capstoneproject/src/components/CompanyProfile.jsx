@@ -31,7 +31,7 @@ const CompanyProfile = ({client, jobOffers}) => {
     <div className='d-flex flex-wrap justify-content-center align-items-center mb-5'>
        {jobOffers && jobOffers.map((jobOffer) =>{
             return (
-                <SingleJobOffer jobOffer={jobOffer} key={jobOffer._id} />
+                <SingleJobOffer jobOffer={jobOffer} key={jobOffer._id} showDealButton={true} />
             )
     })}
     </div>

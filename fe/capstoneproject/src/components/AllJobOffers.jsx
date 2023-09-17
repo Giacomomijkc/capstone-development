@@ -16,7 +16,7 @@ const AllJobOffers = () => {
     {allJobOffers &&
     allJobOffers?.map((jobOffer) => {
         return (
-            <SingleJobOffer jobOffer={jobOffer} key={jobOffer._id} />
+            <SingleJobOffer jobOffer={jobOffer} key={jobOffer._id} showDealButton={true} />
         );
         })
     }

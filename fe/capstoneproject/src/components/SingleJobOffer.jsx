@@ -5,14 +5,15 @@ import { fetchClients } from '../redux/clientsSlice';
 import Button from "react-bootstrap/Button";
 import './SingleJobOffer.css';
 
-const SingleJobOffer = ({jobOffer}) => {
+const SingleJobOffer = ({jobOffer, showDealButton}) => {
     const dispatch = useDispatch();
     const clients = useSelector((state) => state.clients.clients)
+
     useEffect(() => {
         dispatch(fetchClients());
     }, [dispatch,]);
   return (
-    <div className='d-flex flex-column my-5 mx-2 single-job-offer' style={{ width: '250px' }} key={jobOffer?._id} >
+    <div className='d-flex flex-column my-5 mx-2 single-job-offer' style={{ width: '350px' }} key={jobOffer?._id} >
             <div className='d-flex justify-content-center align-items-center p-2'>
             {clients?.map((client) => {
             if (client?._id === jobOffer?.client) {
@@ -55,11 +56,12 @@ const SingleJobOffer = ({jobOffer}) => {
                     <span className='accepted-status'>Last edit on: {jobOffer?.updatedAt.slice(0, 10)}</span>
                 </div>
             </div>
+            {showDealButton && (
             <div className='mt-2 d-flex justify-content-center align-items-center'>
-            <Link to={`/job-offers/${jobOffer?._id}`}>
-                <Button className='make-deal-button my-2'>Make Deal</Button>
-            </Link>
-            </div>
+                <Link to={`/job-offers/${jobOffer?._id}`}>
+                    <Button className='make-deal-button my-2'>Make Deal</Button>
+                </Link>
+            </div>)}
           </div>
         </div>
   )
