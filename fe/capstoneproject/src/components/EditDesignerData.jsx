@@ -5,7 +5,6 @@ import Form from 'react-bootstrap/Form';
 import { useState, useRef } from 'react';
 import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
-import {useNavigate} from 'react-router-dom';
 import { patchAvatar, patchDesigner } from '../redux/designersSlice';
 import './EditDesigner.css'
 

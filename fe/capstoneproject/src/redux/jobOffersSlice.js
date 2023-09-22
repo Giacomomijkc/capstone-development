@@ -73,6 +73,34 @@ export const fetchClientJobOffers = createAsyncThunk('joboffers/fetchClientJobOf
     }
   })
 
+  export const patchJobOffer = createAsyncThunk('joboffers/patchJobOffer', async ({jobOfferId, jobOfferData}) => {
+    try {
+      const token = JSON.parse(localStorage.getItem("userLoggedIn"));
+      const response = await axios.patch(`${apiUrlFetchJobOffers}${jobOfferId}/update`, jobOfferData, {
+        headers: { 'Authorization': `${token}` }
+      });
+      console.log(response)
+      return response.data;
+    } catch (error) {
+      console.log(error);
+      throw new Error('Errore durante l\'aggiornamento della Job Offer');
+    }
+  });
+
+  export const deleteJobOffer = createAsyncThunk('joboffers/deleteJobOffer', async (jobOfferId) => {
+    try {
+      const token = JSON.parse(localStorage.getItem("userLoggedIn"));
+      const response = await axios.delete(`${apiUrlFetchJobOffers}${jobOfferId}/delete`, {
+        headers: { 'Authorization': `${token}` }
+      });
+      console.log(response)
+      return response.data;
+    } catch (error) {
+      console.log(error);
+      throw new Error('Errore durante l\'aggiornamento della Job Offer');
+    }
+  });
+
 
   const jobOffersSlice = createSlice({
     name: 'joboffers',
@@ -85,7 +113,13 @@ export const fetchClientJobOffers = createAsyncThunk('joboffers/fetchClientJobOf
       newJobOffer: null,
       isNewJobOfferLoading: true,
       singleJobOffer: null,
-      singleJobOfferIsLoading: true
+      singleJobOfferIsLoading: true,
+      patchedJobOffer: null,
+      isPatchedJobOfferLoading: true,
+      successPatchMessage: null,
+      deletedJobOffer: null,
+      isDeletedJobOfferLoading: true,
+      successDeleteMessage: null
     },
     extraReducers: (builder) => {
       builder
@@ -134,6 +168,30 @@ export const fetchClientJobOffers = createAsyncThunk('joboffers/fetchClientJobOf
       .addCase(fetchSingleJobOffer.rejected, (state, action) => {
         state.error = action.payload.message
         state.singleJobOfferIsLoading = false
+      })
+      .addCase(patchJobOffer.fulfilled, (state, action) => {
+        state.patchedJobOffer = action.payload.result
+        state.successPatchMessage = action.payload.message
+        state.isPatchedJobOfferLoading = false
+      })
+      .addCase(patchJobOffer.pending, (state, action) => {
+        state.isPatchedJobOfferLoading = true
+      })
+      .addCase(patchJobOffer.rejected, (state, action) => {
+        state.error = action.payload.message
+        state.isPatchedJobOfferLoading = false
+      })
+      .addCase(deleteJobOffer.fulfilled, (state, action) => {
+        state.deletedJobOffer = action.payload
+        state.successDeleteMessage = action.payload.message
+        state.isDeletedJobOfferLoading = false
+      })
+      .addCase(deleteJobOffer.pending, (state, action) => {
+        state.isDeletedJobOfferLoading = true
+      })
+      .addCase(deleteJobOffer.rejected, (state, action) => {
+        state.error = action.payload.message
+        state.isDeletedJobOfferLoading = false
       })
     },
   });

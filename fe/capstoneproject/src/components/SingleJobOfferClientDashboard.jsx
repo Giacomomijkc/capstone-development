@@ -1,17 +1,38 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchClientJobOffers } from '../redux/jobOffersSlice';
-import { Link } from 'react-router-dom';
 import Button from "react-bootstrap/Button";
+import EditJobOffer from './EditJobOffer';
 import './SingleJobOfferClientDashboard.css';
 
 const SingleJobOfferClientDashboard = ({ clientId }) => {
   const dispatch = useDispatch();
   const clientJobOffers = useSelector((state) => state.joboffers.jobOffers)
 
+  const [showJobOfferModal, setShowJobOfferModal] = useState(false);
+  const [selectedJobOfferId, setSelectedJobOfferId] = useState();
+  
+
+  const handleShowJobOfferModal = (jobOfferId) => {
+    setSelectedJobOfferId(jobOfferId); // Memorizza l'ID dell'offerta di lavoro selezionata
+    setShowJobOfferModal(true);
+  }
+
+  const handleJobOfferUpdateSuccess = () => {
+    dispatch(fetchClientJobOffers(clientId))
+      .then(() => {
+        // valutare azioni da fare
+      })
+      .catch((error) => {
+        console.error('Failed to fetch updated designer data:', error);
+      });
+  };
+
   useEffect(() => {
         dispatch(fetchClientJobOffers(clientId));
   }, [clientId, dispatch]);
+
+  
 
   return (
     <>
@@ -46,9 +67,16 @@ const SingleJobOfferClientDashboard = ({ clientId }) => {
                 </div>
             </div>
             <div className='mt-2 d-flex justify-content-center align-items-center'>
-            <Link to={`/joboffers/${clientJobOffer._id}`}>
-                <Button className='edit-button'>Manage</Button>
-            </Link>
+                <Button className='edit-button' onClick={() => handleShowJobOfferModal(clientJobOffer._id)}>Manage</Button>
+            </div>
+            <div>
+              {showJobOfferModal &&
+              <EditJobOffer
+              setShowJobOfferModal={setShowJobOfferModal}
+              show={showJobOfferModal}
+              onSuccessCallback={handleJobOfferUpdateSuccess}
+              jobOfferId={selectedJobOfferId}
+            />}
             </div>
           </div>
         </div>

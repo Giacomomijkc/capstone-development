@@ -1,0 +1,21 @@
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5); /* Colore di sfondo scuro con opacità */
+    z-index: 999; /* Imposta il valore z-index alto per sovrapporlo a tutto il resto */
+  }
+
+  .container-job-offer {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border: solid 1px #BEBFFB;
+    border-radius: 20px;
+    background: white; /* Colore di sfondo del tuo "modale" */
+    padding: 20px;
+    z-index: 1000; /* Imposta un valore z-index più alto per sovrapporlo all'overlay */
+  }

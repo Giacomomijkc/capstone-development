@@ -5,9 +5,8 @@ import Form from 'react-bootstrap/Form';
 import { useState, useRef } from 'react';
 import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
-import {useNavigate} from 'react-router-dom';
 import { patchAvatar, patchClient } from '../redux/clientsSlice';
-import './EditDesigner.css'
+import './EditClientData.css'
 
 const EditClientData = ({setShowClientModal, show, onSuccessCallback}) => {
 
@@ -96,9 +95,9 @@ const EditClientData = ({setShowClientModal, show, onSuccessCallback}) => {
     
   return (
     <>
-          <div>
+    <div>
       <div className={`overlay ${show ? 'active' : ''}`} style={modalStyle} onClick={handleCloseModal}></div>
-      <div className={`container-designer ${show ? 'active' : ''}`} style={modalStyle}>
+      <div className={`container-client ${show ? 'active' : ''}`} style={modalStyle}>
         <Modal.Body>
         <Form style={{ width: '30rem'}} encType='multipart/form-data' className='form' onSubmit={handleSubmit}>
                     <div className='row'>

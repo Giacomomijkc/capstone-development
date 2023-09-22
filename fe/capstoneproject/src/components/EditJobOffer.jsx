@@ -1,34 +1,61 @@
-import React from 'react'
-import Form from 'react-bootstrap/Form';
+import React, { useEffect } from 'react';
+import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
-import { useState, useRef } from 'react';
+import Form from 'react-bootstrap/Form';
+import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
-import {useNavigate} from 'react-router-dom';
-import {createJobOffer}  from '../redux/jobOffersSlice';
-import './CreateJobOfferForm.css';
+import { patchJobOffer, fetchSingleJobOffer, deleteJobOffer } from '../redux/jobOffersSlice';
+import './EditJobOffer.css'
 
-const CreateJobOfferForm = () => {
+const EditJobOffer = ({setShowJobOfferModal, show, onSuccessCallback, jobOfferId}) => {
 
-    const [formData, setFormData] = useState({
-        title: '',
-        deadline: '',
-        description: '',
-        tags: [],
-        budget:{
-            budget_value: '',
-            budget_unit: ''
+    const dispatch = useDispatch();
+    const singleJobOffer = useSelector((state) => state.joboffers.singleJobOffer)
+
+    useEffect(() => {
+        dispatch(fetchSingleJobOffer(jobOfferId));
+      }, [jobOfferId]);
+
+    const handleCloseModal = () => {
+        setShowJobOfferModal(false)
+        setShowSuccessMessage(false)
+    }
+
+    const handleDeleteJobOffer = async() => {
+        try {
+            const response = await dispatch(deleteJobOffer(jobOfferId))
+            if (deleteJobOffer.fulfilled.match(response)) {
+                onSuccessCallback();
+                setShowSuccessMessage(true)
+            }
+        } catch (error) {
+            console.error('Job Offer creation failed:', error);
         }
+        
+    }
+
+    const modalStyle = {
+        display: show ? 'block' : 'none',
+      };
+
+      const [formData, setFormData] = useState({
+        title: singleJobOffer?.title || '',
+        tags: singleJobOffer?.tags || [],
+        budget: {
+            budget_value: singleJobOffer?.budget.budget_value || '',
+            budget_unit: singleJobOffer?.budget.budget_unit || ''
+        },
+        description: singleJobOffer?.description || '',
+        deadline: singleJobOffer?.deadline || '',
     });
 
-    console.log(formData)
-
+    const patchedJobOffer = useSelector((state) => state.joboffers.patchedJobOffer);
+    const isPatchedJobOfferLoading = useSelector((state) => state.joboffers.isPatchedJobOfferLoading);
     const error = useSelector((state) => state.joboffers.error);
-    const successMessage = useSelector((state) => state.joboffers.successMessage);
-    const isNewJobOfferLoading = useSelector((state) => state.joboffers.isNewJobOfferLoading);
-
-    const navigate = useNavigate();
-    const dispatch = useDispatch();
+    const successPatchMessage = useSelector((state) => state.joboffers.successPatchMessage);
+    const successDeleteMessage = useSelector((state) => state.joboffers.successDeleteMessage);
+    const [showSuccessMessage, setShowSuccessMessage] = useState(false);
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -53,7 +80,6 @@ const CreateJobOfferForm = () => {
         }
     };
 
-
     const handleSubmit = async (e) => {
         e.preventDefault();
     
@@ -61,10 +87,9 @@ const CreateJobOfferForm = () => {
             ...formData,
         };
 
-    console.log(successMessage)
     
         try {
-            const response = await dispatch(createJobOffer(jobOfferData));
+            const response = await dispatch(patchJobOffer({jobOfferId: jobOfferId, jobOfferData}));
             setFormData({
                 title: '',
                 deadline: '',
@@ -75,10 +100,9 @@ const CreateJobOfferForm = () => {
                     budget_unit: ''
                 }
             });
-            if (createJobOffer.fulfilled.match(response)) {
-                setTimeout(() => {
-                    navigate(`/dashboard`);
-                  }, 2000);
+            if (patchJobOffer.fulfilled.match(response)) {
+                onSuccessCallback();
+                setShowSuccessMessage(true)
             }
 
         } catch (error) {
@@ -86,10 +110,14 @@ const CreateJobOfferForm = () => {
 
         }
     };
-    
 
   return (
-    <Form style={{ width: '30rem'}} className='form' onSubmit={handleSubmit}>
+    <>
+    <div>
+      <div className={`overlay ${show ? 'active' : ''}`} style={modalStyle} onClick={handleCloseModal}></div>
+      <div className={`container-job-offer ${show ? 'active' : ''}`} style={modalStyle}>
+        <Modal.Body>
+        <Form style={{ width: '30rem'}} encType='multipart/form-data' className='form' onSubmit={handleSubmit}>
                     <div className='row'>
                         <div className='col-md-6'>
                             <Form.Group className="mb-3" controlId="createAuthorForm.ControlInput1">
@@ -97,7 +125,6 @@ const CreateJobOfferForm = () => {
                                 <Form.Control 
                                 className='input'
                                 type="text" 
-                                placeholder="Job Offer Title" 
                                 name="title"  
                                 value={formData.title}
                                 onChange={handleInputChange}
@@ -110,7 +137,6 @@ const CreateJobOfferForm = () => {
                                 <Form.Control 
                                 className='input'
                                 type="text" 
-                                placeholder="Tags about Job Offer" 
                                 name="tags" 
                                 value={formData.tags}
                                 onChange={handleInputChange}
@@ -123,7 +149,6 @@ const CreateJobOfferForm = () => {
                                 <Form.Control 
                                 className='input'
                                 type="text" 
-                                placeholder="Job Offer budget Value" 
                                 name="budget_value" 
                                 value={formData.budget.budget_value}
                                 onChange={handleInputChange}
@@ -136,7 +161,6 @@ const CreateJobOfferForm = () => {
                                 <Form.Control 
                                 className='input'
                                 type="text" 
-                                placeholder="Job Offer budget Unit" 
                                 name="budget_unit" 
                                 value={formData.budget.budget_unit}
                                 onChange={handleInputChange}
@@ -149,7 +173,6 @@ const CreateJobOfferForm = () => {
                                 <Form.Control 
                                 className='input'
                                 type="text" 
-                                placeholder="Job Offer description" 
                                 name="description" 
                                 value={formData.description}
                                 onChange={handleInputChange}
@@ -162,7 +185,6 @@ const CreateJobOfferForm = () => {
                                 <Form.Control 
                                 className='input'
                                 type="text" 
-                                placeholder="Job Offer deadline" 
                                 name="deadline" 
                                 value={formData.deadline}
                                 onChange={handleInputChange}
@@ -171,28 +193,36 @@ const CreateJobOfferForm = () => {
                         </div>
                     </div>
                     <div className='d-flex flex-column'>
-                    {Object.values(formData).some((value) => value === '') ? (
-                        <div className="custom-loader"></div>
-                        ) : (
-                        <Button
-                            className='form-button my-2'
-                            type="submit"
-                            variant="success"
-                        >
-                            Create Job Offer
+                        <Button 
+                            className='form-button my-2' 
+                            type="submit" 
+                            variant="success">
+                                Save Changes
+                        </Button>  
+                        <Button className='close-button my-3' onClick={handleDeleteJobOffer}>
+                            Delete
                         </Button>
-                    )}                 
+                        <Button className='close-button my-3' onClick={handleCloseModal}>
+                            Close
+                        </Button>
                         {error && (
                             <div className="alert alert-danger me-auto " role="alert">
                                 {error}
                             </div>
                         )}
-                        {successMessage && (
-                             <div className="alert alert-success me-auto">{successMessage}</div>
+                        {showSuccessMessage && successPatchMessage && (
+                             <div className="alert alert-success me-auto">{successPatchMessage}</div>
+                        )}
+                        {showSuccessMessage && successDeleteMessage && (
+                             <div className="alert alert-success me-auto">{successDeleteMessage}</div>
                         )}
                     </div>
                 </Form>
+        </Modal.Body>
+      </div>
+    </div>
+    </>
   )
 }
 
-export default CreateJobOfferForm
+export default EditJobOffer
