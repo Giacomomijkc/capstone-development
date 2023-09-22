@@ -15,10 +15,20 @@ export const uploadAvatar = createAsyncThunk('clients/uploadAvatar', async (avat
     }
 });
 
+export const patchAvatar = createAsyncThunk('clients/patchAvatar', async ({ clientId, avatarFormData }) => {
+  try {
+    const response = await axios.patch(`${apirUrlFetchClients}${clientId}/cloudUpdateImg`, avatarFormData);
+    return response.data.result.avatar;
+  } catch (error) {
+    console.log(error);
+    throw new Error('Errore durante l\'aggiornamento dell\'avatar');
+  }
+});
+
 export const registerClient = createAsyncThunk('clients/registerDesigner', async (clientData,{ rejectWithValue }) => {
     try {
         const response = await axios.post(apiUrlRegisterClient, clientData);
-        return response.data;
+        return response.data.avatar;
     } catch (error) {
         console.log(error)
         if (error.response && error.response.data && error.response.data.message) {
@@ -28,6 +38,20 @@ export const registerClient = createAsyncThunk('clients/registerDesigner', async
           throw error;
         }
     }
+});
+
+export const patchClient = createAsyncThunk('clients/patchDesigner', async ({ clientId, clientData }) => {
+  try {
+    const token = JSON.parse(localStorage.getItem("userLoggedIn"));
+    const response = await axios.patch(`${apirUrlFetchClients}${clientId}/update`, clientData, {
+      headers: { 'Authorization': `${token}` }
+    });
+    console.log(response)
+    return response.data;
+  } catch (error) {
+    console.log(error);
+    throw new Error('Errore durante l\'aggiornamento del designer');
+  }
 });
 
 export const fetchClientById = createAsyncThunk('clients/fetchClientById', async (clientId) => {
@@ -74,6 +98,7 @@ const clientsSlice = createSlice({
     initialState: {
       avatarURL: null,
       successMessage: null,
+      successPatchMessage: null,
       isUploadLoading: true,
       client: null,
       clientIsLoading: true,
@@ -81,6 +106,10 @@ const clientsSlice = createSlice({
       isLikedProjectsLoading: true,
       clients: null,
       isClientsLoading: true,
+      patchedAvatar: null,
+      isPatchedAvatarLoading: true,
+      patchedClient: null,
+      isPatchedClientLoading: true,
     },
     reducers: {
     },
@@ -135,6 +164,29 @@ const clientsSlice = createSlice({
         .addCase(fetchClients.rejected, (state, action) => {
           state.error = action.payload
           state.isClientsLoading = false
+        })
+        .addCase(patchAvatar.fulfilled, (state, action) =>{
+          state.patchedAvatar = action.payload
+          state.isPatchedAvatarLoading = false
+        })
+        .addCase(patchAvatar.pending, (state, action) =>{
+          state.isPatchedAvatarLoading = true
+        })
+        .addCase(patchAvatar.rejected, (state, action) =>{
+          state.error = action.payload
+          state.isPatchedAvatarLoading = false
+        })
+        .addCase(patchClient.fulfilled, (state, action) =>{
+          state.patchedClient = action.payload.result
+          state.successPatchMessage = action.payload.message;
+          state.isPatchedClientLoading = false
+        })
+        .addCase(patchClient.pending, (state, action) =>{
+          state.isPatchedClientLoading = true
+        })
+        .addCase(patchClient.rejected, (state, action) =>{
+          state.error = action.payload
+          state.isPatchedClientLoading = false
         })
     },
   });

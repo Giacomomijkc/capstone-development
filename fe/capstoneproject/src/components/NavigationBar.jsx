@@ -56,6 +56,9 @@ const NavigationBar = () => {
                     <Link className='links' to="/all-job-offers">
                       <Nav.Item className='links mx-2'>Job Offers</Nav.Item>
                     </Link>
+                    <Link className='links' to="/all-projects">
+                      <Nav.Item className='mx-2'>All Projects</Nav.Item>
+                    </Link>
                   </>
                 ) : role === 'Client' ? (
                   <>

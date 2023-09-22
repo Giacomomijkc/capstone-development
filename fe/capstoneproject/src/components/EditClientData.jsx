@@ -1,135 +1,106 @@
-import React from 'react'
-import Form from 'react-bootstrap/Form';
+import React from 'react';
+import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
+import Form from 'react-bootstrap/Form';
 import { useState, useRef } from 'react';
 import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
-import { uploadAvatar, registerDesigner } from '../redux/designersSlice';
 import {useNavigate} from 'react-router-dom';
-import './SignUpDesignerForm.css';
+import { patchAvatar, patchClient } from '../redux/clientsSlice';
+import './EditDesigner.css'
 
-const SignUpDesignerForm = () => {
+const EditClientData = ({setShowClientModal, show, onSuccessCallback}) => {
 
-    const [showForm, setShowForm] = useState(false);
-      
-    const handleShowForm = () => {
-        setShowForm(true);
-    };
-      
-    const handleCloseForm = () => {
-        setShowForm(false);
-    };
+    const client = useSelector((state)=> state.users.client.client);
 
+    const handleCloseModal = () => {
+        setShowClientModal(false)
+        setShowSuccessMessage(false)
+    }
+
+    const modalStyle = {
+        display: show ? 'block' : 'none',
+      };
+
+
+    
     const [formData, setFormData] = useState({
-        name: '',
-        surname: '',
-        nickname: '',
-        description: '',
-        tags: [],
-        website: '',
-        instagram: '',
-        email: '',
-        password: '',
-        address: '',
-        vatOrCf: '',
+        name: client.name || '',
+        surname: client.surname || '',
+        company: client.company || '',
+        description: client.description || '',
+        website: client.website || '',
+        email: client.email || '',
+        address: client.address || '',
+        vatOrCf: client.vatOrCf || '',
     });
 
-    const avatarURL = useSelector((state) => state.designers.avatarURL);
-    const error = useSelector((state) => state.designers.error);
-    const successMessage = useSelector((state) => state.designers.successMessage);
-    const coverInputRef = useRef(null);
-    const isUploadLoading = useSelector((state) => state.designers.isUploadLoading);
+    const patchedAvatar = useSelector((state) => state.clients.patchedAvatar);
+    const isPatchedAvatarLoading = useSelector((state) => state.clients.isPatchedAvatarLoading);
+    const error = useSelector((state) => state.clients.error);
+    const successPatchMessage = useSelector((state) => state.clients.successPatchMessage);
+    const coverInputRef = useRef(client.avatar);
+    const [showSuccessMessage, setShowSuccessMessage] = useState(false);
+    const [isFileInputEmpty, setFileInputEmpty] = useState(true);
 
- 
-    const navigate = useNavigate();
+
     const dispatch = useDispatch();
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
-        if (name === 'tags') {
-            setFormData({
-                ...formData,
-                [name]: value.split(',').map(tag => tag.trim()),
-            });
-        } else {
             setFormData({
                 ...formData,
                 [name]: value,
             });
-        }
     };
 
     console.log(formData)
 
     const handleFileUpload = async (e) => {
         const file = e.target.files[0];
-        const uploadData = new FormData();
-        uploadData.append('avatar', file);
+        setFileInputEmpty(!file);
+
+        if(file){
+            const uploadData = new FormData();
+            uploadData.append('avatar', file);
+
+            try {
+                await dispatch(patchAvatar({ clientId: client._id, avatarFormData: uploadData }));
+            } catch (error) {
+                console.error('File upload failed:', error);
+            }
+        }   
     
-        try {
-            await dispatch(uploadAvatar(uploadData));
-        } catch (error) {
-            console.error('File upload failed:', error);
-        }
     };
 
-    console.log(avatarURL)
 
     const handleSubmit = async (e) => {
         e.preventDefault();
     
-    const designerData = {
+        const clientData = {
             ...formData,
-            avatar: avatarURL,
+            avatar: patchedAvatar || client.avatar,
         };
-
-    console.log(successMessage)
     
         try {
-            const response = await dispatch(registerDesigner(designerData));
-            setFormData({
-                name: '',
-                surname: '',
-                nickname: '',
-                description: '',
-                tags: [],
-                website: '',
-                instagram: '',
-                email: '',
-                password: '',
-                address: '',
-                vatOrCf: '',
-            });
-            coverInputRef.current.value = null;
-            if (registerDesigner.fulfilled.match(response)) {
-                setTimeout(() => {
-                    navigate('/login');
-                  }, 2000);
+            const response = await dispatch(patchClient({ clientId: client._id, clientData }));
+            if (patchClient.fulfilled.match(response)) {
+                onSuccessCallback();
+                setShowSuccessMessage(true)
             }
-
+    
         } catch (error) {
-            console.error('Designer registration failed:', error);
-
+            console.error('Designer update failed:', error);
         }
     };
     
-
-    return (
-        <>
-        {!showForm && (
-        <div className='d-flex flex-column align-items-center signup-buttons'>
-            <h1 className='title me-auto mb-4'>Sign up to Hubby!</h1>
-            <Button className='button-google-singup'>
-                Sign up with Google
-            </Button>
-                <p className='my-3'>OR</p>
-            <Button className='button-email-singup' onClick={handleShowForm}>
-                Use your email
-            </Button>
-        </div>
-         )}
-            {showForm && (
-                <Form style={{ width: '30rem'}} encType='multipart/form-data' className='form' onSubmit={handleSubmit}>
+  return (
+    <>
+          <div>
+      <div className={`overlay ${show ? 'active' : ''}`} style={modalStyle} onClick={handleCloseModal}></div>
+      <div className={`container-designer ${show ? 'active' : ''}`} style={modalStyle}>
+        <Modal.Body>
+        <Form style={{ width: '30rem'}} encType='multipart/form-data' className='form' onSubmit={handleSubmit}>
                     <div className='row'>
                         <div className='col-md-6'>
                             <Form.Group className="mb-3" controlId="createAuthorForm.ControlInput1">
@@ -137,7 +108,6 @@ const SignUpDesignerForm = () => {
                                 <Form.Control 
                                 className='input'
                                 type="text" 
-                                placeholder="Your Name" 
                                 name="name"  
                                 value={formData.name}
                                 onChange={handleInputChange}
@@ -150,7 +120,6 @@ const SignUpDesignerForm = () => {
                                 <Form.Control 
                                 className='input'
                                 type="text" 
-                                placeholder="Your Surname" 
                                 name="surname" 
                                 value={formData.surname}
                                 onChange={handleInputChange}
@@ -159,13 +128,12 @@ const SignUpDesignerForm = () => {
                         </div>
                         <div className='col-md-6'>
                             <Form.Group className="mb-3" controlId="createAuthorForm.ControlInput3">
-                                <Form.Label>Nickname</Form.Label>
+                                <Form.Label>Company</Form.Label>
                                 <Form.Control 
                                 className='input'
                                 type="text" 
-                                placeholder="Your Nickname" 
-                                name="nickname"
-                                value={formData.nickname} 
+                                name="company"
+                                value={formData.company} 
                                 onChange={handleInputChange}
                                 />
                             </Form.Group>
@@ -176,22 +144,8 @@ const SignUpDesignerForm = () => {
                                 <Form.Control 
                                 className='input'
                                 type="text" 
-                                placeholder="Your Description" 
                                 name="description" 
                                 value={formData.description}
-                                onChange={handleInputChange}
-                                />
-                            </Form.Group>
-                        </div>
-                        <div className='col-md-6'>
-                            <Form.Group className="mb-3" controlId="createAuthorForm.ControlInput5">
-                                <Form.Label>Tags, separated by comma</Form.Label>
-                                <Form.Control 
-                                className='input'
-                                type="text" 
-                                placeholder="Tags about you" 
-                                name="tags" 
-                                value={formData.tags}
                                 onChange={handleInputChange}
                                 />
                             </Form.Group>
@@ -202,22 +156,8 @@ const SignUpDesignerForm = () => {
                                 <Form.Control 
                                 className='input'
                                 type="text" 
-                                placeholder="Your website url" 
                                 name="website" 
                                 value={formData.website}
-                                onChange={handleInputChange}
-                                />
-                            </Form.Group>
-                        </div>
-                        <div className='col-md-6'>
-                            <Form.Group className="mb-3" controlId="createAuthorForm.ControlInput7">
-                                <Form.Label>Instagram</Form.Label>
-                                <Form.Control 
-                                className='input'
-                                type="text" 
-                                placeholder="Your Ig url" 
-                                name="instagram" 
-                                value={formData.instagram}
                                 onChange={handleInputChange}
                                 />
                             </Form.Group>
@@ -228,22 +168,8 @@ const SignUpDesignerForm = () => {
                                 <Form.Control 
                                 className='input'
                                 type="text" 
-                                placeholder="Your Email" 
                                 name="email"  
                                 value={formData.email}
-                                onChange={handleInputChange}
-                                />
-                            </Form.Group>
-                        </div>
-                        <div className='col-md-6'>
-                            <Form.Group className="mb-3" controlId="createAuthorForm.ControlInput9">
-                                <Form.Label>Password</Form.Label>
-                                <Form.Control 
-                                className='input'
-                                type="text" 
-                                placeholder="Your Password" 
-                                name="password" 
-                                value={formData.password}
                                 onChange={handleInputChange}
                                 />
                             </Form.Group>
@@ -254,7 +180,6 @@ const SignUpDesignerForm = () => {
                                 <Form.Control 
                                 className='input'
                                 type="text" 
-                                placeholder="Your Address" 
                                 name="address" 
                                 value={formData.address}
                                 onChange={handleInputChange}
@@ -267,7 +192,6 @@ const SignUpDesignerForm = () => {
                                 <Form.Control 
                                 className='input'
                                 type="text" 
-                                placeholder="Your Vat or Fiscal Code" 
                                 name="vatOrCf"
                                 value={formData.vatOrCf}
                                 onChange={handleInputChange} 
@@ -280,7 +204,6 @@ const SignUpDesignerForm = () => {
                                 <Form.Control 
                                 className='input'
                                 type="file" 
-                                placeholder="Upload an image" 
                                 name="avatar"
                                 ref={coverInputRef}
                                 onChange={handleFileUpload} 
@@ -289,15 +212,17 @@ const SignUpDesignerForm = () => {
                         </div>
                     </div>
                     <div className='d-flex flex-column'>
-                        {isUploadLoading ?
-                        <div className="custom-loader"></div>
-                       :  <Button 
-                       className='form-button my-2' 
-                       type="submit" 
-                       variant="success">
-                           Create Your Designer Account
-                       </Button>  }
-                        <Button className='close-button my-3' onClick={handleCloseForm}>
+                        {
+                            isPatchedAvatarLoading && !isFileInputEmpty
+                                ? <div className="custom-loader"></div>
+                                : <Button 
+                                className='form-button my-2' 
+                                type="submit" 
+                                variant="success">
+                                    Save Changes
+                                </Button>  
+                        }
+                        <Button className='close-button my-3' onClick={handleCloseModal}>
                             Close
                         </Button>
                         {error && (
@@ -305,14 +230,16 @@ const SignUpDesignerForm = () => {
                                 {error}
                             </div>
                         )}
-                        {successMessage && (
-                             <div className="alert alert-success me-auto">{successMessage}</div>
+                        {showSuccessMessage && successPatchMessage && (
+                             <div className="alert alert-success me-auto">{successPatchMessage}</div>
                         )}
                     </div>
                 </Form>
-            )}
-        </>
-    )
+        </Modal.Body>
+      </div>
+    </div>
+    </>
+  )
 }
 
-export default SignUpDesignerForm;
+export default EditClientData

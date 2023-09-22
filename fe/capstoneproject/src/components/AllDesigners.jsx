@@ -7,12 +7,14 @@ const AllDesigners = () => {
 
     const dispatch = useDispatch();
     const designers = useSelector((state) => state.designers.designers);
+    console.log(designers)
 
     useEffect(() => {;
         dispatch(fetchDesigners())
     }, [dispatch]);
 
   return (
+    <>
     <div className='d-flex flex-column flex-wrap justify-content-center align-items-center'>
     {designers &&
     designers.map((designer) => {
@@ -22,6 +24,7 @@ const AllDesigners = () => {
         })
     }
     </div>
+    </>
   )
 }
 

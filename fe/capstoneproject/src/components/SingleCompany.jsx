@@ -1,10 +1,11 @@
 import React from 'react';
 import Button from "react-bootstrap/Button";
 import { Link } from 'react-router-dom';
+;
 
 const SingleCompany = ({client}) => {
   return (
-    <div className='d-flex justify-content-between align-items-center container-designer my-3 p-2' style={{ width: '600px' }}>
+    <div className='d-flex justify-content-between align-items-center box-designer my-3 p-2' style={{ width: '1000px' }}>
         <img src={client.avatar} alt="designer avatar" className='user-avatar'/>
         <span className='designer-nickname'>{client.company}</span>
         <span>{client.description}</span>

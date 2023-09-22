@@ -62,7 +62,7 @@ designer.patch('/designers/:designerId/cloudUpdateImg', cloudUpload.single('avat
         const result = await DesignersModel.findByIdAndUpdate(designerId, dataToUpdate, options);
 
         res.status(200).json({ 
-            cover: result.avatar,
+            result,
             statusCode: 202,
             message: `Post with id ${designerId} successfully updated`,
         });

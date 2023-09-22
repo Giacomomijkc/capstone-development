@@ -175,7 +175,9 @@ const SingleDealDesignerDashboard = ({ designerId }) => {
             {designerDeal.status === 'completed' && (
               <>
               <div className='d-flex justify-content-center align-itmes-center'>
-              <Button className='edit-deal-buttons mx-2'>Invoice</Button>
+                <Link className='links' >
+                  <Button className='edit-deal-buttons mx-2'>Invoice</Button>
+                </Link>
               </div>
               </>
             )}

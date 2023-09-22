@@ -35,13 +35,13 @@ const DesignerProfile = ({designer, designerProjects}) => {
         </div>
     </div>
         <div className='d-flex flex-column justify-content-center align-items-center'>
-            {designer.email && 
+            {designer?.email && 
                 <span><FontAwesomeIcon icon={faEnvelope} className='mx-2 icons' /> {designer?.email}</span>
             }
-            {designer.website &&
+            {designer?.website &&
                 <span><FontAwesomeIcon icon={faGlobe} className='mx-2 icons' /> {designer?.website}</span>
             }
-            {designer.instagram &&
+            {designer?.instagram &&
                 <span><FontAwesomeIcon icon={faLink} className='mx-2 icons' />{designer?.instagram}</span>
             }
         </div>

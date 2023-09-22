@@ -80,7 +80,7 @@ const ProjectUploadForm = () => {
             ...formData,
             cover: coverURL,
             images: imagesURL,
-            author: designerLogged.designer._id
+            author: designerLogged?.designer?._id
         };
 
     console.log(successMessage)

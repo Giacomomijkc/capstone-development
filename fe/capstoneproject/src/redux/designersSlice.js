@@ -15,6 +15,17 @@ export const uploadAvatar = createAsyncThunk('designers/uploadAvatar', async (av
     }
 });
 
+export const patchAvatar = createAsyncThunk('designers/patchAvatar', async ({ designerId, avatarFormData }) => {
+  try {
+    const response = await axios.patch(`${apiUrlFetchDesigners}${designerId}/cloudUpdateImg`, avatarFormData);
+    console.log(response)
+    return response.data.result.avatar;
+  } catch (error) {
+    console.log(error);
+    throw new Error('Errore durante l\'aggiornamento dell\'avatar');
+  }
+});
+
 export const registerDesigner = createAsyncThunk('designers/registerDesigner', async (designerData,{ rejectWithValue }) => {
     try {
         const response = await axios.post(apiUrlRegisterDesigner, designerData);
@@ -28,6 +39,20 @@ export const registerDesigner = createAsyncThunk('designers/registerDesigner', a
           throw error;
         }
     }
+});
+
+export const patchDesigner = createAsyncThunk('designers/patchDesigner', async ({ designerId, designerData }) => {
+  try {
+    const token = JSON.parse(localStorage.getItem("userLoggedIn"));
+    const response = await axios.patch(`${apiUrlFetchDesigners}${designerId}/update`, designerData, {
+      headers: { 'Authorization': `${token}` }
+    });
+    console.log(response)
+    return response.data;
+  } catch (error) {
+    console.log(error);
+    throw new Error('Errore durante l\'aggiornamento del designer');
+  }
 });
 
 export const fetchDesigner = createAsyncThunk('designers/fetchDesigner', async (_, {getState}) => {
@@ -84,25 +109,18 @@ const designersSlice = createSlice({
     initialState: {
       avatarURL: null,
       successMessage: null,
+      successPatchMessage: null,
       isUploadLoading: true,
-      /*designerData: {
-        surname: '',
-        nickname: '',
-        description: '',
-        tags: [],
-        website: '',
-        instagram: '',
-        email: '',
-        password: '',
-        address: '',
-        vatOrCf: '',
-      },*/
       likedProjects: [],
       isLikedProjectsLoading: true,
       userId: null,
       designer: null,
       singleDesigner: null, 
-      designers: null,
+      designers: [],
+      patchedAvatar: null,
+      isPatchedAvatarLoading: true,
+      patchedDesigner: null,
+      isPatchedDesignerLoading: true,
     },
     reducers: {
       setUserId: (state, action) => {
@@ -164,6 +182,30 @@ const designersSlice = createSlice({
         .addCase(fetchProjectsLikedByDesigner.rejected, (state, action) =>{
           state.error = action.payload
           state.isLikedProjectsLoading = false
+        })
+        .addCase(patchAvatar.fulfilled, (state, action) =>{
+          state.patchedAvatar = action.payload
+          state.isPatchedAvatarLoading = false
+        })
+        .addCase(patchAvatar.pending, (state, action) =>{
+          state.isPatchedAvatarLoading = true
+        })
+        .addCase(patchAvatar.rejected, (state, action) =>{
+          state.error = action.payload
+          state.isPatchedAvatarLoading = false
+        })
+        .addCase(patchDesigner.fulfilled, (state, action) =>{
+          state.patchedDesigner = action.payload.result
+          state.successPatchMessage = action.payload.message;
+          console.log(action.payload.message)
+          state.isPatchedDesignerLoading = false
+        })
+        .addCase(patchDesigner.pending, (state, action) =>{
+          state.isPatchedDesignerLoading = true
+        })
+        .addCase(patchDesigner.rejected, (state, action) =>{
+          state.error = action.payload
+          state.isPatchedDesignerLoading = false
         })
     },
   });

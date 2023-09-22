@@ -104,6 +104,80 @@ invoice.patch('/invoices/:invoiceId/update', verifyToken, async (req, res) => {
     }
 });
 
+//get di una singola invoice
+
+invoice.get('/invoices/:invoiceId', verifyToken, async (req, res) => {
+    try {
+        const { invoiceId } = req.params;
+
+        const invoice = await InvoicesModel.findById(invoiceId);
+
+        if (!invoice) {
+            return res.status(404).json({ message: 'Invoice not found' });
+        }
+
+        // Verifica se l'utente ha il permesso di accedere a questa invoice (es. solo il designer o il cliente associato)
+        const reqUserIdToString = req.user._id.toString();
+        const designerId = invoice.designer.toString();
+        const clientId = invoice.client.toString();
+
+        if (req.user.role === 'Designer' && reqUserIdToString !== designerId) {
+            return res.status(403).json({ message: 'Access denied' });
+        }
+
+        if (req.user.role === 'Client' && reqUserIdToString !== clientId) {
+            return res.status(403).json({ message: 'Access denied' });
+        }
+
+        res.status(200).json({ statusCode: 200, message: 'Invoice retrieved successfully', invoice });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ statusCode: 500, message: 'Internal server error', error });
+    }
+});
+
+//get di tutte le invoices di un designeer
+invoice.get('/invoices/designer/:designerId', verifyToken, async (req, res) => {
+    try {
+        const { designerId } = req.params;
+
+        // Verifica se l'utente ha il permesso di accedere alle invoice del designer
+        const reqUserIdToString = req.user._id.toString();
+
+        if (req.user.role !== 'Designer' || reqUserIdToString !== designerId) {
+            return res.status(403).json({ message: 'Access denied' });
+        }
+
+        const invoices = await InvoicesModel.find({ designer: designerId });
+
+        res.status(200).json({ statusCode: 200, message: 'Designer invoices retrieved successfully', invoices });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ statusCode: 500, message: 'Internal server error', error });
+    }
+});
+
+
+//get di tutte le invoices di un client
+invoice.get('/invoices/client/:clientId', verifyToken, async (req, res) => {
+    try {
+        const { clientId } = req.params;
+
+        // Verifica se l'utente ha il permesso di accedere alle invoice del cliente
+        const reqUserIdToString = req.user._id.toString();
+
+        if (req.user.role !== 'Client' || reqUserIdToString !== clientId) {
+            return res.status(403).json({ message: 'Access denied' });
+        }
+
+        const invoices = await InvoicesModel.find({ client: clientId });
+
+        res.status(200).json({ statusCode: 200, message: 'Client invoices retrieved successfully', invoices });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ statusCode: 500, message: 'Internal server error', error });
+    }
+});
 
 
 module.exports = invoice;

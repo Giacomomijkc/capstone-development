@@ -56,7 +56,7 @@ client.patch('/clients/:clientId/cloudUpdateImg', cloudUpload.single('avatar'), 
         const result = await ClientsModel.findByIdAndUpdate(clientId, dataToUpdate, options);
 
         res.status(200).json({ 
-            cover: result.avatar,
+            result,
             statusCode: 202,
             message: `Post with id ${clientId} successfully updated`,
         });

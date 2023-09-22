@@ -21,7 +21,7 @@ const CompanyProfile = ({client, jobOffers}) => {
                 <span><FontAwesomeIcon icon={faEnvelope} className='mx-2 icons' /> {client?.email}</span>
             }
             {client?.website &&
-                <span><FontAwesomeIcon icon={faGlobe} className='mx-2 icons' /> {client?.website}</span>
+                <a><FontAwesomeIcon icon={faGlobe} className='mx-2 icons' /> {client?.website}</a>
             }
             {client?.name && client?.surname &&
                 <span><FontAwesomeIcon icon={faUser} className='mx-2 icons' /> {client?.name} {client?.surname}</span>

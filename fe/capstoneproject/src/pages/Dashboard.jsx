@@ -9,6 +9,8 @@ import SingleDealClientDashboard from '../components/SingleDealClientDashboard';
 import SingleLikedProjectDesignerDashboard from '../components/SingleLikedProjectDesignerDashboard';
 import SingleLikedProjectClientDashboard from '../components/SingleLikedProjectClientDashboard';
 import SingleJobOfferClientDashboard from '../components/SingleJobOfferClientDashboard';
+import EditDesignerData from '../components/EditDesignerData';
+import EditClientData from '../components/EditClientData';
 import { useSelector, useDispatch } from 'react-redux';
 import { getDesignerDetails, getClientDetails } from '../redux/usersSlice';
 import { fetchDesigners } from '../redux/designersSlice';
@@ -40,6 +42,16 @@ const Dashboard = () => {
   const [showProjectsLiked, setShowProjectsLiked] = useState (false);
   const [showProjectsClientLiked, setShowProjectsClientLiked] = useState (false);
   const [showButtons, setShowButtons] = useState(true)
+  const [showDesignerModal, setShowDesignerModal] = useState(false);
+  const [showClientModal, setShowClientModal] = useState(false);
+
+  const handleShowDesignerModal = () => {
+    setShowDesignerModal(true);
+  }
+
+  const handleShowClientModal = () => {
+    setShowClientModal(true);
+  }
 
   const handleShowProjectsPosted = () => {
     setShowProjectsPosted(true)
@@ -80,8 +92,26 @@ const Dashboard = () => {
     setShowProjectsClientLiked(false)
     setShowButtons(true)
   }
- 
-  
+
+const handleDesignerUpdateSuccess = () => {
+  dispatch(getDesignerDetails(designerId))
+    .then(() => {
+      // valutare azioni da fare
+    })
+    .catch((error) => {
+      console.error('Failed to fetch updated designer data:', error);
+    });
+};
+
+  const handleClientUpdateSuccess = () => {
+    dispatch(getClientDetails(clientId))
+      .then(() => {
+        // valutare azioni da fare
+      })
+      .catch((error) => {
+        console.error('Failed to fetch updated designer data:', error);
+      });
+  };
 
   useEffect(() => {
     dispatch(fetchDesigners());
@@ -110,10 +140,18 @@ const Dashboard = () => {
               <span className='nickname'>{designer.designer.nickname}</span>
             </div>
             <div className='d-flex flex-column justify-content-center algin-items-center'>
-              <Button className='edit-datas-button mb-2'>Edit personal info</Button>
+              <Button className='edit-datas-button mb-2' onClick={handleShowDesignerModal}>Edit personal info</Button>
               <Link className='links' to="/create-deal">
                 <Button className='make-deal-button mt-2'>Make a Deal</Button>
               </Link>
+            </div>
+            <div>
+              {showDesignerModal &&
+              <EditDesignerData
+              setShowDesignerModal={setShowDesignerModal}
+              show={showDesignerModal}
+              onSuccessCallback={handleDesignerUpdateSuccess}
+            />}
             </div>
           </div>
           <div className='d-flex justify-content-center algin-items-center mt-5' >
@@ -169,10 +207,19 @@ const Dashboard = () => {
               <span className='nickname'>{client.client.company}</span>
             </div>
             <div className='d-flex flex-column justify-content-center algin-items-center'>
-              <Button className='edit-datas-button mb-2'>Edit personal info</Button>
+              <Button className='edit-datas-button mb-2' onClick={handleShowClientModal}>Edit personal info</Button>
               <Link className="links" to="/create-job-offer">
                 <Button className='make-deal-button mt-2'>Make a Job offer</Button>
               </Link>
+              <span className='tags my-2'>Your Id: {client?.client._id}</span>
+            </div>
+            <div>
+              {showClientModal &&
+              <EditClientData
+              setShowClientModal={setShowClientModal}
+              show={showClientModal}
+              onSuccessCallback={handleClientUpdateSuccess}
+            />}
             </div>
           </div>
           <div className='d-flex justify-content-center algin-items-center mt-5' >
