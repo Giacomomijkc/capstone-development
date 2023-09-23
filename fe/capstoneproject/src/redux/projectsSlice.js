@@ -29,12 +29,14 @@ export const uploadCover = createAsyncThunk('projects/uploadCover', async (cover
 });
 
 // Crea un'azione asincrona per aggiornare la cover di un progetto
-export const updateCover = createAsyncThunk('projects/updateCover', async ({ projectId, cover }) => {
-    const formData = new FormData();
-    formData.append('cover', cover);
-  
-    const response = await axios.patch(`http://localhost:5050/projects/${projectId}/cover/update`, formData);
-    return response.data.cover;
+export const updateCover = createAsyncThunk('projects/updateCover', async ({ projectId, coverFormData }) => {
+  try {
+    const response = await axios.patch(`${apiUrlFetchProjects}${projectId}/cover/update`, coverFormData);
+    return response.data.result.cover;
+  } catch (error) {
+    console.log(error)
+        throw new Error('Errors updating cover');
+  }
 });
 
 // Crea un'azione asincrona per caricare immagini per un progetto
@@ -49,12 +51,15 @@ export const uploadImages = createAsyncThunk('projects/uploadImages', async (ima
 });
 
 // Crea un'azione asincrona per aggiornare le immagini di un progetto
-export const updateImages = createAsyncThunk('projects/updateImages', async ({ projectId, images }) => {
-    const formData = new FormData();
-    images.forEach((image) => formData.append('images', image));
-  
-    const response = await axios.patch(`http://localhost:5050/projects/${projectId}/images/update`, formData);
-    return response.data.images;
+export const updateImages = createAsyncThunk('projects/updateImages', async ({ projectId, imagesFormData }) => {
+  try {
+    const response = await axios.patch(`${apiUrlFetchProjects}${projectId}/images/update`, imagesFormData);
+    return response.data.result.images;
+    
+  } catch (error) {
+    console.log(error)
+    throw new Error('Errors updating images');
+  }
 });
 
 // Crea un'azione asincrona per creare un nuovo progetto
@@ -73,6 +78,20 @@ export const createProject = createAsyncThunk('projects/createProject', async (p
         throw error;
       }
     }
+});
+
+// Crea un'azione asincrona per aggiornare un nuovo progetto
+export const patchProject = createAsyncThunk('projects/patchProject', async ({projectId, projectData}) => {
+  try {
+    const token = JSON.parse(localStorage.getItem("userLoggedIn"));
+    const response = await axios.patch(`${apiUrlFetchProjects}${projectId}/update`, projectData, {
+      headers: { 'Authorization': `${token}` }
+  })
+    return response.data
+  } catch (error) {
+    console.log(error)
+      throw new Error('Errors uploading images');
+  }
 });
 
 // Crea un'azione asincrona per ottenere un progetto singolo
@@ -151,6 +170,24 @@ export const toggleSingleProjectLike = createAsyncThunk('projects/toggleSinglePr
   }
 })
 
+// Crea un'azione asincrona per eliminare un nuovo progetto
+export const deleteProject = createAsyncThunk('projects/deleteProject', async (projectId,{ rejectWithValue }) => {
+  try {
+    const token = JSON.parse(localStorage.getItem("userLoggedIn"));
+    const response = await axios.delete(`${apiUrlFetchProjects}${projectId}`, {
+      headers: { 'Authorization': `${token}` }
+  })
+    return response.data
+  } catch (error) {
+    if (error.response && error.response.data && error.response.data.message) {
+      console.log(error.response.data.error.errors)
+      return rejectWithValue(error.response.data.message);
+    } else {
+      throw error;
+    }
+  }
+});
+
 const projectsSlice = createSlice({
   name: 'projects',
   initialState: {
@@ -167,7 +204,17 @@ const projectsSlice = createSlice({
     coverURL: null,
     imagesURL: null,
     successMessage: null,
-    createdProject: null
+    createdProject: null,
+    patchedCover: null,
+    patchedImages: null,
+    patchedProject: null,
+    isPatchedCoverLoading: true,
+    isPatchedImagesLoading: true,
+    isPatchedProjectLoading: true,
+    successPatchMessage: null,
+    deletedProject: null,
+    isDeletedProjectLoading: true,
+    successDeleteMessage: null
   },
   reducers: {
     setCurrentPage: (state, action) => {
@@ -250,6 +297,52 @@ const projectsSlice = createSlice({
     })
     .addCase(fetchDesignerLikedProjects.pending, (state, action) => {
       state.isLikedProjectsLoading = true;
+    })
+    .addCase(updateCover.fulfilled, (state, action) => {
+      state.patchedCover = action.payload;
+      state.isPatchedCoverLoading = false;
+    })
+    .addCase(updateCover.rejected, (state, action) => {
+      state.error = action.payload;
+      state.isPatchedCoverLoading = false;
+    })
+    .addCase(updateCover.pending, (state, action) => {
+      state.isPatchedCoverLoading = true;
+    })
+    .addCase(updateImages.fulfilled, (state, action) => {
+      state.patchedImages = action.payload;
+      state.isPatchedImagesLoading = false;
+    })
+    .addCase(updateImages.rejected, (state, action) => {
+      state.error = action.payload;
+      state.isPatchedImagesLoading = false;
+    })
+    .addCase(updateImages.pending, (state, action) => {
+      state.isPatchedImagesLoading = true;
+    })
+    .addCase(patchProject.fulfilled, (state, action) => {
+      state.patchedProject = action.payload.result;
+      state.successPatchMessage = action.payload.message;
+      state.isPatchedProjectLoading = false;
+    })
+    .addCase(patchProject.rejected, (state, action) => {
+      state.error = action.payload;
+      state.isPatchedProjectLoading = false;
+    })
+    .addCase(patchProject.pending, (state, action) => {
+      state.isPatchedProjectLoading = true;
+    })
+    .addCase(deleteProject.fulfilled, (state, action) => {
+      state.deletedProject = action.payload;
+      state.successDeleteMessage = action.payload.message;
+      state.isDeletedProjectLoading = false;
+    })
+    .addCase(deleteProject.rejected, (state, action) => {
+      state.error = action.payload;
+      state.isDeletedProjectLoading = false;
+    })
+    .addCase(deleteProject.pending, (state, action) => {
+      state.isDeletedProjectLoading = true;
     })
   },
 });

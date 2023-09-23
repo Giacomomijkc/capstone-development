@@ -1,13 +1,32 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchDesignerProjects } from '../redux/projectsSlice';
 import { Link } from 'react-router-dom';
 import Button from "react-bootstrap/Button";
+import EditProject from './EditProject';
 import './SingleProjectDesignerDashboard.css';
 
 const SingleProjectDesignerDashboard = ({ designerId }) => {
   const dispatch = useDispatch();
   const designerProjects = useSelector((state) => state.projects.designerProjects)
+
+  const [showProjectModal, setShowProjectModal] = useState(false);
+  const [selectedProjectId, setSelectedProjectId] = useState();
+
+  const handleShowProjectModal = (projectId) => {
+    setSelectedProjectId(projectId); 
+    setShowProjectModal(true);
+  }
+
+  const handleProjectUpdateSuccess = () => {
+    dispatch(fetchDesignerProjects(designerId))
+      .then(() => {
+        // valutare azioni da fare
+      })
+      .catch((error) => {
+        console.error('Failed to fetch updated designer data:', error);
+      });
+  };
 
   useEffect(() => {
         dispatch(fetchDesignerProjects(designerId));
@@ -25,9 +44,16 @@ const SingleProjectDesignerDashboard = ({ designerId }) => {
               <span className='author-nickname mx-2'>{designerProject.title}</span>
             </div>
             <div className='mt-2'>
-            <Link to={`/projects/edit/${designerProject._id}`}>
-                <Button className='edit-project-button'>Edit</Button>
-            </Link>
+                <Button className='edit-project-button' onClick={() => handleShowProjectModal(designerProject._id)}>Edit</Button>
+            </div>
+            <div>
+              {showProjectModal &&
+              <EditProject
+              setShowProjectModal={setShowProjectModal}
+              show={showProjectModal}
+              onSuccessCallback={handleProjectUpdateSuccess}
+              projectId={selectedProjectId}
+              />}
             </div>
           </div>
         </div>

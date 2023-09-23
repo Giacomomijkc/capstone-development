@@ -72,12 +72,12 @@ const ProjectDetails = ({project, designer}) => {
                                 <span>{project.likes.length}</span>
                             )}
                             </div>
-                            <div className="icon-container">
+                            {/*<div className="icon-container">
                             <FontAwesomeIcon icon={faComment} className='mx-2 icons-project-details' />
                             {project.comments && (
                                 <span>{project.comments.length}</span>
                             )}
-                            </div>
+                            </div>*/}
                         </div>
                     )}
                 </div>

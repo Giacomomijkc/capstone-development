@@ -1,7 +1,8 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchClientDeals, acceptDeal, denyDeal } from '../redux/dealsSlice';
-import DesignerInfo from './DesignerInfo';
+import { fetchDesigners } from '../redux/designersSlice';
+import { Link } from 'react-router-dom';
 import Button from "react-bootstrap/Button";
 import './SingleDealClientDashboard.css';
 
@@ -26,9 +27,11 @@ const SingleDealClientDashboard = ({ clientId }) => {
 
     const dispatch = useDispatch();
     const clientDeals = useSelector((state) => state.deals.clientDeals)
+    const designers = useSelector((state) => state.designers.designers)
 
     useEffect(() => {
         dispatch(fetchClientDeals(clientId));
+        dispatch(fetchDesigners)
     }, [dispatch, clientId]);
 
     const handleAcceptDeal = async (dealId) => {
@@ -43,11 +46,22 @@ const SingleDealClientDashboard = ({ clientId }) => {
     
   return (
     <>
-        {clientDeals && clientDeals.map(clientDeal => (
-      <div className='d-flex flex-column my-5 mx-2 deal' style={{ width: '350px' }} key={clientDeal._id}>
-        {clientDeal.designer && (
-          <DesignerInfo designerId={clientDeal.designer} />
-        )}
+        {clientDeals && clientDeals.map(clientDeal => {
+          const designer = designers?.find(d => d._id === clientDeal.designer);
+          return (
+            <div className='d-flex flex-column my-5 mx-2 deal' style={{ width: '350px' }} key={clientDeal._id}>
+              {designer && (
+                <div className='d-flex justify-content-between align-items-center'>
+                  <Link className='links' to={`/designers/${designer._id}`}>
+                    <div>
+                      <img className='user-avatar' src={designer.avatar} alt="client img" />
+                    </div> 
+                    <div>
+                      <span className='user-nickname'>{designer.nickname}</span>  
+                    </div> 
+                  </Link>
+                </div>
+            )}
         <div className='d-flex justify-content-center align-items-center'>
           <div className='mt-2 d-flex justify-content-center align-items-center'>
             <span className='info'>{clientDeal.description}</span>
@@ -144,7 +158,7 @@ const SingleDealClientDashboard = ({ clientId }) => {
           </div>
         </div>
       </div>
-    ))}
+    );})}
   </>
   )
 }

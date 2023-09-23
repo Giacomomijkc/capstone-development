@@ -69,7 +69,6 @@ const EditClientData = ({setShowClientModal, show, onSuccessCallback}) => {
                 console.error('File upload failed:', error);
             }
         }   
-    
     };
 
 

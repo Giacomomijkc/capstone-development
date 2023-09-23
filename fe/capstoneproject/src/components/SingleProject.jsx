@@ -60,7 +60,7 @@ const SingleProject = ({projectToRender, authorDesigner}) => {
             {isLogged && (
               <div className='mt-2'>
                 <span className='project-like'><FontAwesomeIcon icon={isLiked ? solidHeart :regularHeart} className='mx-2 icons' onClick={handleLikeClick}/>{projectToRender?.likes?.length}</span>
-                <span className='project-comment'> <FontAwesomeIcon icon={faComment} className='mx-2 icons' />{projectToRender?.comments?.length}</span>
+                {/*<span className='project-comment'> <FontAwesomeIcon icon={faComment} className='mx-2 icons' />{projectToRender?.comments?.length}</span>*/}
               </div>
             )}
         </div>

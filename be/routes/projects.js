@@ -59,7 +59,7 @@ project.patch('/projects/:projectId/cover/update', cloudUpload.single('cover'), 
         const result = await ProjectsModel.findByIdAndUpdate(projectId, dataToUpdate, options);
 
         res.status(200).json({
-            cover: result.cover,
+            result,
             statusCode: 202,
             message: `Project cover with id ${projectId} successfully updated`
         });
@@ -85,13 +85,16 @@ project.patch('/projects/:projectId/images/update', cloudUpload.array('images', 
     const { projectId } = req.params;
 
     try {
+        if (!req.files) {
+            throw new Error('No files were uploaded');
+        }
         const updatedImageUrls = req.files.map(file => file.path);
         const dataToUpdate = { images: updatedImageUrls };
         const options = { new: true };
         const result = await ProjectsModel.findByIdAndUpdate(projectId, dataToUpdate, options);
 
         res.status(200).json({
-            images: result.images,
+            result,
             statusCode: 202,
             message: `Project images with id ${projectId} successfully updated`
         });
