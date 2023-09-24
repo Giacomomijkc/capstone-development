@@ -17,23 +17,29 @@ const CompanyProfile = ({client, jobOffers}) => {
         </div>
     </div>
         <div className='d-flex flex-column justify-content-center align-items-center'>
-            {client?.email && 
+            {client?.email && (
+            <a href={`mailto:${client.email}`} className='links'>
                 <span><FontAwesomeIcon icon={faEnvelope} className='mx-2 icons' /> {client?.email}</span>
-            }
-            {client?.website &&
-                <a><FontAwesomeIcon icon={faGlobe} className='mx-2 icons' /> {client?.website}</a>
-            }
+            </a>
+            )}
+            {client?.website && (
+            <a href={client.website} target="_blank" rel="noopener noreferrer" className='links'>
+                <span><FontAwesomeIcon icon={faGlobe} className='mx-2 icons' /> {client?.website}</span>
+            </a>
+            )}
             {client?.name && client?.surname &&
                 <span><FontAwesomeIcon icon={faUser} className='mx-2 icons' /> {client?.name} {client?.surname}</span>
             }
         </div>
     </div>
-    <div className='d-flex flex-wrap justify-content-center align-items-center mb-5'>
-       {jobOffers && jobOffers.map((jobOffer) =>{
-            return (
+    <div className='d-flex flex-wrap justify-content-center align-items-center mt-3 mb-5'>
+        {jobOffers && jobOffers.length > 0 ? (
+            jobOffers.map((jobOffer) => (
                 <SingleJobOffer jobOffer={jobOffer} key={jobOffer._id} showDealButton={true} />
-            )
-    })}
+            ))
+            ) : (
+            <p>No Job Offers found for this company</p>
+            )}
     </div>
     </>
   )

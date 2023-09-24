@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchClientDeals, acceptDeal, denyDeal } from '../redux/dealsSlice';
 import { fetchDesigners } from '../redux/designersSlice';
+import { getClientInvoices, downloadInvoicePDF } from '../redux/invoicesSlice';
 import { Link } from 'react-router-dom';
 import Button from "react-bootstrap/Button";
 import './SingleDealClientDashboard.css';
@@ -28,10 +29,12 @@ const SingleDealClientDashboard = ({ clientId }) => {
     const dispatch = useDispatch();
     const clientDeals = useSelector((state) => state.deals.clientDeals)
     const designers = useSelector((state) => state.designers.designers)
+    const clientInvoices = useSelector((state) => state.invoices.clientInvoices)
 
     useEffect(() => {
         dispatch(fetchClientDeals(clientId));
-        dispatch(fetchDesigners)
+        dispatch(fetchDesigners);
+        dispatch(getClientInvoices(clientId))
     }, [dispatch, clientId]);
 
     const handleAcceptDeal = async (dealId) => {
@@ -43,11 +46,26 @@ const SingleDealClientDashboard = ({ clientId }) => {
       await dispatch(denyDeal(dealId));
       await dispatch(fetchClientDeals(clientId));
     }
+
+    const handleDownloadInvoice = async (invoiceId) => {
+      try {
+        const response = await dispatch(downloadInvoicePDF(invoiceId));
+        if (downloadInvoicePDF.fulfilled.match(response)) {
+          const pdfURL = response.payload;  // Ottieni pdfURL dalla risposta
+          window.open(pdfURL, '_blank');
+        } else {
+          console.error('Error downloading PDF:', response.payload);
+        }
+      } catch (error) {
+        console.error('Error downloading PDF:', error);
+      }
+    };
     
   return (
     <>
         {clientDeals && clientDeals.map(clientDeal => {
           const designer = designers?.find(d => d._id === clientDeal.designer);
+          const hasAssociatedInvoice = clientInvoices.find(invoice => invoice.deal === clientDeal._id);
           return (
             <div className='d-flex flex-column my-5 mx-2 deal' style={{ width: '350px' }} key={clientDeal._id}>
               {designer && (
@@ -149,8 +167,18 @@ const SingleDealClientDashboard = ({ clientId }) => {
               <span className='status-text'>Waiting for Designer Action</span>
             )}
             {/* Stato COMPLETED */}
-            {clientDeal.status === 'completed' && (
+            {clientDeal.status === 'completed' && !hasAssociatedInvoice && (
               <span className='status-text'>Waiting for Designer Action</span>
+            )}
+            {clientDeal.status === 'completed' && hasAssociatedInvoice && (
+              <div className='d-flex justify-content-center align-items-center'>
+                <Button className='edit-deal-buttons mx-2' onClick={() => {
+                console.log('Invoice ID:', hasAssociatedInvoice._id);
+                handleDownloadInvoice(hasAssociatedInvoice._id);
+              }}>
+                Invoice
+              </Button>
+              </div>
             )}
           </div>
           <div>

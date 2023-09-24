@@ -69,6 +69,7 @@ export const createProject = createAsyncThunk('projects/createProject', async (p
       const response = await axios.post(apiUrlFetchProjectUpload, projectData, {
         headers: { 'Authorization': `${token}` }
     })
+    console.log(response)
       return response.data.createdProject
     } catch (error) {
       if (error.response && error.response.data && error.response.data.message) {
@@ -87,7 +88,7 @@ export const patchProject = createAsyncThunk('projects/patchProject', async ({pr
     const response = await axios.patch(`${apiUrlFetchProjects}${projectId}/update`, projectData, {
       headers: { 'Authorization': `${token}` }
   })
-    return response.data
+    return response.data.createdProject
   } catch (error) {
     console.log(error)
       throw new Error('Errors uploading images');
@@ -205,6 +206,8 @@ const projectsSlice = createSlice({
     imagesURL: null,
     successMessage: null,
     createdProject: null,
+    //isCreatedProjectLoading: true,
+    //successCreateMessage: null,
     patchedCover: null,
     patchedImages: null,
     patchedProject: null,
@@ -281,12 +284,17 @@ const projectsSlice = createSlice({
       state.imagesURL = action.payload;
       state.isUploadingImages = false;
     })
-    .addCase(createProject.rejected, (state, action) =>{
+    /*.addCase(createProject.rejected, (state, action) =>{
       state.error = action.payload;
-    })
+      state.isCreatedProjectLoading = false
+    })*/
     .addCase(createProject.fulfilled, (state, action) =>{
       state.createdProject = action.payload;
+      //state.isCreatedProjectLoading = false
     })
+    /*.addCase(createProject.pending, (state, action) =>
+    state.isCreatedProjectLoading = true
+    )*/
     .addCase(fetchDesignerLikedProjects.fulfilled, (state, action) => {
       state.liked_projects = action.payload;
       state.isLikedProjectsLoading = false;

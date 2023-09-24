@@ -28,7 +28,7 @@ export const patchAvatar = createAsyncThunk('clients/patchAvatar', async ({ clie
 export const registerClient = createAsyncThunk('clients/registerDesigner', async (clientData,{ rejectWithValue }) => {
     try {
         const response = await axios.post(apiUrlRegisterClient, clientData);
-        return response.data.avatar;
+        return response.data;
     } catch (error) {
         console.log(error)
         if (error.response && error.response.data && error.response.data.message) {

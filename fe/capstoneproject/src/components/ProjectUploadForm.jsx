@@ -28,7 +28,7 @@ const ProjectUploadForm = () => {
     const isUploadingCover = useSelector((state) => state.projects.isUploadingCover);
     const isUploadingImages = useSelector((state) => state.projects.isUploadingImages);
     const designerLogged = useSelector((state)=> state.users.designer);
-    //const createdProject = useSelector((state)=> state.projects.createdProject)
+    
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -83,7 +83,6 @@ const ProjectUploadForm = () => {
             author: designerLogged?.designer?._id
         };
 
-    console.log(successMessage)
     
         try {
             const response = await dispatch(createProject(projectData));

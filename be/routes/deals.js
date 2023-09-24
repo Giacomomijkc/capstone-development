@@ -60,6 +60,33 @@ deal.post('/deals/create', verifyToken, async (req, res) => {
     }
 });
 
+deal.get('/deals/:dealId', verifyToken, async (req, res) => {
+    const { dealId } = req.params;
+
+    try {
+        const deal = await DealsModel.findById(dealId);
+
+        if (!deal) {
+            return res.status(404).json({
+                statusCode: 404,
+                message: 'Deal not found',
+            });
+        }
+
+        res.status(200).json({
+            statusCode: 200,
+            message: 'Deal fetched successfully',
+            deal,
+        });
+    } catch (error) {
+        res.status(500).json({
+            message: 'Internal server error',
+            error,
+        });
+    }
+});
+
+
 // accettazione deal lato client
 deal.patch('/deals/:dealId/accept', verifyToken, async (req, res) => {
     const { dealId } = req.params;

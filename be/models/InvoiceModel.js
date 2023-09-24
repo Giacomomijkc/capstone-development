@@ -5,7 +5,10 @@ function arrayLimit(val) {
 }
 
 const InvoiceModelSchema = new mongoose.Schema({
-
+    invoiceNumber: {
+        type: String, 
+        required: true,
+    },
     deal:{
         type: mongoose.Schema.Types.ObjectId,
         ref: "DEAL"
@@ -72,7 +75,19 @@ const InvoiceModelSchema = new mongoose.Schema({
     description:{
         type: String,
         required: true
-    }
+    },
+    fiscalNotes: {
+        type: String, // Campo per aspetti fiscali
+        required: false
+    },
+    VAT: {
+        type: Number, // Campo per l'IVA
+        required: false
+    },
+    totalAmount: {
+        type: Number, // Importo totale (amount_value + VAT)
+        required: true
+    },
 }, { timestamps: true, strict: true });
 
 module.exports = mongoose.model("INVOICE", InvoiceModelSchema, "invoices");

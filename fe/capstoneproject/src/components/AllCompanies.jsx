@@ -12,7 +12,7 @@ const AllCompanies = () => {
         dispatch(fetchClients())
     }, [dispatch]);
   return (
-    <div className='d-flex flex-column flex-wrap justify-content-center align-items-center'>
+    <div className='d-flex flex-column flex-wrap justify-content-center align-items-center mb-2'>
     {clients &&
     clients.map((client) => {
         return (

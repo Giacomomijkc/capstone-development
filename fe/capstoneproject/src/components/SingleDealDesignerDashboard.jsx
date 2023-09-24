@@ -1,9 +1,12 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchDesignerDeals, startDeal, endDeal, deleteDeal } from '../redux/dealsSlice';
+import { getDesignerInvoices, downloadInvoicePDF } from '../redux/invoicesSlice';
 import { fetchClients } from '../redux/clientsSlice';
 import { Link } from 'react-router-dom';
 import Button from "react-bootstrap/Button";
+import CreateInvoiceForm from './CreateInvoiceForm';
+import {store} from '../redux/store'
 import './SingleDealDesignerDashboard.css';
 
 const SingleDealDesignerDashboard = ({ designerId }) => {
@@ -28,11 +31,27 @@ const SingleDealDesignerDashboard = ({ designerId }) => {
     const dispatch = useDispatch();
     const designerDeals = useSelector((state) => state.deals.designerDeals)
     const clients = useSelector((state) => state.clients.clients)
-    console.log(designerDeals)
+    const designerInvoices = useSelector((state) => state.invoices.designerInvoices)
+    
+    const handleDownloadInvoice = async (invoiceId) => {
+      try {
+        const response = await dispatch(downloadInvoicePDF(invoiceId));
+        if (downloadInvoicePDF.fulfilled.match(response)) {
+          const pdfURL = response.payload;  // Ottieni pdfURL dalla risposta
+          window.open(pdfURL, '_blank');
+        } else {
+          console.error('Error downloading PDF:', response.payload);
+        }
+      } catch (error) {
+        console.error('Error downloading PDF:', error);
+      }
+    };
+    
 
     useEffect(() => {
         dispatch(fetchDesignerDeals(designerId));
         dispatch(fetchClients());
+        dispatch(getDesignerInvoices(designerId))
     }, [dispatch, designerId]);
 
     console.log(clients)
@@ -60,11 +79,16 @@ const SingleDealDesignerDashboard = ({ designerId }) => {
       await dispatch(fetchClients());
       console.log('lanciato fetchClients')
     }
+
+    const [showInvoiceModal, setShowInvoiceModal] = useState(false);
+    const [selectedDealId, setSelectedDealId] = useState(null);
     
   return (
     <>
 {designerDeals && designerDeals.map(designerDeal => {
   const client = clients?.find(c => c._id === designerDeal.client);
+  const hasAssociatedInvoice = designerInvoices.find(invoice => invoice.deal === designerDeal._id);
+  console.log(hasAssociatedInvoice)
   return (
     <div className='d-flex flex-column my-5 mx-2 deal' style={{ width: '350px' }} key={designerDeal._id}>
       {client && (
@@ -172,14 +196,30 @@ const SingleDealDesignerDashboard = ({ designerId }) => {
               </>
             )}
             {/* Stato COMPLETED */}
-            {designerDeal.status === 'completed' && (
+            {designerDeal.status === 'completed' && !hasAssociatedInvoice && (
               <>
               <div className='d-flex justify-content-center align-itmes-center'>
-                <Link className='links' >
-                  <Button className='edit-deal-buttons mx-2'>Invoice</Button>
-                </Link>
+                  <Button className='edit-deal-buttons mx-2' onClick={() => {
+                setSelectedDealId(designerDeal._id);
+                setShowInvoiceModal(true);
+              }}>Invoice</Button>
               </div>
+              <CreateInvoiceForm
+                show={showInvoiceModal}
+                onClose={() => setShowInvoiceModal(false)}
+                dealId={selectedDealId}
+              />
               </>
+            )}
+            {designerDeal.status === 'completed' && hasAssociatedInvoice && (
+              <div className='d-flex justify-content-center align-items-center'>
+      <Button className='edit-deal-buttons mx-2' onClick={() => {
+      console.log('Invoice ID:', hasAssociatedInvoice._id); // Aggiungi questo log
+      handleDownloadInvoice(hasAssociatedInvoice._id);
+    }}>
+      See Inv
+    </Button>
+              </div>
             )}
           </div>
           <div>

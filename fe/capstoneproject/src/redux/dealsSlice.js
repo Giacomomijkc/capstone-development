@@ -138,6 +138,25 @@ export const deleteDeal = createAsyncThunk('deals/deleteDeal', async (dealId,{ r
   }
 })
 
+export const getSingleDeal = createAsyncThunk('deals/getSingleDeal', async (dealId,{ rejectWithValue }) =>{
+  try {
+      const token = JSON.parse(localStorage.getItem("userLoggedIn"));
+      const response = await axios.get(`${apiUrlFetchDeals}${dealId}`, null, {
+        headers: { 'Authorization': `${token}` }
+      });
+      console.log(response)
+      return response.data;
+
+  } catch (error) {
+    console.log(error)
+    if (error.response && error.response.data && error.response.data.message){
+        return rejectWithValue(error.response.data.message);
+    } else {
+        throw error;
+    }
+  }
+})
+
   const dealsSlice = createSlice({
     name: 'deals',
     initialState: {
@@ -158,6 +177,8 @@ export const deleteDeal = createAsyncThunk('deals/deleteDeal', async (dealId,{ r
       isEndDealLoading: true,
       dealDeleted: null,
       isDealDeletedLoading: true,
+      singleDeal: null,
+      isSingleDealLoading: true,
     },
     reducers: {
     },
@@ -258,6 +279,17 @@ export const deleteDeal = createAsyncThunk('deals/deleteDeal', async (dealId,{ r
       .addCase(deleteDeal.rejected, (state, action) => {
         state.error = action.payload;
         state.isDealDeletedLoading   = false;
+      })
+      .addCase(getSingleDeal.fulfilled, (state, action) => {
+        state.singleDeal = action.payload.deal;
+        state.isSingleDealLoading = false;
+      })
+      .addCase(getSingleDeal.pending, (state, action) => {
+        state.isSingleDealLoading = true;
+      })
+      .addCase(getSingleDeal.rejected, (state, action) => {
+        state.error = action.payload.message;
+        state.isSingleDealLoading   = false;
       })
     },
   });

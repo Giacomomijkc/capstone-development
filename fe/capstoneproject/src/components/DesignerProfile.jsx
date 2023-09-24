@@ -35,15 +35,21 @@ const DesignerProfile = ({designer, designerProjects}) => {
         </div>
     </div>
         <div className='d-flex flex-column justify-content-center align-items-center'>
-            {designer?.email && 
+            {designer?.email && (
+            <a href={`mailto:${designer.email}`} className='links'>
                 <span><FontAwesomeIcon icon={faEnvelope} className='mx-2 icons' /> {designer?.email}</span>
-            }
-            {designer?.website &&
-                <span><FontAwesomeIcon icon={faGlobe} className='mx-2 icons' /> {designer?.website}</span>
-            }
-            {designer?.instagram &&
-                <span><FontAwesomeIcon icon={faLink} className='mx-2 icons' />{designer?.instagram}</span>
-            }
+            </a>
+            )}
+            {designer?.website && (
+                <a href={designer.website} target="_blank" rel="noopener noreferrer" className='links'>
+                    <span><FontAwesomeIcon icon={faGlobe} className='mx-2 icons' /> {designer?.website}</span>
+                </a>
+            )}
+            {designer?.instagram && (
+                <a href={designer.instagram} target="_blank" rel="noopener noreferrer" className='links'>
+                    <span><FontAwesomeIcon icon={faLink} className='mx-2 icons' />{designer?.instagram}</span>
+                </a>
+            )}
         </div>
     </div>
     <div className='d-flex justify-content-center align-items-center'>
