@@ -163,8 +163,8 @@ const handleDesignerUpdateSuccess = () => {
           {showButtons &&
             <div className='d-flex justify-content-center algin-items-center buttons-show-container'>
               <div className='d-flex justify-content-center algin-items-center'>
-                <Button className='show-close-button mx-2' onClick={handleShowProjectsPosted}>Your Projects</Button>
-                <Button className='show-close-button mx-2'onClick={handleShowProjectsLiked}>Projects Liked</Button>
+                <Button className='show-close-button mx-2 mb-5' onClick={handleShowProjectsPosted}>Your Projects</Button>
+                <Button className='show-close-button mx-2 mb-5'onClick={handleShowProjectsLiked}>Projects Liked</Button>
               </div>
             </div>
           }
@@ -231,8 +231,8 @@ const handleDesignerUpdateSuccess = () => {
           {showButtons &&
             <div className='d-flex justify-content-center algin-items-center buttons-show-container'>
               <div className='d-flex justify-content-center algin-items-center'>
-                <Button className='show-close-button mx-2' onClick={handleShowJobOffers}>Your JobOffer</Button>
-                <Button className='show-close-button mx-2'onClick={handleShowProjectsClientLiked}>Projects Liked</Button>
+                <Button className='show-close-button mx-2 mb-5' onClick={handleShowJobOffers}>Your JobOffer</Button>
+                <Button className='show-close-button mx-2 mb-5'onClick={handleShowProjectsClientLiked}>Projects Liked</Button>
               </div>
             </div>
           }

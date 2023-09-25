@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState} from 'react';
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import { useDispatch, useSelector } from 'react-redux';
-import { getSingleDeal, fetchDesignerDeals } from '../redux/dealsSlice';
+import { getDesignerInvoices } from '../redux/invoicesSlice';
 import { createInvoice } from '../redux/invoicesSlice'
 
 const CreateInvoiceForm = ({ show, onClose, dealId }) => {
@@ -12,7 +12,6 @@ const CreateInvoiceForm = ({ show, onClose, dealId }) => {
         display: show ? 'block' : 'none',
       };
 
-    const singleDeal = useSelector((state) => state.deals.singleDeal)
     const [showSuccessMessage, setShowSuccessMessage] = useState(false)
     const [showErrorMessage, setShowErrorMessage] = useState(false)
     const successCreationInvoiceMessage = useSelector((state) => state.invoices.successCreationInvoiceMessage)
@@ -35,17 +34,6 @@ const CreateInvoiceForm = ({ show, onClose, dealId }) => {
         setShowErrorMessage(false)
     }
 
-    /*useEffect(() => {
-        const fetchData = async () => {
-            try {
-              await dispatch(getSingleDeal(dealId));
-            } catch (error) {
-              console.error('Failed to fetch single Job Offer:', error);
-            }
-          };
-        
-          fetchData();
-      }, [dealId, dispatch]);*/
 
       const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -60,7 +48,7 @@ const CreateInvoiceForm = ({ show, onClose, dealId }) => {
         try {
             const formDataWithDealId = {
                 ...formData,
-                dealId: dealId, // Aggiungi il dealId
+                dealId: dealId,
               };
             const response = await dispatch(createInvoice(formDataWithDealId ));
             setFormData({
@@ -72,7 +60,7 @@ const CreateInvoiceForm = ({ show, onClose, dealId }) => {
             });
             if (createInvoice.fulfilled.match(response)) {
                 setShowSuccessMessage(true)
-                await dispatch(fetchDesignerDeals(designerId))
+                await dispatch(getDesignerInvoices(designerId));
             }
         } catch (error) {
             setShowErrorMessage(true)

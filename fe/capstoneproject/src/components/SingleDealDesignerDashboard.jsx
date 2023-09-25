@@ -6,7 +6,6 @@ import { fetchClients } from '../redux/clientsSlice';
 import { Link } from 'react-router-dom';
 import Button from "react-bootstrap/Button";
 import CreateInvoiceForm from './CreateInvoiceForm';
-import {store} from '../redux/store'
 import './SingleDealDesignerDashboard.css';
 
 const SingleDealDesignerDashboard = ({ designerId }) => {

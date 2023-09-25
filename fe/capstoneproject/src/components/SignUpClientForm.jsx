@@ -10,16 +10,6 @@ import './SignUpClientForm.css';
 
 const SignUpClientForm = () => {
 
-    const [showForm, setShowForm] = useState(false);
-      
-    const handleShowForm = () => {
-        setShowForm(true);
-    };
-      
-    const handleCloseForm = () => {
-        setShowForm(false);
-    };
-
     const [formData, setFormData] = useState({
         name: '',
         surname: '',
@@ -98,20 +88,8 @@ const SignUpClientForm = () => {
     };
   return (
     <>
-    {!showForm && (
-    <div className='d-flex flex-column align-items-center signup-buttons'>
-        <h1 className='title me-auto mb-4'>Sign up to Hubby!</h1>
-        <Button className='button-google-singup'>
-            Sign up with Google
-        </Button>
-            <p className='my-3'>OR</p>
-        <Button className='button-email-singup' onClick={handleShowForm}>
-            Use your email
-        </Button>
-    </div>
-     )}
-        {showForm && (
             <Form style={{ width: '30rem'}} encType='multipart/form-data' className='form' onSubmit={handleSubmit}>
+            <h1 className='title me-auto mb-4'>Sign up to Hubby with a Client Profile!</h1>
                 <div className='row'>
                     <div className='col-md-6'>
                         <Form.Group className="mb-3" controlId="createAuthorForm.ControlInput1">
@@ -253,9 +231,6 @@ const SignUpClientForm = () => {
                    variant="success">
                        Create Your Client Account
                    </Button>  }
-                    <Button className='close-button my-3' onClick={handleCloseForm}>
-                        Close
-                    </Button>
                     {error && (
                         <div className="alert alert-danger me-auto " role="alert">
                             {error}
@@ -266,7 +241,6 @@ const SignUpClientForm = () => {
                     )}
                 </div>
             </Form>
-        )}
     </>
   )
 }
