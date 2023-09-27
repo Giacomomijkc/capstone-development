@@ -1,7 +1,7 @@
 import React from 'react'
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
-import { useState, useRef } from 'react';
+import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
 import {useNavigate} from 'react-router-dom';
@@ -25,7 +25,6 @@ const CreateJobOfferForm = () => {
 
     const error = useSelector((state) => state.joboffers.error);
     const successMessage = useSelector((state) => state.joboffers.successMessage);
-    const isNewJobOfferLoading = useSelector((state) => state.joboffers.isNewJobOfferLoading);
 
     const navigate = useNavigate();
     const dispatch = useDispatch();

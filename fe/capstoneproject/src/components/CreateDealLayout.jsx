@@ -1,9 +1,8 @@
 import React from 'react'
 import Row from 'react-bootstrap/esm/Row';
 import Col from 'react-bootstrap/esm/Col';
-import SignUpCover from '../assets/singup-cover.jpg';
+import ProjectUploadCover from '../assets/project-upload-cover.jpg';
 import { useState } from 'react';
-import Container from 'react-bootstrap/esm/Container';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import {useNavigate} from 'react-router-dom';
@@ -14,7 +13,6 @@ import './SignUpDesignerLayout.css';
 const CreateDealLayout = () => {
   const error = useSelector((state) => state.deals.error);
   const successMessage = useSelector((state) => state.deals.successMessage);
-  const isNewDealLoading = useSelector((state) => state.deals.isNewDealLoading);
 
 
   const [formData, setFormData] = useState({
@@ -109,7 +107,7 @@ const CreateDealLayout = () => {
   return (
   <Row className="full-height">
     <Col md={4} className='col-md-4 p-0'>
-        <img src={SignUpCover} alt="SingUpCover" className='signup-cover full-height'/>
+        <img src={ProjectUploadCover} alt="Project Upload Cover" className='signup-cover full-height'/>
     </Col>
     <Col md={8} className='signup-form-container col-md-8 p-0 d-flex justify-content-center align-items-center'>
     <Form style={{ width: '30rem'}} className='form' onSubmit={handleSubmit}>
