@@ -7,6 +7,7 @@ import Button from 'react-bootstrap/Button';
 import {useNavigate} from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import {createDeal} from '../redux/dealsSlice';
+import './JobOfferDetails.css'
 
 const JobOfferDetails = ({jobOffer}) => {
     
@@ -15,7 +16,6 @@ const JobOfferDetails = ({jobOffer}) => {
 
     const error = useSelector((state) => state.deals.error);
     const successMessage = useSelector((state) => state.deals.successMessage);
-    const isNewDealLoading = useSelector((state) => state.deals.isNewDealLoading);
 
 
     const [formData, setFormData] = useState({
@@ -111,7 +111,7 @@ const JobOfferDetails = ({jobOffer}) => {
   return (
     <>
     <Container className='fluid'>
-    <div className='d-flex justify-content-evenly align-items-center'>
+    <div className='d-flex justify-content-evenly align-items-center form-sjb-container'>
         <SingleJobOffer jobOffer={jobOffer} showDealButton={false}/>
         <Form style={{ width: '30rem'}} className='form' onSubmit={handleSubmit}>
                     <div className='row'>

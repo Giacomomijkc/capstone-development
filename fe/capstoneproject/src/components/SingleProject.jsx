@@ -1,10 +1,9 @@
 import React from 'react';
 import './SingleProject.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faComment } from '@fortawesome/free-regular-svg-icons';
 import { faHeart as regularHeart } from '@fortawesome/free-regular-svg-icons';
 import { faHeart as solidHeart } from '@fortawesome/free-solid-svg-icons';
-import { toggleSingleProjectLike, fetchDesignerProjects } from '../redux/projectsSlice';
+import { toggleSingleProjectLike } from '../redux/projectsSlice';
 import { fetchProjects } from '../redux/projectsSlice';
 import { getDesignerDetails } from '../redux/usersSlice';
 import { getClientDetails } from '../redux/usersSlice';
@@ -33,7 +32,6 @@ const SingleProject = ({projectToRender, authorDesigner}) => {
         await dispatch(toggleSingleProjectLike(projectToRender._id));
         dispatch(getClientDetails(clientLogged.client._id));
         console.log('sto chiamando getClientDetails')
-        //questo mi fa effettivamente aggiornare i like
         dispatch(fetchProjects());
         console.log('sto chiamando fetchProjects')
       }
@@ -60,7 +58,6 @@ const SingleProject = ({projectToRender, authorDesigner}) => {
             {isLogged && (
               <div className='mt-2'>
                 <span className='project-like'><FontAwesomeIcon icon={isLiked ? solidHeart :regularHeart} className='mx-2 icons' onClick={handleLikeClick}/>{projectToRender?.likes?.length}</span>
-                {/*<span className='project-comment'> <FontAwesomeIcon icon={faComment} className='mx-2 icons' />{projectToRender?.comments?.length}</span>*/}
               </div>
             )}
         </div>

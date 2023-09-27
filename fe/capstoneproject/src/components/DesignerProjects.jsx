@@ -11,7 +11,7 @@ const DesignerProjects = ({ designer, designerProjects }) => {
             <SingleProject
               key={project._id}
               projectToRender={project}
-              authorDesigner={designer } // Pass designer's ID as author
+              authorDesigner={designer } 
             />
           ))
         ) : (

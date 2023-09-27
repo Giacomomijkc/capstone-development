@@ -45,11 +45,10 @@ export const downloadInvoicePDF = createAsyncThunk('invoices/downloadInvoicePDF'
         const token = JSON.parse(localStorage.getItem('userLoggedIn'));
         const response = await axios.get(`${apiUrlFetchInvoices}${invoiceId}/pdf`, {
           headers: { 'Authorization': `${token}` },
-          responseType: 'arraybuffer', // Indica a Axios di trattare la risposta come un blob
+          responseType: 'arraybuffer', 
         });
   
         if (response.status === 200) {
-            // Crea un oggetto Blob contenente il PDF
             const blob = new Blob([response.data], { type: 'application/pdf' });
             return URL.createObjectURL(blob);
           } else {
@@ -118,7 +117,6 @@ const invoicesSlice = createSlice({
             })
             .addCase(downloadInvoicePDF.rejected, (state, action) => {
                 state.pdfURL = null;
-                // Gestisci l'errore, ad esempio, impostando uno stato di errore
                 state.errorPDFMessage = action.payload;
             });
     },

@@ -194,61 +194,7 @@ invoice.get('/invoices/client/:clientId', verifyToken, async (req, res) => {
         res.status(500).json({ statusCode: 500, message: 'Internal server error', error });
     }
 });
-/*
-invoice.get('/invoices/:invoiceId/pdf', verifyToken, async (req, res) => {
-    try {
-        const { invoiceId } = req.params;
-        const invoice = await InvoicesModel.findById(invoiceId);
-    
-        if (!invoice) {
-          return res.status(404).json({ message: 'Invoice not found' });
-        }
-    
-        const reqUserIdToString = req.user._id.toString();
-        const designerId = invoice.designer.toString();
-        const clientId = invoice.client.toString();
-    
-        if (req.user.role === 'Designer' && reqUserIdToString !== designerId) {
-          return res.status(403).json({ message: 'Access denied' });
-        }
-    
-        if (req.user.role === 'Client' && reqUserIdToString !== clientId) {
-          return res.status(403).json({ message: 'Access denied' });
-        }
-    
-        const doc = new PDFDocument();
-  
-      // Aggiungi i dati dell'invoice al documento PDF
-      doc.text(`Invoice ID: ${invoice._id}`);
-      doc.text(`Invoice Number: ${invoice.invoiceNumber}`);
-      doc.text(`Account Name: ${invoice.clientName}`);
-      doc.text(`Account Surname: ${invoice.clientSurname}`);
-      doc.text(`Company Fiscal Data: ${invoice.clientVatOrCf}`);
-      doc.text(`Company: ${invoice.clientCompany}`);
-      doc.text(`Company address: ${invoice.clientAddress}`);
-      doc.text(`Designer Name: ${invoice.designerName}`);
-      doc.text(`Designer Surname: ${invoice.designerSurname}`);
-      doc.text(`Designer Fiscal Data: ${invoice.designerVatOrCf}`);
-      doc.text(`Designer Address: ${invoice.designerAddress}`);
-      doc.text(`Invoice Description: ${invoice.description}`);
-      doc.text(`Amount Value: ${invoice.amount.amount_value}`);
-      doc.text(`Amount Unit: ${invoice.amount.amount_unit}`);
-      doc.text(`VAT: ${invoice.VAT}`);
-      doc.text(`Total Amount: ${invoice.totalAmount}`);
-      doc.text(`Fiscale Notes: ${invoice.fiscalNotes}`);
-      // Altri dati dell'invoice...
-  
-      res.setHeader('Content-Type', 'application/pdf');
-    res.setHeader('Content-Disposition', `attachment; filename="invoice.pdf"`);
 
-    doc.pipe(res);
-    doc.end();
-
-    } catch (error) {
-      console.error(error);
-      res.status(500).json({ statusCode: 500, message: 'Internal server error', error });
-    }
-  });*/
 
   invoice.get('/invoices/:invoiceId/pdf', verifyToken, async (req, res) => {
     try {
@@ -271,29 +217,22 @@ invoice.get('/invoices/:invoiceId/pdf', verifyToken, async (req, res) => {
         return res.status(403).json({ message: 'Access denied' });
       }
   
-      // Crea un documento PDF
       const doc = new PDFDocument();
   
-      // Imposta la font per il documento
-      //doc.font('path/to/your/font.ttf'); // Sostituisci con il percorso del tuo file di font
-      //doc.fontSize(12); // Imposta la dimensione del carattere
-  
-      // Aggiungi il logo in alto al centro del documento
-      const logoImage = path.join(__dirname, '../../fe/capstoneproject/src/assets/logo.png');
+      const logoImage = path.join(__dirname, '../asset/logo.png');
       const logoWidth = 200;
       const logoHeight = 150;
       const centerX = (doc.page.width - logoWidth) / 2;
       doc.image(logoImage, centerX, 30, { width: logoWidth, height: logoHeight });
   
-        // Posizione iniziale per i dati
-        let xLeft = 50; // Per i dati a sinistra
-        let xRight = 400; // Per i dati a destra
-        let y = 150; // Altezza iniziale
 
-        // Calcola la coordinata y per l'inizio delle informazioni del cliente
-        const clientY = Math.max(150, y); // Prendi il valore più alto tra 150 e y
+        let xLeft = 50;
+        let xRight = 400; 
+        let y = 150;
 
-        // Dati del cliente a sinistra
+        const clientY = Math.max(150, y); 
+
+     
         doc.fillColor('black').text('Account Name:', xLeft, y);
         doc.fillColor('#BEBFFB').text(`${invoice.clientName}`, xLeft, y + 20);
         y += 40;
@@ -312,9 +251,8 @@ invoice.get('/invoices/:invoiceId/pdf', verifyToken, async (req, res) => {
 
         doc.fillColor('black').text('Company Address:', xLeft, y);
         doc.fillColor('#BEBFFB').text(`${invoice.clientAddress}`, xLeft, y + 20);
-        y += 60; // Aggiungi spazio tra i dati del cliente e del designer
+        y += 60; 
 
-        // Dati del designer a destra
         doc.fillColor('black').text('Designer Name:', xRight, clientY);
         doc.fillColor('#BEBFFB').text(`${invoice.designerName}`, xRight, clientY + 20);
         y = clientY + 40;
@@ -332,65 +270,57 @@ invoice.get('/invoices/:invoiceId/pdf', verifyToken, async (req, res) => {
 
 
 
-// Dati sotto il logo
-const initialY = 400;
-const cellWidth = 250;
-const cellHeight = 30;
+        const initialY = 400;
+        const cellWidth = 250;
+        const cellHeight = 30;
 
-// Imposta lo spessore del bordo
-doc.lineWidth(1);
-
-// Riga 1
-doc.rect(xLeft, initialY, cellWidth, cellHeight).stroke('#BEBFFB');
-doc.fillColor('black').text('Invoice ID', xLeft, initialY);
-doc.rect(xLeft + cellWidth, initialY, cellWidth, cellHeight).stroke('#BEBFFB');
-doc.fillColor('black').text(`${invoice._id}`, xLeft + cellWidth, initialY);
-
-// Riga 2
-doc.rect(xLeft, initialY + cellHeight, cellWidth, cellHeight).stroke('#BEBFFB');
-doc.fillColor('black').text('Invoice Number', xLeft, initialY + cellHeight);
-doc.rect(xLeft + cellWidth, initialY + cellHeight, cellWidth, cellHeight).stroke('#BEBFFB');
-doc.fillColor('black').text(`${invoice.invoiceNumber}`, xLeft + cellWidth, initialY + cellHeight);
-
-// Riga 3
-doc.rect(xLeft, initialY + cellHeight * 2, cellWidth, cellHeight).stroke('#BEBFFB');
-doc.fillColor('black').text('Invoice Description', xLeft, initialY + cellHeight * 2);
-doc.rect(xLeft + cellWidth, initialY + cellHeight * 2, cellWidth, cellHeight).stroke('#BEBFFB');
-doc.fillColor('black').text(`${invoice.description}`, xLeft + cellWidth, initialY + cellHeight * 2);
-
-// Riga 4
-doc.rect(xLeft, initialY + cellHeight * 3, cellWidth, cellHeight).stroke('#BEBFFB');
-doc.fillColor('black').text('Amount Value', xLeft, initialY + cellHeight * 3);
-doc.rect(xLeft + cellWidth, initialY + cellHeight * 3, cellWidth, cellHeight).stroke('#BEBFFB');
-doc.fillColor('black').text(`${invoice.amount.amount_value} ${invoice.amount.amount_unit}`, xLeft + cellWidth, initialY + cellHeight * 3);
-
-// Riga 5
-doc.rect(xLeft, initialY + cellHeight * 4, cellWidth, cellHeight).stroke('#BEBFFB');
-doc.fillColor('black').text('VAT:', xLeft, initialY + cellHeight * 4);
-doc.rect(xLeft + cellWidth, initialY + cellHeight * 4, cellWidth, cellHeight).stroke('#BEBFFB');
-doc.fillColor('black').text(`${invoice.VAT} ${invoice.amount.amount_unit}`, xLeft + cellWidth, initialY + cellHeight * 4);
-
-// Riga 6
-doc.rect(xLeft, initialY + cellHeight * 5, cellWidth, cellHeight).stroke('#BEBFFB');
-doc.fillColor('black').text('Total Amount', xLeft, initialY + cellHeight * 5);
-doc.rect(xLeft + cellWidth, initialY + cellHeight * 5, cellWidth, cellHeight).stroke('#BEBFFB');
-doc.fillColor('black').text(`${invoice.totalAmount} ${invoice.amount.amount_unit}`, xLeft + cellWidth, initialY + cellHeight * 5);
-
-// Riga 7
-doc.rect(xLeft, initialY + cellHeight * 6, cellWidth, cellHeight).stroke('#BEBFFB');
-doc.fillColor('black').text('Fiscal Notes', xLeft, initialY + cellHeight * 6);
-doc.rect(xLeft + cellWidth, initialY + cellHeight * 6, cellWidth, cellHeight).stroke('#BEBFFB');
-doc.fillColor('black').text(`${invoice.fiscalNotes}`, xLeft + cellWidth, initialY + cellHeight * 6);
+        doc.lineWidth(1);
 
 
+        doc.rect(xLeft, initialY, cellWidth, cellHeight).stroke('#BEBFFB');
+        doc.fillColor('black').text('Invoice ID', xLeft, initialY);
+        doc.rect(xLeft + cellWidth, initialY, cellWidth, cellHeight).stroke('#BEBFFB');
+        doc.fillColor('black').text(`${invoice._id}`, xLeft + cellWidth, initialY);
 
 
+        doc.rect(xLeft, initialY + cellHeight, cellWidth, cellHeight).stroke('#BEBFFB');
+        doc.fillColor('black').text('Invoice Number', xLeft, initialY + cellHeight);
+        doc.rect(xLeft + cellWidth, initialY + cellHeight, cellWidth, cellHeight).stroke('#BEBFFB');
+        doc.fillColor('black').text(`${invoice.invoiceNumber}`, xLeft + cellWidth, initialY + cellHeight);
+
+
+        doc.rect(xLeft, initialY + cellHeight * 2, cellWidth, cellHeight).stroke('#BEBFFB');
+        doc.fillColor('black').text('Invoice Description', xLeft, initialY + cellHeight * 2);
+        doc.rect(xLeft + cellWidth, initialY + cellHeight * 2, cellWidth, cellHeight).stroke('#BEBFFB');
+        doc.fillColor('black').text(`${invoice.description}`, xLeft + cellWidth, initialY + cellHeight * 2);
+
+
+        doc.rect(xLeft, initialY + cellHeight * 3, cellWidth, cellHeight).stroke('#BEBFFB');
+        doc.fillColor('black').text('Amount Value', xLeft, initialY + cellHeight * 3);
+        doc.rect(xLeft + cellWidth, initialY + cellHeight * 3, cellWidth, cellHeight).stroke('#BEBFFB');
+        doc.fillColor('black').text(`${invoice.amount.amount_value} ${invoice.amount.amount_unit}`, xLeft + cellWidth, initialY + cellHeight * 3);
+
+
+        doc.rect(xLeft, initialY + cellHeight * 4, cellWidth, cellHeight).stroke('#BEBFFB');
+        doc.fillColor('black').text('VAT:', xLeft, initialY + cellHeight * 4);
+        doc.rect(xLeft + cellWidth, initialY + cellHeight * 4, cellWidth, cellHeight).stroke('#BEBFFB');
+        doc.fillColor('black').text(`${invoice.VAT} ${invoice.amount.amount_unit}`, xLeft + cellWidth, initialY + cellHeight * 4);
+
+        doc.rect(xLeft, initialY + cellHeight * 5, cellWidth, cellHeight).stroke('#BEBFFB');
+        doc.fillColor('black').text('Total Amount', xLeft, initialY + cellHeight * 5);
+        doc.rect(xLeft + cellWidth, initialY + cellHeight * 5, cellWidth, cellHeight).stroke('#BEBFFB');
+        doc.fillColor('black').text(`${invoice.totalAmount} ${invoice.amount.amount_unit}`, xLeft + cellWidth, initialY + cellHeight * 5);
+
+        doc.rect(xLeft, initialY + cellHeight * 6, cellWidth, cellHeight).stroke('#BEBFFB');
+        doc.fillColor('black').text('Fiscal Notes', xLeft, initialY + cellHeight * 6);
+        doc.rect(xLeft + cellWidth, initialY + cellHeight * 6, cellWidth, cellHeight).stroke('#BEBFFB');
+        doc.fillColor('black').text(`${invoice.fiscalNotes}`, xLeft + cellWidth, initialY + cellHeight * 6);
   
-      // Imposta il nome del file di output
+
       res.setHeader('Content-Type', 'application/pdf');
       res.setHeader('Content-Disposition', `attachment; filename="invoice.pdf"`);
   
-      // Pipe il documento PDF al client
+
       doc.pipe(res);
       doc.end();
     } catch (error) {

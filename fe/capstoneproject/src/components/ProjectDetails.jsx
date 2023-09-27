@@ -9,14 +9,12 @@ import { getClientDetails } from '../redux/usersSlice';
 import { fetchProjects } from '../redux/projectsSlice';
 import { useSelector, useDispatch } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faComment } from '@fortawesome/free-regular-svg-icons';
 import { faHeart as regularHeart } from '@fortawesome/free-regular-svg-icons';
 import { faHeart as solidHeart } from '@fortawesome/free-solid-svg-icons';
 
 
 const ProjectDetails = ({project, designer}) => {
 
-    //const projects = useSelector((state) => state.projects.projects);
     const isLogged = useSelector((state)=> state.users.isLogged);
     const designerLogged = useSelector((state)=> state.users.designer);
     const clientLogged = useSelector((state)=> state.users.client);
@@ -72,12 +70,6 @@ const ProjectDetails = ({project, designer}) => {
                                 <span>{project.likes.length}</span>
                             )}
                             </div>
-                            {/*<div className="icon-container">
-                            <FontAwesomeIcon icon={faComment} className='mx-2 icons-project-details' />
-                            {project.comments && (
-                                <span>{project.comments.length}</span>
-                            )}
-                            </div>*/}
                         </div>
                     )}
                 </div>
@@ -94,7 +86,7 @@ const ProjectDetails = ({project, designer}) => {
             </div>
             <div className='d-flex flex-wrap justify-content-center'>
                 {project.images?.map((image, index) => (
-                <img key={index} src={image} alt={`Image ${index + 1}`} className='project-image mx-3 mt-2' />
+                <img key={index} src={image} alt={`Projects ${index + 1}`} className='project-image mx-3 mt-2' />
                 ))}
             </div>
             <div className='d-flex justify-content-center align-items-center mt-3 buttons-container'>

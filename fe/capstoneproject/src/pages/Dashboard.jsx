@@ -128,6 +128,7 @@ const handleDesignerUpdateSuccess = () => {
     }
 }, [dispatch, token, designerId, clientId, role]);
 
+
   return (
     <>
     <NavigationBar/>
@@ -162,7 +163,7 @@ const handleDesignerUpdateSuccess = () => {
           </div>
           {showButtons &&
             <div className='d-flex justify-content-center algin-items-center buttons-show-container'>
-              <div className='d-flex justify-content-center algin-items-center'>
+              <div className='d-flex justify-content-center algin-items-center container-button'>
                 <Button className='show-close-button mx-2 mb-5' onClick={handleShowProjectsPosted}>Your Projects</Button>
                 <Button className='show-close-button mx-2 mb-5'onClick={handleShowProjectsLiked}>Projects Liked</Button>
               </div>
@@ -204,7 +205,7 @@ const handleDesignerUpdateSuccess = () => {
           <div className='d-flex justify-content-evenly align-items-center border-box-container border-box'>
             <div className='d-flex flex-column justify-content-center algin-items-center'>
               <span className='welcome'>Welcome</span>
-              <span className='nickname'>{client.client.company}</span>
+              <span className='nickname'>{client.client.name}</span>
             </div>
             <div className='d-flex flex-column justify-content-center algin-items-center'>
               <Button className='edit-datas-button mb-2' onClick={handleShowClientModal}>Edit personal info</Button>
@@ -230,7 +231,7 @@ const handleDesignerUpdateSuccess = () => {
           </div>
           {showButtons &&
             <div className='d-flex justify-content-center algin-items-center buttons-show-container'>
-              <div className='d-flex justify-content-center algin-items-center'>
+              <div className='d-flex justify-content-center algin-items-center container-button'>
                 <Button className='show-close-button mx-2 mb-5' onClick={handleShowJobOffers}>Your JobOffer</Button>
                 <Button className='show-close-button mx-2 mb-5'onClick={handleShowProjectsClientLiked}>Projects Liked</Button>
               </div>

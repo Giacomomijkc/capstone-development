@@ -166,16 +166,13 @@ jobOffer.delete('/joboffers/:jobOfferId/delete', verifyToken, async (req, res) =
             return res.status(404).json({ message: 'Job offer not found' });
         }
 
-        //VERIFICARE SE IL TO STRING FUNZIONA
         if (!client.job_offers.some(offer => offer.job_offer_id.equals(jobOfferId))) {
             return res.status(403).json({ message: 'You can only delete your own job offers' });
         }
 
-        //VERIFICARE SE IL TO STRING FUNZIONA
         client.job_offers = client.job_offers.filter(offer => !offer.job_offer_id.equals(jobOfferId));
         await client.save();
 
-        // Elimina la job offer dal database
         await JobOffersModel.findByIdAndDelete(jobOfferId);
 
         res.status(200).json({ message: 'Job offer deleted successfully' });

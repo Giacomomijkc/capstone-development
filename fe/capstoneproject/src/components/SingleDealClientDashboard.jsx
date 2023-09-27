@@ -141,11 +141,8 @@ const SingleDealClientDashboard = ({ clientId }) => {
             </div>
           )}
         </div>
-        
-        {/* Gestione dinamica in base allo stato */}
         <div className='d-flex justify-content-between align-items-center mt-3'>
           <div>
-            {/* Stato OFFERED */}
             {clientDeal.status === 'offered' && (
               <>
               <div className='d-flex justify-content-center align-itmes-center'>
@@ -154,19 +151,15 @@ const SingleDealClientDashboard = ({ clientId }) => {
               </div>
               </>
             )}
-            {/* Stato ACCEPTED */}
             {clientDeal.status === 'accepted' && (
               <span className='status-text'>Waiting for Designer Action</span>
             )}
-            {/* Stato DENIED */}
             {clientDeal.status === 'denied' && (
               <span className='status-text'>Waiting for Designer Action</span>
             )}
-            {/* Stato IN PROGRESS */}
             {clientDeal.status === 'in progress' && (
               <span className='status-text'>Waiting for Designer Action</span>
             )}
-            {/* Stato COMPLETED */}
             {clientDeal.status === 'completed' && !hasAssociatedInvoice && (
               <span className='status-text'>Waiting for Designer Action</span>
             )}

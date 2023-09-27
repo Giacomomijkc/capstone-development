@@ -19,7 +19,6 @@ import CreateJobOfferPage from './pages/CreateJobOfferPage';
 import ClientProfilePage from './pages/ClientProfilePage';
 import SingleJobOfferPage from './pages/SingleJobOfferPage';
 import CreateDealPage from './pages/CreateDealPage';
-import DealDesignerDetailsPage from './pages/DealDesignerDetailsPage';
 import jwtDecode from 'jwt-decode';
 import { setRole, setIsLogged, setToken, setClientId, setDesignerId } from '../src/redux/usersSlice';
 import { useDispatch } from 'react-redux';
@@ -64,7 +63,6 @@ const App = () => {
           <Route exact path="clients/:clientId" element={<ClientProfilePage/>}/>
           <Route exact path="job-offers/:jobOfferId" element={<SingleJobOfferPage/>}/>
           <Route exact path="create-deal" element={<CreateDealPage/>}/>
-          <Route exact /*inserire path corretto rispetto a get*/ element={<DealDesignerDetailsPage/>}/>
         </Route>
         <Route exact path="/signup-options" element={<SingUpOptionsPage/>}/>
         <Route exact path="/signup-designer" element={<SingUpDesignerPage/>}/>

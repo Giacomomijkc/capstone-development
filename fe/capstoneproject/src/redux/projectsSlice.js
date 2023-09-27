@@ -5,7 +5,6 @@ const apirUrlFetchCoverProjectUpload = `${process.env.REACT_APP_SERVER_BASE_URL}
 const apiUrlFetchImagesProjectUpload = `${process.env.REACT_APP_SERVER_BASE_URL}/projects/images/upload`;
 const apiUrlFetchProjectUpload = `${process.env.REACT_APP_SERVER_BASE_URL}/projects/create`;
 
-// Crea un'azione asincrona per ottenere i progetti
 
 export const fetchProjects = createAsyncThunk('projects/fetchProjects', async () => {
   try {
@@ -17,7 +16,6 @@ export const fetchProjects = createAsyncThunk('projects/fetchProjects', async ()
   }
 });
 
-// Crea un'azione asincrona per caricare una cover per un progetto
 export const uploadCover = createAsyncThunk('projects/uploadCover', async (coverFormData) => {
   try {
     const response = await axios.post(apirUrlFetchCoverProjectUpload, coverFormData);
@@ -28,7 +26,7 @@ export const uploadCover = createAsyncThunk('projects/uploadCover', async (cover
   }
 });
 
-// Crea un'azione asincrona per aggiornare la cover di un progetto
+
 export const updateCover = createAsyncThunk('projects/updateCover', async ({ projectId, coverFormData }) => {
   try {
     const response = await axios.patch(`${apiUrlFetchProjects}${projectId}/cover/update`, coverFormData);
@@ -39,7 +37,7 @@ export const updateCover = createAsyncThunk('projects/updateCover', async ({ pro
   }
 });
 
-// Crea un'azione asincrona per caricare immagini per un progetto
+
 export const uploadImages = createAsyncThunk('projects/uploadImages', async (imagesFormData) => {
     try {
       const response = await axios.post(apiUrlFetchImagesProjectUpload, imagesFormData);
@@ -50,7 +48,7 @@ export const uploadImages = createAsyncThunk('projects/uploadImages', async (ima
     }
 });
 
-// Crea un'azione asincrona per aggiornare le immagini di un progetto
+
 export const updateImages = createAsyncThunk('projects/updateImages', async ({ projectId, imagesFormData }) => {
   try {
     const response = await axios.patch(`${apiUrlFetchProjects}${projectId}/images/update`, imagesFormData);
@@ -62,7 +60,7 @@ export const updateImages = createAsyncThunk('projects/updateImages', async ({ p
   }
 });
 
-// Crea un'azione asincrona per creare un nuovo progetto
+
 export const createProject = createAsyncThunk('projects/createProject', async (projectData,{ rejectWithValue }) => {
     try {
       const token = JSON.parse(localStorage.getItem("userLoggedIn"));
@@ -81,7 +79,7 @@ export const createProject = createAsyncThunk('projects/createProject', async (p
     }
 });
 
-// Crea un'azione asincrona per aggiornare un nuovo progetto
+
 export const patchProject = createAsyncThunk('projects/patchProject', async ({projectId, projectData}) => {
   try {
     const token = JSON.parse(localStorage.getItem("userLoggedIn"));
@@ -95,7 +93,7 @@ export const patchProject = createAsyncThunk('projects/patchProject', async ({pr
   }
 });
 
-// Crea un'azione asincrona per ottenere un progetto singolo
+
 export const fetchSingleProject = createAsyncThunk('projects/fetchSingleProject', async (projectId) => {
   try {
     const response = await axios.get(`${apiUrlFetchProjects}${projectId}`);
@@ -107,7 +105,7 @@ export const fetchSingleProject = createAsyncThunk('projects/fetchSingleProject'
   }
 });
 
-//Crea un'azione asincrona per ottenere i projects di un designer
+
 export const fetchDesignerProjects = createAsyncThunk('projects/fetchDesignerProjects', async (designerId) =>{
   try {
     const response = await axios.get(`${apiUrlFetchProjects}designer/${designerId}`);
@@ -128,7 +126,7 @@ export const fetchDesignerLikedProjects = createAsyncThunk('projects-liked/fetch
   }
 })
 
-//crea un'azione asincrona per mettere/togliere like a un progetto
+
 export const toggleLike = createAsyncThunk('projects/toggleLike', async (projectId, { rejectWithValue, getState }) => {
   try {
       const token = JSON.parse(localStorage.getItem("userLoggedIn"));
@@ -149,7 +147,7 @@ export const toggleLike = createAsyncThunk('projects/toggleLike', async (project
   }
 })
 
-//crea una seconda azione asincrona per mettere/togliere al componente SingleProject
+
 export const toggleSingleProjectLike = createAsyncThunk('projects/toggleSingleProjectLike', async (projectId, { rejectWithValue, getState }) => {
   try {
       const token = JSON.parse(localStorage.getItem("userLoggedIn"));
@@ -171,7 +169,7 @@ export const toggleSingleProjectLike = createAsyncThunk('projects/toggleSinglePr
   }
 })
 
-// Crea un'azione asincrona per eliminare un nuovo progetto
+
 export const deleteProject = createAsyncThunk('projects/deleteProject', async (projectId,{ rejectWithValue }) => {
   try {
     const token = JSON.parse(localStorage.getItem("userLoggedIn"));
@@ -206,8 +204,6 @@ const projectsSlice = createSlice({
     imagesURL: null,
     successMessage: null,
     createdProject: null,
-    //isCreatedProjectLoading: true,
-    //successCreateMessage: null,
     patchedCover: null,
     patchedImages: null,
     patchedProject: null,
@@ -284,17 +280,9 @@ const projectsSlice = createSlice({
       state.imagesURL = action.payload;
       state.isUploadingImages = false;
     })
-    /*.addCase(createProject.rejected, (state, action) =>{
-      state.error = action.payload;
-      state.isCreatedProjectLoading = false
-    })*/
     .addCase(createProject.fulfilled, (state, action) =>{
       state.createdProject = action.payload;
-      //state.isCreatedProjectLoading = false
     })
-    /*.addCase(createProject.pending, (state, action) =>
-    state.isCreatedProjectLoading = true
-    )*/
     .addCase(fetchDesignerLikedProjects.fulfilled, (state, action) => {
       state.liked_projects = action.payload;
       state.isLikedProjectsLoading = false;

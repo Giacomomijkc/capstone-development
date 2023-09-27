@@ -14,14 +14,13 @@ const SingleJobOfferClientDashboard = ({ clientId }) => {
   
 
   const handleShowJobOfferModal = (jobOfferId) => {
-    setSelectedJobOfferId(jobOfferId); // Memorizza l'ID dell'offerta di lavoro selezionata
+    setSelectedJobOfferId(jobOfferId); 
     setShowJobOfferModal(true);
   }
 
   const handleJobOfferUpdateSuccess = () => {
     dispatch(fetchClientJobOffers(clientId))
       .then(() => {
-        // valutare azioni da fare
       })
       .catch((error) => {
         console.error('Failed to fetch updated designer data:', error);

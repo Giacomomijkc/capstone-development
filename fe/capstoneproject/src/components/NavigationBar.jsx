@@ -73,7 +73,7 @@ const NavigationBar = () => {
               </Nav>
             )}
           </Navbar.Collapse>
-          <div className="position-relative" style={{ marginLeft: 'auto', marginRight: 'auto' }}>
+          <div className="d-flex justify-content-center" >
             <Link to="/">
               <Navbar.Brand><img src={logoImage} alt="Logo" className="logo"/></Navbar.Brand>
             </Link>
@@ -82,14 +82,6 @@ const NavigationBar = () => {
             <div className='ms-auto'>
               {isLogged ? (
                 <div className='d-flex justify-content-center align-items-center'>
-                  {/*<Form className="d-flex mx-2">
-                    <Form.Control
-                      type="search"
-                      placeholder="Search"
-                      className="search me-2"
-                      aria-label="Search"
-                    />
-              </Form>*/}
                   {role === 'Designer' ? (
                     <>
                       <Link to="/create-project">

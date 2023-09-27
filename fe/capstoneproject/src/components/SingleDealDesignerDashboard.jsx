@@ -81,10 +81,12 @@ const SingleDealDesignerDashboard = ({ designerId }) => {
 
     const [showInvoiceModal, setShowInvoiceModal] = useState(false);
     const [selectedDealId, setSelectedDealId] = useState(null);
+
     
   return (
     <>
-{designerDeals && designerDeals.map(designerDeal => {
+{designerDeals && 
+designerDeals.map((designerDeal) => {
   const client = clients?.find(c => c._id === designerDeal.client);
   const hasAssociatedInvoice = designerInvoices.find(invoice => invoice.deal === designerDeal._id);
   console.log(hasAssociatedInvoice)
@@ -163,14 +165,11 @@ const SingleDealDesignerDashboard = ({ designerId }) => {
           </div>
         )}
       </div>
-              {/* Gestione dinamica in base allo stato */}
               <div className='d-flex justify-content-between align-items-center mt-3'>
           <div>
-            {/* Stato OFFERED */}
             {designerDeal.status === 'offered' && (
               <span className='status-text'>Waiting for Client Action</span>
             )}
-            {/* Stato ACCEPTED */}
             {designerDeal.status === 'accepted' && (
               <>
               <div className='d-flex justify-content-center align-itmes-center'>
@@ -178,7 +177,6 @@ const SingleDealDesignerDashboard = ({ designerId }) => {
               </div>
               </>
             )}
-            {/* Stato DENIED */}
             {designerDeal.status === 'denied' && (
             <>
             <div className='d-flex justify-content-center align-itmes-center'>
@@ -186,7 +184,6 @@ const SingleDealDesignerDashboard = ({ designerId }) => {
             </div>
             </>
             )}
-            {/* Stato IN PROGRESS */}
             {designerDeal.status === 'in progress' && (
               <>
               <div className='d-flex justify-content-center align-itmes-center'>
@@ -194,7 +191,6 @@ const SingleDealDesignerDashboard = ({ designerId }) => {
               </div>
               </>
             )}
-            {/* Stato COMPLETED */}
             {designerDeal.status === 'completed' && !hasAssociatedInvoice && (
               <>
               <div className='d-flex justify-content-center align-itmes-center'>

@@ -3,14 +3,7 @@ import { useSelector } from 'react-redux';
 import Container from 'react-bootstrap/esm/Container';
 import Row from 'react-bootstrap/esm/Row';
 import Button from 'react-bootstrap/esm/Button';
-import Col from 'react-bootstrap/esm/Col';
 import { Link } from 'react-router-dom';
-import Homepage1 from '../assets/homepage-client-1.png';
-import Homepage2 from '../assets/homepage-client-2.png';
-import Homepage3 from '../assets/homepage-client-3.png';
-import Homepage4 from '../assets/homepage-client-4.png';
-import Homepage5 from '../assets/homepage-designer-1.png';
-import Homepage6 from '../assets/homepage-designer-2.png';
 import './HomepageComponent.css';
 
 const HomepageComponent = () => {

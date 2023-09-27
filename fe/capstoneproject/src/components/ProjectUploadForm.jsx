@@ -57,7 +57,6 @@ const ProjectUploadForm = () => {
         }
     };
 
-    //inserire handle per gestire le immagini
     const handleImagesUpload = async (e) => {
         const files = e.target.files;
         const uploadData = new FormData();
