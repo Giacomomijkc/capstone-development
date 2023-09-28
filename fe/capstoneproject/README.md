@@ -1,70 +1,111 @@
-# Getting Started with Create React App
+*************** 👨‍💻 HUBBY: your personal hub where you can manage your creative deals, whether you're a company or a designer! 👨‍💻 ***************
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Hubby is a simple and practical tool designed to facilitate the working relationship between designers and clients.
 
-## Available Scripts
+*************** 🖥 ONLINE VERSION 🖥 ***************
+►  https://sensational-nasturtium-2c1df2.netlify.app/
 
-In the project directory, you can run:
+Feel free to login with the following credentials:
+► designer account: email: testdesigner@me.it - password: 1234567
+► client account: email: testclient@me.it - password: 1234567
 
-### `npm start`
+*************** ⚡️ CORE FEATURE ⚡️ ***************
+Hubby's primary feature allows a designer to create a deal with a client. This deal has different states that change through interactions between the two users (designer and client). 
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+The client can accept or reject a deal, and the designer can start, complete, and generate an invoice for it. 
+Deals are visible within their respective dashboards, where users can interact with them.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+*************** ⚡️ SECONDARY FEATURES ⚡️ ***************
+Hubby also offers some secondary features:
 
-### `npm test`
+► Clients can post job offers (to which designers can respond directly).
+► Designers can upload their projects.
+► Both clients and designers can view projects, a list of clients, and a list of designers.
+► Technologies Used:
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+*************** 💻 TECHNOLOGIES 💻 ***************
+Hubby is developed using the following technologies:
 
-### `npm run build`
+► Front-end: React
+► Back-end: Node.js
+► Database: MongoDB
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+*************** 🚥 HOW TO START 🚥 ***************
+To get started with Hubby, clone this repository to your local machine and follow these steps:
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+/// 🟠 REQUIRED SERVICES 🟠 ////
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+► Create an account on Cloudinary and generate the name, API key, and API secret. Insert them into your .env file in the backend (https://cloudinary.com/).
 
-### `npm run eject`
+► Create an account on MongoDB, generate the link, and insert it into your .env file in the backend.
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+//// 🟠 BACK END 🟠 ////
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+► In your project's backend folder, run the following commands in the terminal:
+  - npm init
+  - npm install
+► Install the following dependencies:
+  bcrypt
+  cloudinary
+  cors
+  dotenv
+  express
+  express-session
+  express-validator
+  jsonwebtoken
+  mongoose
+  multer
+  multer-storage-cloudinary
+  path
+  pdfkit
+  nodemon
+► In your .env file, add the following configurations:
+  CLOUDINARY_CLOUD_NAME=""
+  CLOUDINARY_API_KEY=""
+  CLOUDINARY_API_SECRET=""
+  MONGO_DB_URL=""
+  JWT_SECRET=""
+► Run the command `npm run dev` to start the server.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+//// 🟠 FRONT END 🟠 ////
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+► In your project's frontend folder, run the following command in the terminal:
+  - npm install
+► Install the following dependencies:
+  @fortawesome/fontawesome-svg-core
+  @fortawesome/free-regular-svg-icons
+  @fortawesome/free-solid-svg-icons
+  @fortawesome/react-fontawesome
+  @reduxjs/toolkit
+  axios
+  bootstrap
+  jwt-decode
+  react
+  react-bootstrap
+  react-dom
+  react-redux
+  react-router-dom
+► In your .env file, add the following configuration:
+  REACT_APP_SERVER_BASE_URL="http://localhost:5050" (if you're using port 5050 in the backend).
+► In your project's frontend folder, run the command `npm start`.
 
-## Learn More
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+*************** 👌🏻 USAGE 👌🏻 ***************
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+► As a designer, you can create deals with clients, manage projects, and generate invoices.
+► As a client, you can post job offers, manage deals with designers, and view projects.
 
-### Code Splitting
+*************** 🙏 CONTRIBUTING 🙏 ***************
+Contributions to Hubby are welcome. If you'd like to contribute, please follow these steps:
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+► Fork the repository on GitHub.
+► Clone your forked repository to your local machine.
+► Create a new branch for your feature or bug fix.
+► Make your changes and commit them with descriptive messages.
+► Push your branch to your forked repository on GitHub.
+► Create a pull request to merge your changes into the main repository.
+License:
 
-### Analyzing the Bundle Size
+*************** 🟢 LICENSE 🟢 ***************
+This project is licensed under the MIT License.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
