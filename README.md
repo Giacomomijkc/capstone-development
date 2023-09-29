@@ -47,40 +47,40 @@ To get started with Hubby, clone this repository to your local machine and follo
 In your project's backend folder, run the following commands in the terminal:
 
 ```bash
-  npm init
+npm init
 ```
 
 Install dependencies
 
 ```bash
-  npm install
-  npm i bcrypt
-  npm i cloudinary
-  npm i cors
-  npm i dotenv
-  npm i express
-  npm i express-session
-  npm i express-validator
-  npm i jsonwebtoken
-  npm i mongoose
-  npm i multer-storage-cloudinary
-  npm i path
-  npm i pdfkit
-  npm i nodemon
+npm install
+npm i bcrypt
+npm i cloudinary
+npm i cors
+npm i dotenv
+npm i express
+npm i express-session
+npm i express-validator
+npm i jsonwebtoken
+npm i mongoose
+npm i multer-storage-cloudinary
+npm i path
+npm i pdfkit
+npm i nodemon
 ```
 In your .env file, add the following configurations:
   ```bash
-  CLOUDINARY_CLOUD_NAME=""
-  CLOUDINARY_API_KEY=""
-  CLOUDINARY_API_SECRET=""
-  MONGO_DB_URL=""
-  JWT_SECRET=""
+CLOUDINARY_CLOUD_NAME=""
+CLOUDINARY_API_KEY=""
+CLOUDINARY_API_SECRET=""
+MONGO_DB_URL=""
+JWT_SECRET=""
 ```
 
 Start the server
 
 ```bash
-  npm run dev
+npm run dev
 ```
 
 In your project's frontend folder, run the following commands in the terminal to install dependencies:
