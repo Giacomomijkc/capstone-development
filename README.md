@@ -109,7 +109,7 @@ In your .env file, add the following configurations:
 Start the project
 
 ```bash
-  npm start
+npm start
 ```
 ## Contributing
 Contributions to Hubby are welcome. If you'd like to contribute, please follow these steps:
