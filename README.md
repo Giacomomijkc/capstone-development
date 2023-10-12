@@ -54,19 +54,6 @@ Install dependencies
 
 ```bash
 npm install
-npm i bcrypt
-npm i cloudinary
-npm i cors
-npm i dotenv
-npm i express
-npm i express-session
-npm i express-validator
-npm i jsonwebtoken
-npm i mongoose
-npm i multer-storage-cloudinary
-npm i path
-npm i pdfkit
-npm i nodemon
 ```
 In your .env file, add the following configurations:
   ```bash
